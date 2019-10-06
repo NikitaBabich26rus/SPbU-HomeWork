@@ -81,14 +81,7 @@ bool checkTests(int size, int array[], bool test)
 			count++;
 		}
 	}
-	if (count == size)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return count == size;
 }
 
 void ifTest(bool test)

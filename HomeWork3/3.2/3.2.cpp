@@ -9,7 +9,7 @@ bool binSearch(int size, int value, int array[])
 	int countLeft = 0;
 	int countRight = size - 1;
 	bool answer = false;
-	while (countLeft <= countRight && answer == 0)
+	while (countLeft <= countRight && !answer)
 	{
 		const int countMind = (countLeft + countRight) / 2;
 		if (array[countMind] == value)
@@ -79,10 +79,7 @@ bool checkTests(int size, int array[], bool test)
 		{
 			return false;
 		}
-		else
-		{
-			return true;
-		}
+		return true;
 	}
 }
 
@@ -107,12 +104,14 @@ void tests()
 	qsort(0, size1 - 1, testArray1);
 	test = checkTests(size1, testArray1, test);
 	ifTest(test);
+
 	const int size2 = 12;
 	int testArray2[size2] = { -1, 100, 2212, 312, 191, 100, 1881, 7, 323, 1, 1222, 2 };
 	input(size2, testArray2);
 	qsort(0, size2 - 1, testArray2);
 	test = checkTests(size2, testArray2, test);
 	ifTest(test);
+
 	const int size3 = 10000;
 	int testArray3[size3]{};
 	srand(time(nullptr));

@@ -18,6 +18,9 @@
     <ClCompile Include="4.2.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="qsort.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="qsort.h">
@@ -28,5 +31,8 @@
     <Text Include="Text.txt" />
     <Text Include="Input.txt" />
     <Text Include="Tests.txt" />
+    <Text Include="Text1.txt" />
+    <Text Include="Text2.txt" />
+    <Text Include="Test.txt" />
   </ItemGroup>
 </Project>

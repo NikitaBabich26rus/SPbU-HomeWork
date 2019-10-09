@@ -152,14 +152,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="4.2.cpp" />
+    <ClCompile Include="qsort.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="qsort.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Input.txt" />
+    <Text Include="Test.txt" />
     <Text Include="Tests.txt" />
     <Text Include="Text.txt" />
+    <Text Include="Text1.txt" />
+    <Text Include="Text2.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,12 +1,9 @@
 ﻿
-
 #include <stdio.h>
 #include "qsort.h"
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
-
-
 
 int searching(int size, int array[])
 {
@@ -67,7 +64,7 @@ void test()
 {
 	int sizeTest;
 	int answer;
-	FILE * file = fopen("Tests.txt", "r");
+	FILE * file = fopen("Test.txt", "r");
 	for (int count = 0; count < 3; count++)
 	{
 		fscanf(file, "%d", &sizeTest);

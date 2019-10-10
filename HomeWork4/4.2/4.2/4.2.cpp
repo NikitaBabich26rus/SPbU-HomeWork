@@ -16,7 +16,7 @@ int searching(int size, int array[])
 		{
 			count++;
 		}
-		if (array[i] != array[i + 1])
+		else
 		{
 			if (count > answer)
 			{
@@ -62,8 +62,8 @@ void output(int size, int array[])
 
 void test()
 {
-	int sizeTest;
-	int answer;
+	int sizeTest = 0;
+	int answer = 0;
 	FILE * file = fopen("Test.txt", "r");
 	for (int count = 0; count < 3; count++)
 	{
@@ -77,6 +77,7 @@ void test()
 		output(sizeTest, testArray);
 		qsort(0, sizeTest - 1, testArray);
 		checkTests(searching(sizeTest, testArray), answer);
+		delete[]testArray;
 	}
 	fclose(file);
 }

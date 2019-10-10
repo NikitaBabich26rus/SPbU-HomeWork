@@ -77,7 +77,7 @@ void test()
 		output(sizeTest, testArray);
 		qsort(0, sizeTest - 1, testArray);
 		checkTests(searching(sizeTest, testArray), answer);
-		delete[]testArray;
+		delete[] testArray;
 	}
 	fclose(file);
 }

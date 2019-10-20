@@ -27,11 +27,11 @@ void outputDirectory(Directory array[], int size)
 	}
 }
 
-void searchNumberByName(Directory array[], int size, char helpName[], char answer[])
+void searchNumberByName(Directory array[], int size, char name[], char answer[])
 {
 	for (int i = 0; i < size; i++)
 	{
-		if (strcmp(helpName, array[i].name) == 0)
+		if (strcmp(name, array[i].name) == 0)
 		{
 			printf("Found number : ");
 			printf("%s\n", array[i].number);
@@ -40,11 +40,11 @@ void searchNumberByName(Directory array[], int size, char helpName[], char answe
 	}
 }
 
-void searchNameByNumber(Directory array[], int size, char helpNumber[], char answer[])
+void searchNameByNumber(Directory array[], int size, char number[], char answer[])
 {
 	for (int i = 0; i < size; i++)
 	{
-		if (strcmp(helpNumber, array[i].number) == 0)
+		if (strcmp(number, array[i].number) == 0)
 		{
 			printf("Found name : ");
 			printf("%s\n", array[i].name);
@@ -69,7 +69,7 @@ void outputString(char array[])
 	printf("%s\n", array);
 }
 
-void  checkTest(char answer[], char myAnswer[])
+void checkTest(char answer[], char myAnswer[])
 {
 	if (strcmp(answer, myAnswer) == 0)
 	{
@@ -109,9 +109,8 @@ void checkDirectory(Directory array[], int size)
 
 void test()
 {
-	Directory array[100] = {};
+	Directory arrayTest[10]{};
 	int size = 0;
-	printf("Input command\n");
 	int command = 1;
 	printf("%d\n", command);
 	printf("Input name\n");
@@ -120,11 +119,10 @@ void test()
 	printf("Input number\n");
 	char number1[sizeNumber] = "1111";
 	printf("%s\n", number1);
-	push(array, size, name1, number1);
+	push(arrayTest, size, name1, number1);
 	size++;
 
 	printf("\n");
-	printf("Input command\n");
 	command = 1;
 	printf("%d\n", command);
 	printf("Input name\n");
@@ -133,49 +131,94 @@ void test()
 	printf("Input number\n");
 	char number2[sizeNumber] = "2222";
 	printf("%s\n", number2);
-	push(array, size, name2, number2);
+	push(arrayTest, size, name2, number2);
 	size++;
 
 	printf("\n");
-	printf("Input command\n");
 	command = 2;
 	printf("%d\n", command);
 	printf("Directory:\n");
-	outputDirectory(array, size);
+	outputDirectory(arrayTest, size);
 
 	printf("\n");
-	printf("Input command\n");
 	command = 3;
 	char answer1[sizeNumber] = "2222";
 	printf("%d\n", command);
 	printf("Input name to search for the number\n");
 	char helpName[sizeName] = "bbbb";
 	char myAnswerNumber[sizeNumber];
-	searchNumberByName(array, size, helpName, myAnswerNumber);
+	searchNumberByName(arrayTest, size, helpName, myAnswerNumber);
 	checkTest(answer1, myAnswerNumber);
 
 	printf("\n");
-	printf("Input command\n");
 	command = 4;
 	char answer2[sizeName] = "aaaa";
 	printf("%d\n", command);
 	printf("Input number to search for the name\n");
 	char helpNumber[sizeNumber] = "1111";
 	char myAnswerName[sizeName];
-	searchNameByNumber(array, size, helpNumber, myAnswerName);
+	searchNameByNumber(arrayTest, size, helpNumber, myAnswerName);
 	checkTest(answer2, myAnswerName);
 
 	printf("\n");
-	printf("Input command\n");
 	command = 5;
 	printf("%d\n", command);
-	saveInFile(array, size);
+	saveInFile(arrayTest, size);
 	printf("Directory is saved in file\n");
-	checkDirectory(array, size);
+	checkDirectory(arrayTest, size);
+	printf("\n");
 }
 
 int main()
 {
+	Directory array[100];
 	test();
+	int size = 0;
+	while (true)
+	{
+		printf("Input command\n");
+		int command = 0;
+		scanf("%d", &command);
+		if (command == 0)
+		{
+			return 0;
+		}
+		if (command == 1)
+		{
+			char name[sizeName]{};
+			char number[sizeNumber]{};
+			printf("Input name\n");
+			scanf("%s", name);
+			printf("Input number\n");
+			scanf("%s", number);
+			push(array, size, name, number);
+			size++;
+		}
+		if (command == 2)
+		{
+			outputDirectory(array, size);
+		}
+		if (command == 3)
+		{
+			char answer[sizeNumber]{};
+			char name[sizeName]{};
+			printf("Input name to search for the number\n");
+			scanf("%s", name);
+			searchNumberByName(array, size, name, answer);
+
+		}
+		if (command == 4)
+		{
+			char answer[sizeName]{};
+			char number[sizeNumber]{};
+			printf("Input number to search for the name\n");
+			scanf("%s", number);
+			searchNameByNumber(array, size, number, answer);
+		}
+		if (command == 5)
+		{
+			saveInFile(array, size);
+		}
+	}
 	return 0;
 }

@@ -1,24 +1,6 @@
 ﻿
 #include <stdio.h>
-
-struct Stack
-{
-	char bracket;
-	Stack *next;
-};
-
-void push(Stack** head, char bracket)
-{
-	Stack* newBracket = new Stack;
-	newBracket->bracket = bracket;
-	newBracket->next = *head;
-	*head = newBracket;
-}
-
-void deleteBracket(Stack** head)
-{
-	*head = (*head)->next;
-}
+#include "Stack.h"
 
 bool answer(Stack **head)
 {
@@ -36,26 +18,26 @@ bool answer(Stack **head)
 
 void checkBracket(char bracket, Stack **head)
 {
-	bool help = true;
+	bool check = true;
 	if (*head != nullptr)
 	{
 		if (bracket == ')' && (*head)->bracket == '(')
 		{
 			deleteBracket(head);
-			help = false;
+			check = false;
 		}
 		if (bracket == ']' && (*head)->bracket == '[')
 		{
 			deleteBracket(head);
-			help = false;
+			check = false;
 		}
 		if (bracket == '}' && (*head)->bracket == '{')
 		{
 			deleteBracket(head);
-			help = false;
+			check = false;
 		}
 	}
-	if (help)
+	if (check)
 	{
 		push(head, bracket);
 	}

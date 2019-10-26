@@ -1,7 +1,5 @@
 #include "Stack.h"
 
-using namespace std;
-
 void push(Stack** head, char bracket)
 {
 	Stack* newBracket = new Stack;
@@ -10,7 +8,7 @@ void push(Stack** head, char bracket)
 	*head = newBracket;
 }
 
-void deleteBracket(Stack** head)
+void pop(Stack** head)
 {
 	Stack *helpDelete = (*head)->next;
 	delete* head;

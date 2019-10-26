@@ -12,4 +12,4 @@ struct Stack
 
 void push(Stack** head, char bracket);
 
-void deleteBracket(Stack** head);
+void pop(Stack** head);

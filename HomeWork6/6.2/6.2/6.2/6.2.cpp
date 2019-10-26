@@ -23,17 +23,17 @@ void checkBracket(char bracket, Stack **head)
 	{
 		if (bracket == ')' && (*head)->bracket == '(')
 		{
-			deleteBracket(head);
+			pop(head);
 			check = false;
 		}
 		if (bracket == ']' && (*head)->bracket == '[')
 		{
-			deleteBracket(head);
+			pop(head);
 			check = false;
 		}
 		if (bracket == '}' && (*head)->bracket == '{')
 		{
-			deleteBracket(head);
+			pop(head);
 			check = false;
 		}
 	}
@@ -51,20 +51,23 @@ void checkString(int size, char string[], Stack **head)
 	}
 }
 
-void checkAnswer(bool myAnswer, bool answer)
+int checkAnswer(bool myAnswer, bool answer, int checkTest)
 {
 	if (myAnswer == answer)
 	{
 		printf("Program is correct\n");
+		return checkTest;
 	}
 	else
 	{
 		printf("Program error\n");
+		return -1;
 	}
 }
 
-void test()
+int test()
 {
+	int checkTest = 0;
 	Stack* headTest1 = nullptr;
 	const int sizeTest1 = 12;
 	bool answerTest1 = true;
@@ -75,8 +78,9 @@ void test()
 	printf("%s\n", stringTest1);
 	checkString(sizeTest1, stringTest1, &headTest1);
 	bool myAnswerTest1 = answer(&headTest1);
-	checkAnswer(myAnswerTest1, answerTest1);
+	checkTest = checkAnswer(myAnswerTest1, answerTest1, checkTest);
 	printf("\n");
+	delete[] headTest1;
 
 	Stack* headTest2 = nullptr;
 	const int sizeTest2 = 22;
@@ -88,13 +92,15 @@ void test()
 	printf("%s\n", stringTest2);
 	checkString(sizeTest2, stringTest2, &headTest2);
 	bool myAnswerTest2 = answer(&headTest2);
-	checkAnswer(myAnswerTest2, answerTest2);
+	checkTest = checkAnswer(myAnswerTest2, answerTest2, checkTest);
 	printf("\n");
+	delete[] headTest2;
+	return checkTest;
 }
 
 int main()
 {
-	test();
+	printf("%d", test());
 	return 0;
 }
 

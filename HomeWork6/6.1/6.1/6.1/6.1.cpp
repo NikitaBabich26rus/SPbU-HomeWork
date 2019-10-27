@@ -7,7 +7,7 @@
 bool testCorrect(char string[])
 {
 	int amountValues = 0;
-	for (int i = 0; string[i] != '\n'; i++)
+	for (int i = 0; string[i] != '\0'; i++)
 	{
 		if (string[i] != ' ')
 		{
@@ -64,55 +64,41 @@ void checkSymbol(Stack **head, char value)
 	}
 }
 
-void checkString(Stack** head, char string[])
+int testing(char string[])
 {
-	for (int i = 0; string[i] != '\n'; i++)
+	if (!testCorrect(string))
 	{
-		if (string[i] != ' ')
+		return 0;
+	}
+	Stack* head = nullptr;
+	for (int i = 0; string[i] != '\0'; i++)
+	{
+		if (string[i] != ' ' && string[i] != '\n')
 		{
-			checkSymbol(head, string[i]);
+			checkSymbol(&head, string[i]);
 		}
 	}
+	int myAnswer = head->value;
+	deleteStack(&head);
+	return myAnswer;
 }
 
 int checkAnswer(int myAnswer, int answer, bool checkTest)
 {
-	if (myAnswer == answer)
-	{
-		return checkTest;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-int testing(char stringTest[])
-{
-	if (testCorrect(stringTest))
-	{
-		Stack* head = nullptr;
-		checkString(&head, stringTest);
-		int myAnswer = head->value;
-		deleteStack(&head);
-		return myAnswer;
-	}
-	return 0;
+	return myAnswer == answer ? checkTest : false;
 }
 
 bool tests()
 {
 	bool checkTest1 = true;
-	char stringTest1[23] = "1 2 + 9 * 3 * 4 + 5 /\n";
+	char stringTest1[23] = "1 2 + 9 * 3 * 4 + 5 /";
 	int answerTest1 = 17;
-	testCorrect(stringTest1);
 	int myAnswerTest1 = testing(stringTest1);
 	checkTest1 = checkAnswer(myAnswerTest1, answerTest1, checkTest1);
 
 	bool checkTest2 = true;
-	char stringTest2[23] = "5 7 - 9 * 2 * 6 + 6 /\n";
+	char stringTest2[23] = "5 7 - 9 * 2 * 6 + 6 /";
 	int answerTest2 = -5;
-	testCorrect(stringTest2);
 	int myAnswerTest2 = testing(stringTest2);
 	checkTest2 = checkAnswer(myAnswerTest2, answerTest2, checkTest2);
 	return checkTest1 && checkTest2;
@@ -124,19 +110,16 @@ int main()
 	{
 		return -1;
 	}
+	char string[100]{};
+	printf("Input string:\n");
+	fgets(string, 100, stdin);
+	if (testCorrect(string))
+	{
+		printf("%d", testing(string));
+	}
 	else
 	{
-		char string[100]{};
-		printf("Input string:\n");
-		fgets(string, 100, stdin);
-		if (testCorrect(string))
-		{
-			printf("%d", testing(string));
-		}
-		else
-		{
-			printf("Input is not correct");
-		}
+		printf("Input is not correct");
 	}
 	return 0;
 }

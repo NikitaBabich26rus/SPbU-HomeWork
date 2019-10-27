@@ -1,12 +1,13 @@
 ﻿
 #include <stdio.h>
-#include "Stack.h"
+#include <stdlib.h>
 #include <string.h>
+#include "Stack.h"
 
 bool testCorrect(char string[])
 {
 	int amountValues = 0;
-	for (int i = 0; i < strlen(string); i++)
+	for (int i = 0; string[i] != '\n'; i++)
 	{
 		if (string[i] != ' ')
 		{
@@ -65,7 +66,7 @@ void checkSymbol(Stack **head, char value)
 
 void checkString(Stack** head, char string[])
 {
-	for (int i = 0; i < strlen(string); i++)
+	for (int i = 0; string[i] != '\n'; i++)
 	{
 		if (string[i] != ' ')
 		{
@@ -74,59 +75,68 @@ void checkString(Stack** head, char string[])
 	}
 }
 
-int checkAnswer(int myAnswer, int answer, int checkTest)
+int checkAnswer(int myAnswer, int answer, bool checkTest)
 {
 	if (myAnswer == answer)
 	{
-		printf("Program is correct\n");
 		return checkTest;
 	}
 	else
 	{
-		printf("Program error\n");
-		return -1;
+		return false;
 	}
 }
 
-int testing(Stack** headTest, char stringTest[], int checkTest, int answerTest)
+int testing(char stringTest[])
 {
 	if (testCorrect(stringTest))
 	{
-		checkString(headTest, stringTest);
-		printf("My answer : ");
-		printf("%d\n", (*headTest)->value);
-		checkTest = checkAnswer((*headTest)->value, answerTest, checkTest);
-		deleteStack(headTest);
-		return checkTest;
+		Stack* head = nullptr;
+		checkString(&head, stringTest);
+		int myAnswer = head->value;
+		deleteStack(&head);
+		return myAnswer;
 	}
-	else
-	{
-		printf("Test is not correct\n");
-		return -1;
-	}
+	return 0;
 }
 
-void tests()
+bool tests()
 {
-	int checkTest = 0;
-	Stack* headTest1 = nullptr;
-	char stringTest1[22] = "1 2 + 9 * * 4 + 5 /";
+	bool checkTest1 = true;
+	char stringTest1[23] = "1 2 + 9 * 3 * 4 + 5 /\n";
 	int answerTest1 = 17;
-	printf("%s\n", stringTest1);
-	checkTest = testing(&headTest1, stringTest1, checkTest, answerTest1);
-	printf("\n");
+	testCorrect(stringTest1);
+	int myAnswerTest1 = testing(stringTest1);
+	checkTest1 = checkAnswer(myAnswerTest1, answerTest1, checkTest1);
 
-	Stack* headTest2 = nullptr;
-	char stringTest2[22] = "5 7 - 9 * 2 * 6 + 6 /";
+	bool checkTest2 = true;
+	char stringTest2[23] = "5 7 - 9 * 2 * 6 + 6 /\n";
 	int answerTest2 = -5;
-	printf("%s\n", stringTest2);
-	testing(&headTest2, stringTest2, checkTest, answerTest2);
-	printf("\n");
-	printf("%d\n", checkTest);
+	testCorrect(stringTest2);
+	int myAnswerTest2 = testing(stringTest2);
+	checkTest2 = checkAnswer(myAnswerTest2, answerTest2, checkTest2);
+	return checkTest1 && checkTest2;
 }
 
 int main()
 {
-	tests();
+	if (!tests())
+	{
+		return -1;
+	}
+	else
+	{
+		char string[100]{};
+		printf("Input string:\n");
+		fgets(string, 100, stdin);
+		if (testCorrect(string))
+		{
+			printf("%d", testing(string));
+		}
+		else
+		{
+			printf("Input is not correct");
+		}
+	}
 	return 0;
 }

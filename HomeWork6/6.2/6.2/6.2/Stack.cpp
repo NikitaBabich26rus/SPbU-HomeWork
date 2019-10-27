@@ -1,16 +1,24 @@
 #include "Stack.h"
 
-void push(Stack** head, char bracket)
+void push(int value, Stack** head)
 {
-	Stack* newBracket = new Stack;
-	newBracket->bracket = bracket;
-	newBracket->next = *head;
-	*head = newBracket;
+	Stack* newElement = new Stack;
+	newElement->next = *head;
+	newElement->value = value;
+	*head = newElement;
 }
 
 void pop(Stack** head)
 {
-	Stack *helpDelete = (*head)->next;
+	Stack* newElement = (*head)->next;
 	delete* head;
-	*head = helpDelete;
+	*head = newElement;
+}
+
+void deleteStack(Stack** head)
+{
+	while (*head != nullptr)
+	{
+		pop(head);
+	}
 }

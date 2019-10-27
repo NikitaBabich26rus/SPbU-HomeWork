@@ -1,15 +1,19 @@
 #pragma once
 
-// abstract data type, which is a list of elements organized according to the LIFO principle
-
+// Абстрактный тип данных, представляющий собой список
+// элементов, организованных по принципу LIFO
 
 struct Stack
 {
-	char bracket;
+	int value;
 	Stack* next;
 };
 
+// Добавление нового элемента в стек
+void push(int value, Stack** head);
 
-void push(Stack** head, char bracket);
-
+// Удаление верхнего элемента из стека
 void pop(Stack** head);
+
+// Удаление стека
+void deleteStack(Stack** head);

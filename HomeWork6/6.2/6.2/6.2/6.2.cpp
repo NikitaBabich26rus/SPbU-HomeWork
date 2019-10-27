@@ -7,12 +7,11 @@ bool answer(Stack **head)
 {
 	if (*head == nullptr)
 	{
-		printf("Phrase is right\n");
 		return true;
 	}
 	else
 	{
-		printf("Phrase is false\n");
+		deleteStack(head);
 		return false;
 	}
 }
@@ -56,47 +55,54 @@ int checkAnswer(bool myAnswer, bool answer, bool checkTest)
 {
 	if (myAnswer == answer)
 	{
-		printf("Program is correct\n");
 		return checkTest;
 	}
 	else
 	{
-		printf("Program error\n");
 		return false;
 	}
+}
+
+bool checkBalance(char stringTest[])
+{
+	Stack* head = nullptr;
+	checkString(stringTest, &head);
+	return answer(&head);
 }
 
 bool test()
 {
 	bool checkTest = true;
-	Stack* headTest1 = nullptr;
-	bool answerTest1 = false;
-	printf("Size of string: ");
+	bool answerTest1 = true;
 	char stringTest1[13] = "{[()()][]()}";
-	printf("String:");
-	printf("%s\n", stringTest1);
-	checkString(stringTest1, &headTest1);
-	bool myAnswerTest1 = answer(&headTest1);
+	bool myAnswerTest1 = checkBalance(stringTest1);
 	checkTest = checkAnswer(myAnswerTest1, answerTest1, checkTest);
-	printf("\n");
-	deleteStack(&headTest1);
 
-	Stack* headTest2 = nullptr;
 	bool answerTest2 = false;
-	printf("Size of string: ");
 	char stringTest2[21] = "({}({[()(()][]()}))";
-	printf("String:");
-	printf("%s\n", stringTest2);
-	checkString(stringTest2, &headTest2);
-	bool myAnswerTest2 = answer(&headTest2);
+	bool myAnswerTest2 = checkBalance(stringTest2);
 	checkTest = checkAnswer(myAnswerTest2, answerTest2, checkTest);
-	printf("\n");
-	deleteStack(&headTest1);
 	return checkTest;
 }
 
 int main()
 {
-	return test() ? 0 : -1;
+
+	if (!test())
+	{
+		return -1;
+	}
+	char string[100]{};
+	printf("Input string:\n");
+	scanf("%s", string);
+	if (checkBalance(string))
+	{
+		printf("Balance is correct\n");
+	}
+	else
+	{
+		printf("Balance is not correct\n");
+	}
+	return 0;
 }
 

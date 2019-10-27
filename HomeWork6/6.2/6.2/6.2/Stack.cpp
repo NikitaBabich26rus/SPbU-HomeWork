@@ -21,4 +21,5 @@ void deleteStack(Stack** head)
 	{
 		pop(head);
 	}
+	delete* head;
 }

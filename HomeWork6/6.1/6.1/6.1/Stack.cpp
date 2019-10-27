@@ -1,8 +1,6 @@
 
 #include "Stack.h"
 
-using namespace std;
-
 void push(int value, Stack** head)
 {
 	Stack* newElement = new Stack;
@@ -16,4 +14,12 @@ void pop(Stack** head)
 	Stack* newElement = (*head)->next;
 	delete *head;
 	*head = newElement;
+}
+
+void deleteStack(Stack** head)
+{
+	while (*head != nullptr)
+	{
+		pop(head);
+	}
 }

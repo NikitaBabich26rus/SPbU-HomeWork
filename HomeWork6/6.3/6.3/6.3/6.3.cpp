@@ -12,24 +12,35 @@ int pushValue(char answer[], int count, char value)
 	return count;
 }
 
+bool operators1(char value)
+{
+	return value == '/' || value == '*' || value == '-' || value == '+';
+}
+
+bool operators2(char value)
+{
+	return value == '/' || value == '*';
+}
+
 int algorithmDijkstra(Stack** head, char value, int count, char answer[])
 {
 	if (value <= '9' && value >= '0')
 	{
 		count = pushValue(answer, count, value);
 	}
-	if (value == '+' || value == '-' || value == '/' || value == '*')
+	if (value == '+' || value == '-')
 	{
-		if (*head != nullptr)
+		while (!empty(head) && operators1((*head)->value))
 		{
-			if ((value == '+' || value == '-') && ((*head)->value == '*' || (*head)->value == '/' || (*head)->value == '+' || (*head)->value == '-'))
-			{
-				count = pushValue(answer, count, pop(head));
-			}
-			if ((value == '*' || value == '/') && ((*head)->value == '*' || (*head)->value == '/'))
-			{
-				count = pushValue(answer, count, pop(head));
-			}
+			count = pushValue(answer, count, pop(head));
+		}
+		push(value, head);
+	}
+	if (value == '/' || value == '*')
+	{
+		while (!empty(head) && operators2((*head)->value))
+		{
+			count = pushValue(answer, count, pop(head));
 		}
 		push(value, head);
 	}

@@ -25,3 +25,8 @@ void deleteStack(Stack** head)
 	}
 	delete* head;
 }
+
+bool empty(Stack** head)
+{
+	return *head == nullptr;
+}

@@ -15,3 +15,6 @@ char pop(Stack** head);
 
 // Удаление стека
 void deleteStack(Stack** head);
+
+// Проверка стека на пустоту
+bool empty(Stack** head);

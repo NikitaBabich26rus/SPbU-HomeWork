@@ -17,3 +17,11 @@ char pop(Stack** head)
 	return element;
 }
 
+void deleteStack(Stack** head)
+{
+	while (*head != nullptr)
+	{
+		pop(head);
+	}
+	delete* head;
+}

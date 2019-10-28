@@ -26,6 +26,10 @@ int algorithmDijkstra(Stack** head, char value, int count, char answer[])
 			{
 				count = pushValue(answer, count, pop(head));
 			}
+			if ((value == '*' || value == '/') && ((*head)->value == '*' || (*head)->value == '/'))
+			{
+				count = pushValue(answer, count, pop(head));
+			}
 		}
 		push(value, head);
 	}
@@ -62,6 +66,7 @@ int checkString(char string[], char answer[])
 		head = head->next;
 	}
 	count--;
+	deleteStack(&head);
 	return count;
 }
 
@@ -80,7 +85,7 @@ bool checkTest(char myAnswer[], char answer[], int size)
 bool tests()
 {
 	bool checkTest1 = false;
-	char answerTest1[18] = "1 2 + 4 8 + 3 / *";
+	char answerTest1[18] = "1 2 + 4 8 + * 3 /";
 	char stringTest1[26] = "( 1 + 2 ) * ( 4 + 8 ) / 3";
 	char myAnswerTest1[30]{};
 	const int size = checkString(stringTest1, myAnswerTest1);
@@ -108,4 +113,5 @@ int main()
 	fgets(string, 100, stdin);
 	const int size = checkString(string, answer);
 	printf("%s\n", answer);
+	return 0;
 }

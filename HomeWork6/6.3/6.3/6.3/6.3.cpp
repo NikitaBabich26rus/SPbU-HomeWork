@@ -22,7 +22,7 @@ int algorithmDijkstra(Stack** head, char value, int count, char answer[])
 	{
 		if (*head != nullptr)
 		{
-			if ((value == '+' || value == '-') && ((*head)->value == '*' || (*head)->value == '/'))
+			if ((value == '+' || value == '-') && ((*head)->value == '*' || (*head)->value == '/' || (*head)->value == '+' || (*head)->value == '-'))
 			{
 				count = pushValue(answer, count, pop(head));
 			}
@@ -63,7 +63,9 @@ int checkString(char string[], char answer[])
 	while (head != nullptr)
 	{
 		count = pushValue(answer, count, head->value);
-		head = head->next;
+		Stack* newHead = head->next;
+		delete head;
+		head = newHead;
 	}
 	count--;
 	deleteStack(&head);

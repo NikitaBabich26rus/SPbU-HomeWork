@@ -10,11 +10,11 @@ bool test()
 	push(test, 5);
 	push(test, 3);
 	push(test, 112);
-	if (checkElement(test, -123))
+	if (contains(test, -123))
 	{
 		checkTest = false;
 	}
-	if (checkElement(test, -12))
+	if (contains(test, -12))
 	{
 		checkTest = false;
 	}
@@ -24,7 +24,7 @@ bool test()
 	}
 	deleteElement(test, 112);
 	deleteElement(test, 3);
-	if (!checkElement(test, 5))
+	if (!contains(test, 5))
 	{
 		checkTest = false;
 	}
@@ -50,6 +50,7 @@ int main()
 		scanf("%d", &command);
 		if (command == 0)
 		{
+			deleteList(list);
 			return 0;
 		}
 		if (command == 1)
@@ -73,7 +74,6 @@ int main()
 			printf("\n");
 		}
 	}
-	deleteList(list);
 	return 0;
 }
 

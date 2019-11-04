@@ -2,6 +2,17 @@
 #include "List.h"
 
 
+struct ListElement
+{
+	int value;
+	ListElement* next;
+};
+
+struct List
+{
+	ListElement* head = nullptr;
+};
+
 List* createList()
 {
 	return new List;
@@ -17,37 +28,36 @@ void push(List* list, int value)
 	if (empty(list))
 	{
 		list->head = new ListElement{ value, nullptr };
+		return;
+	}
+	ListElement* element1 = nullptr;
+	ListElement* element2 = list->head;
+	while (element2 != nullptr && value > element2->value)
+	{
+		element1 = element2;
+		element2 = element2->next;
+	}
+	if (element1 == nullptr)
+	{
+		list->head = new ListElement{ value, element2 };
 	}
 	else
 	{
-		ListElement* element1 = nullptr;
-		ListElement* element2 = list->head;
-		while (element2 != nullptr && value > element2->value)
-		{
-			element1 = element2;
-			element2 = element2->next;
-		}
-		if (element1 == nullptr)
-		{
-			list->head = new ListElement{ value, element2 };
-		}
-		else
-		{
-			element1->next = new ListElement{ value, element2 };
-		}
+		element1->next = new ListElement{ value, element2 };
 	}
 }
 
 void deleteElement(List *list, int value)
 {
-	if (value == list->head->value)
+	if (!empty(list))
 	{
-		ListElement* help = list->head->next;
-		delete list->head;
-		list->head = help;
-	}
-	else
-	{
+		if (value == list->head->value)
+		{
+			ListElement* help = list->head->next;
+			delete list->head;
+			list->head = help;
+			return;
+		}
 		ListElement* firstElement = list->head;
 		ListElement* secondElement = nullptr;
 		while (firstElement != nullptr)
@@ -55,7 +65,7 @@ void deleteElement(List *list, int value)
 			if (value == firstElement->value)
 			{
 				ListElement* help = firstElement->next;
-				delete firstElement->next;
+				delete firstElement;
 				secondElement->next = help;
 				break;
 			}
@@ -85,25 +95,22 @@ bool checkSort(List *list)
 	return true;
 }
 
-bool checkElement(List* list, int value)
+bool contains(List* list, int value)
 {
 	if (empty(list))
 	{
 		return false;
 	}
-	else
+	ListElement* helpElement = list->head;
+	while (helpElement != nullptr)
 	{
-		ListElement* helpElement = list->head;
-		while (helpElement != nullptr)
+		if (helpElement->value == value)
 		{
-			if (helpElement->value == value)
-			{
-				return true;
-			}
-			helpElement = helpElement->next;
+			return true;
 		}
-		return false;
+		helpElement = helpElement->next;
 	}
+	return false;
 }
 
 void outputList(List* list)

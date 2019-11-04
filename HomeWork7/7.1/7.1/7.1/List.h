@@ -1,31 +1,31 @@
 #pragma once
 
+// Элементы списка
+struct ListElement;
 
-struct ListElement
-{
-	int value;
-	ListElement* next;
-};
+// Список - структура данных, позволяющая хранить элементы 
+struct List;
 
-struct List
-{
-	ListElement* head = nullptr;
-};
-
+// Создать список
 List* createList();
 
+// Проверка списка на наличие элементов
 bool empty(List* head);
 
+// Добавить элемент
 void push(List* list, int value);
 
+// Удалить элемент
 void deleteElement(List* list, int value);
 
+// Вывести лист
 void outputList(List* list);
 
+// Проверить список на сортированность
 bool checkSort(List* list);
 
-bool checkElement(List* list, int value);
+// Проверить список на налчие элемента
+bool contains(List* list, int value);
 
-void outputList(List* list);
-
+// Удалить список
 void deleteList(List* list);

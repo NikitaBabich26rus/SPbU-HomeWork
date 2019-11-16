@@ -1,9 +1,9 @@
 #pragma once
 
-// Элементы списка
+// Элементы циклического списка списка
 struct ListElement;
 
-// Список
+// Циклический список
 struct List;
 
 // Создать список
@@ -21,5 +21,3 @@ void deleteElement(List* list, ListElement* value);
 // Вывод списка
 void outputList(List* list);
 
-// Реализация алгоритма
-int algorithm(int size, int count);

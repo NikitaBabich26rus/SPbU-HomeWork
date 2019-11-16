@@ -20,7 +20,7 @@ List* createList()
 
 bool empty(List* list)
 {
-	return  list->head == nullptr;
+	return list->head == nullptr;
 }
 
 void push(List* list, int value)
@@ -59,28 +59,4 @@ void outputList(List* list)
 		printf("%d ", helpElement->value);
 		helpElement = helpElement->next;
 	}
-}
-
-int algorithm(int size, int count)
-{
-	List* list = createList();
-	for (int i = 0; i < size; i++)
-	{
-		push(list, i + 1);
-	}
-	ListElement* parent = list->tail;
-	while (parent != parent->next)
-	{
-		for (int i = 0; i < count - 1; i++)
-		{
-			parent = parent->next;
-		}
-		//outputList(list);
-		//printf("\n");
-		deleteElement(list, parent);
-	}
-	int answer = parent->value;
-	delete parent;
-	delete list;
-	return answer;
 }

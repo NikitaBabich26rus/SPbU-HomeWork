@@ -45,12 +45,21 @@ void deleteElement(List* list, ListElement *parent)
 	{
 		list->head = helpElement;
 	}
+	if (list->tail == parent->next)
+	{
+		list->tail = parent;
+	}
 	delete parent->next;
 	parent->next = helpElement;
 }
 
 void outputList(List* list)
 {
+	if (list->head == list->head->next)
+	{
+		printf("%d", list->head->value);
+		return;
+	}
 	ListElement* helpElement = list->head;
 	printf("%d ", helpElement->value);
 	helpElement = helpElement->next;
@@ -59,4 +68,19 @@ void outputList(List* list)
 		printf("%d ", helpElement->value);
 		helpElement = helpElement->next;
 	}
+}
+
+ListElement* takeTail(List* list)
+{
+	return list->tail;
+}
+
+ListElement* takeNextElement(ListElement* element)
+{
+	return element->next;
+}
+
+int takeValue(ListElement* element)
+{
+	return element->value;
 }

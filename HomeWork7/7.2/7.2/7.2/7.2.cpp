@@ -9,18 +9,16 @@ int algorithm(int size, int count)
 	{
 		push(list, i + 1);
 	}
-	ListElement *parent = list->tail;
-	while (parent != parent->next)
+	ListElement *parent = takeTail(list);
+	while (parent != takeNextElement(parent))
 	{
 		for (int i = 0; i < count - 1; i++)
 		{
-			parent = parent->next; 
+			parent = takeNextElement(parent); 
 		}
-		//outputList(list);
-		//printf("\n");
 		deleteElement(list, parent);
 	}
-	int answer = parent->value;
+	int answer = takeValue(parent);
 	delete parent;
 	delete list;
 	return answer;

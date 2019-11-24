@@ -20,9 +20,7 @@ int main()
 		scanf("%s", number);
 		push(list, name, number);
 	}
-	output(list);
 	list = mergeSort(list);
-	printf("hui\n");
 	output(list);
 	return 0;
 }

@@ -118,20 +118,18 @@ void pushToNewList(List* list, List* leftList, List* rightList)
 	char sideString[sizeOfString]{};
 	if (strcmp(leftList->head->mainString, rightList->head->mainString) >= 0)
 	{
-		printf("%s\n", leftList->head->mainString);
-		printf("%s\n", leftList->head->sideString);
-		strcpy(mainString, leftList->head->mainString);
-		strcpy(sideString, leftList->head->sideString);
+		strcpy(mainString, rightList->head->mainString);
+		strcpy(sideString, rightList->head->sideString);
 		push(list, mainString, sideString);
-		deleteElement(leftList);
+		deleteElement(rightList);
 		//delete[] mainString;
 		//delete[] sideString;
 		return;
 	}
-	strcpy(mainString, rightList->head->mainString);
-	strcpy(sideString, rightList->head->sideString);
+	strcpy(mainString, leftList->head->mainString);
+	strcpy(sideString, leftList->head->sideString);
 	push(list, mainString, sideString);
-	deleteElement(rightList);
+	deleteElement(leftList);
 	//delete[] mainString;
 	//delete[] sideString;
 }

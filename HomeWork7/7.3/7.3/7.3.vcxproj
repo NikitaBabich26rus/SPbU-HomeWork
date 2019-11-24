@@ -159,6 +159,11 @@
     <ClInclude Include="List.h" />
     <ClInclude Include="MergeSort.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Input.txt" />
+    <Text Include="Test.txt" />
+    <Text Include="Text.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

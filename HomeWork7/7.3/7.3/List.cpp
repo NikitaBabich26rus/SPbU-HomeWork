@@ -149,3 +149,19 @@ void transferLastValues(List* oldList, List* newList)
 		//delete[] sideString;
 	}
 }
+
+bool checkSort(List* list)
+{
+	ListElement* firstElement = list->head;
+	ListElement* secondElement = nullptr;
+	for (;firstElement->next != nullptr;)
+	{
+		secondElement = firstElement;
+		firstElement = firstElement->next;
+		if (strcmp(secondElement->mainString, firstElement->mainString) > 0)
+		{
+			return false;
+		}
+	}
+	return true;
+}

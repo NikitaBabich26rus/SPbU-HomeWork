@@ -33,4 +33,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Test.txt" />
+    <Text Include="Text.txt" />
+    <Text Include="Input.txt" />
+  </ItemGroup>
 </Project>

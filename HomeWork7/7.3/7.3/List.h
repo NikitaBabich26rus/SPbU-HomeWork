@@ -23,3 +23,5 @@ bool empty(List* list);
 void transferLastValues(List* oldList, List* newList);
 
 void pushToNewList(List* list, List* leftList, List* rightList);
+
+bool checkSort(List* list);

@@ -4,17 +4,17 @@
 List* merge(List* leftList, List* rightList)
 {
 	List* list = createList();
-	while (!empty(leftList) || !empty(rightList))
+	while (!empty(leftList) && !empty(rightList))
 	{
 		pushToNewList(list, leftList, rightList);
-		if (!empty(leftList) && empty(rightList))
-		{
-			transferLastValues(leftList, list);
-		}
-		if (empty(leftList) && !empty(rightList))
-		{
-			transferLastValues(rightList, list);
-		}
+	}
+	if (!empty(leftList))
+	{
+		transferLastValues(leftList, list);
+	}
+	if (!empty(rightList))
+	{
+		transferLastValues(rightList, list);
 	}
 	return list;
 }
@@ -26,8 +26,10 @@ List* mergeSort(List* list)
 	{
 		return list;
 	}
-	List* leftList = createNewLeftlist(list, size);
-	List* rightList = createNewRightList(list, size);
+	List* leftList = createList();
+	createNewLeftList(list, leftList, size);
+	List* rightList = createList();
+	createNewRightList(list, rightList, size);
 	leftList = mergeSort(leftList);
 	rightList = mergeSort(rightList);
 

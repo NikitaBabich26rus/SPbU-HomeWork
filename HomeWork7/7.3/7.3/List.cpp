@@ -41,6 +41,7 @@ void push(List* list, char mainString[], char sideString[])
 		strcpy(list->head->mainString, mainString);
 		strcpy(list->head->sideString, sideString);
 		list->tail = list->head;
+		list->size = list->size + 1;
 		return;
 	}
 	list->tail->next = new ListElement;
@@ -62,11 +63,10 @@ void output(List* list)
 	}
 }
 
-List* createNewRightList(List* list, int size)
+void createNewRightList(List* list, List* rightList, int size)
 {
 	ListElement* helpElement = list->tail;
-	List* rightList = createList();
-	for (int i = size; i >= size / 2 + bool(size % 2); i--)
+	for (int i = size - 1; i >= size / 2; i--)
 	{
 		char mainString[sizeOfString]{};
 		char sideString[sizeOfString]{};
@@ -74,17 +74,15 @@ List* createNewRightList(List* list, int size)
 		strcpy(sideString, helpElement->sideString);
 		push(rightList, mainString, sideString);
 		helpElement = helpElement->previos;
-		delete[] mainString;
-		delete[] sideString;
+	//	delete[] mainString;
+	//  delete[] sideString;
 	}
-	return rightList;
 }
 
-List* createNewLeftList(List* list, int size)
+void createNewLeftList(List* list, List* leftList, int size)
 {
 	ListElement* helpElement = list->head;
-	List* leftList = createList();
-	for (int i = 1; i <= size / 2; i++)
+	for (int i = 0; i < size / 2; i++)
 	{
 		char mainString[sizeOfString]{};
 		char sideString[sizeOfString]{};
@@ -92,10 +90,26 @@ List* createNewLeftList(List* list, int size)
 		strcpy(sideString, helpElement->sideString);
 		push(leftList, mainString, sideString);
 		helpElement = helpElement->next;
-		delete[] mainString;
-		delete[] sideString;
+		//delete[] mainString;
+		//delete[] sideString;
 	}
-	return leftList;
+}
+
+void deleteElement(List* list)
+{
+	if (list->head->next == nullptr)
+	{
+		delete list->head;
+		list->head = nullptr;
+		list->tail = nullptr;
+		list->size = 0;
+		return;
+	}
+	ListElement* helpElement = list->head->next;
+	delete list->head;
+	list->head = helpElement;
+	list->size = list->size - 1;
+	list->head->previos = nullptr;
 }
 
 void pushToNewList(List* list, List* leftList, List* rightList)
@@ -104,22 +118,22 @@ void pushToNewList(List* list, List* leftList, List* rightList)
 	char sideString[sizeOfString]{};
 	if (strcmp(leftList->head->mainString, rightList->head->mainString) >= 0)
 	{
+		printf("%s\n", leftList->head->mainString);
+		printf("%s\n", leftList->head->sideString);
 		strcpy(mainString, leftList->head->mainString);
 		strcpy(sideString, leftList->head->sideString);
 		push(list, mainString, sideString);
-		leftList->head = leftList->head->next;
-		delete leftList->head->previos;
-		delete[] mainString;
-		delete[] sideString;
+		deleteElement(leftList);
+		//delete[] mainString;
+		//delete[] sideString;
 		return;
 	}
 	strcpy(mainString, rightList->head->mainString);
 	strcpy(sideString, rightList->head->sideString);
 	push(list, mainString, sideString);
-	rightList->head = rightList->head->next;
-	delete rightList->head->previos;
-	delete[] mainString;
-	delete[] sideString;
+	deleteElement(rightList);
+	//delete[] mainString;
+	//delete[] sideString;
 }
 
 void transferLastValues(List* oldList, List* newList)
@@ -133,7 +147,7 @@ void transferLastValues(List* oldList, List* newList)
 		strcpy(sideString, helpElement->sideString);
 		push(newList, mainString, sideString);
 		helpElement = helpElement->next;
-		delete[] mainString;
-		delete[] sideString;
+		//delete[] mainString;
+		//delete[] sideString;
 	}
 }

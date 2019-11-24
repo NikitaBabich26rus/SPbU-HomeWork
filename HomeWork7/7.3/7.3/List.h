@@ -12,11 +12,9 @@ void push(List* list, char mainString[], char sideString[]);
 
 void output(List* list);
 
-int sizeOfList(List* list);
+void createNewLeftList(List* list, List* leftList, int size);
 
-List* createNewLeftlist(List* list, int mid);
-
-List* createNewRightList(List* list, int mid);
+void createNewRightList(List* list, List* rightList, int size);
 
 int takeListSize(List* list);
 

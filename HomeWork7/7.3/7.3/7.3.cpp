@@ -21,8 +21,9 @@ int main()
 		push(list, name, number);
 	}
 	output(list);
-	List* newList = mergeSort(list);
-	output(newList);
+	list = mergeSort(list);
+	printf("hui\n");
+	output(list);
 	return 0;
 }
 

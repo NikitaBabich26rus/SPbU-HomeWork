@@ -27,7 +27,7 @@ bool test()
 	int keyTest7 = 15;
 	char wordTest7[sizeOfWord] = "gg";
 	push(tree, keyTest7, wordTest7);
-	deleteElement(tree, 19);
+	checkElementForDelete(tree, 19);
 	bool test = true;
 	if (checkKeyInTree(tree, 19) == true)
 	{
@@ -49,6 +49,7 @@ bool test()
 	{
 		test = false;
 	}
+	deleteTree(tree);
 	return test;
 }
 
@@ -118,7 +119,7 @@ int main()
 			printf("Введите ключ : ");
 			int key = 0;
 			scanf("%d", &key);
-			deleteElement(tree, key);
+			checkElementForDelete(tree, key);
 		}
 		if (command == 0)
 		{

@@ -163,7 +163,7 @@ void setChild(TreeElement* parent, TreeElement* oldChild, TreeElement* newChild)
 	}
 }
 
-void deleteElement(Tree* tree, int key)
+void checkElementForDelete(Tree* tree, int key)
 {
 	TreeElement* parent = nullptr;
 	TreeElement* elementForDeletion = checkElementInTreeAndParent(tree, key, &parent);
@@ -175,12 +175,12 @@ void deleteElement(Tree* tree, int key)
 	{
 		if (tree->head == elementForDeletion)
 		{
-			delete tree->head;
+			deleteElement(tree->head);
 			tree->head = nullptr;
 			return;
 		}
 		setChild(parent, elementForDeletion, nullptr);
-		delete elementForDeletion;
+		deleteElement(elementForDeletion);
 		return;
 	}
 	if (elementForDeletion->leftChild == nullptr && elementForDeletion->rightChild != nullptr)
@@ -188,11 +188,11 @@ void deleteElement(Tree* tree, int key)
 		if (tree->head == elementForDeletion)
 		{
 			tree->head = elementForDeletion->rightChild;
-			delete elementForDeletion;
+			deleteElement(elementForDeletion);
 			return;
 		}
 		setChild(parent, elementForDeletion, elementForDeletion->rightChild);
-		delete elementForDeletion;
+		deleteElement(elementForDeletion);
 		return;
 	}
 	if (elementForDeletion->rightChild == nullptr && elementForDeletion->leftChild != nullptr)
@@ -200,36 +200,50 @@ void deleteElement(Tree* tree, int key)
 		if (tree->head == elementForDeletion)
 		{
 			tree->head = elementForDeletion->leftChild;
-			delete elementForDeletion;
+			deleteElement(elementForDeletion);
 			return;
 		}  
 		setChild(parent, elementForDeletion, elementForDeletion->leftChild);
-		delete elementForDeletion;
+		deleteElement(elementForDeletion);
 		return;
 	}
 	TreeElement* parentOfÑhangeElement = elementForDeletion;
 	TreeElement* changeElement = findLeftMax(elementForDeletion, &parentOfÑhangeElement);
 	if (tree->head == elementForDeletion)
 	{
+		if (elementForDeletion->leftChild == changeElement)
+		{
+			tree->head = changeElement;
+			changeElement->rightChild = elementForDeletion->rightChild;
+			deleteElement(elementForDeletion);
+			return;
+		}
 		tree->head = changeElement;
 		parentOfÑhangeElement->rightChild = changeElement->leftChild;
 		changeElement->leftChild = elementForDeletion->leftChild;
 		changeElement->rightChild = elementForDeletion->rightChild;
-		delete elementForDeletion;
+		deleteElement(elementForDeletion);
+		return;
+	}
+	if (elementForDeletion->leftChild == changeElement)
+	{
+		setChild(parent, elementForDeletion, changeElement);
+		changeElement->rightChild = elementForDeletion->rightChild;
+		deleteElement(elementForDeletion);
 		return;
 	}
 	parentOfÑhangeElement->rightChild = changeElement->leftChild;
 	setChild(parent, elementForDeletion, changeElement);
 	changeElement->leftChild = elementForDeletion->leftChild;
 	changeElement->rightChild = elementForDeletion->rightChild;
-	delete elementForDeletion;
+	deleteElement(elementForDeletion);
 }
 
 void deleteTree(Tree* tree)
 {
 	while (!empty(tree))
 	{
-		deleteElement(tree, tree->head->key);
+		checkElementForDelete(tree, tree->head->key);
 	}
 	delete tree;
 }

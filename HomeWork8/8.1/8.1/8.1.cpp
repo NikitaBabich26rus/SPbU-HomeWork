@@ -29,23 +29,23 @@ bool test()
 	push(tree, keyTest7, wordTest7);
 	checkElementForDelete(tree, 19);
 	bool test = true;
-	if (checkKeyInTree(tree, 19) == true)
+	if (isKeyInTree(tree, 19))
 	{
 		test = false;
 	}
-	if (checkWordInTree(tree, 19) != nullptr)
+	if (getWordInTree(tree, 19) != nullptr)
 	{
 		test = false;
 	}
-	if (checkKeyInTree(tree, 5) == false)
+	if (!isKeyInTree(tree, 5))
 	{
 		test = false;
 	}
-	if (checkKeyInTree(tree, 9) == false)
+	if (!isKeyInTree(tree, 9))
 	{
 		test = false;
 	}
-	if (checkKeyInTree(tree, 25) == false)
+	if (!isKeyInTree(tree, 25))
 	{
 		test = false;
 	}
@@ -66,7 +66,7 @@ int main()
 	printf("Если вы хотите проверить наличие заданного ключа в словаре, введите 3\n");
 	printf("Если вы хотите удалить заданный ключ и связанное с ним значение из словаря, введите 4\n");
 	printf("Если вы хотите выйти, введите 0\n");
-	while(true)
+	while (true)
 	{
 		int command = 0;
 		printf("Введите команду : ");
@@ -88,16 +88,14 @@ int main()
 			int key = 0;
 			scanf("%d", &key);
 
-			if (!checkKeyInTree(tree, key))
+			if (!isKeyInTree(tree, key))
 			{
 				printf("Данного слова нет в словаре\n");
 			}
 			else
 			{
-				char helpWord[sizeOfWord]{};
-				strcpy(helpWord, checkWordInTree(tree, key));
 				printf("Ваше слово : ");
-				printf("%s\n", helpWord);
+				printf("%s\n", getWordInTree(tree, key));
 			}
 		}
 		if (command == 3)
@@ -105,7 +103,7 @@ int main()
 			printf("Введите ключ : ");
 			int key = 0;
 			scanf("%d", &key);
-			if (!checkKeyInTree(tree, key))
+			if (!isKeyInTree(tree, key))
 			{
 				printf("Данный ключ не содержится в словаре\n");
 			}

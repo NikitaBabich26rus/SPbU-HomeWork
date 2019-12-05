@@ -3,17 +3,17 @@
 #include <stdio.h>
 #include <locale.h>
 
-struct Tree
-{
-	TreeElement* head = nullptr;
-};
-
 struct TreeElement
 {
 	int key = 0;
 	char word[sizeOfWord];
 	TreeElement* rightChild = nullptr;
 	TreeElement* leftChild = nullptr;
+};
+
+struct Tree
+{
+	TreeElement* root = nullptr;
 };
 
 Tree* create()
@@ -23,27 +23,19 @@ Tree* create()
 
 bool empty(Tree* tree)
 {
-	return tree->head == nullptr;
-}
-
-void deleteElement(TreeElement* element)
-{
-	element->key = 0;
-	element->leftChild = nullptr;
-	element->rightChild = nullptr;
-	delete element;
+	return tree->root == nullptr;
 }
 
 void push(Tree* tree, int key, char word[])
 {
 	if (empty(tree))
 	{
-		tree->head = new TreeElement;
-		tree->head->key = key;
-		strcpy(tree->head->word, word);
+		tree->root = new TreeElement;
+		tree->root->key = key;
+		strcpy(tree->root->word, word);
 		return;
 	}
-	TreeElement* helpElement = tree->head;
+	TreeElement* helpElement = tree->root;
 	while (true)
 	{
 		if (key > helpElement->key)
@@ -78,7 +70,7 @@ void push(Tree* tree, int key, char word[])
 
 TreeElement* checkElementInTree(Tree* tree, int key)
 {
-	TreeElement* helpElement = tree->head;
+	TreeElement* helpElement = tree->root;
 	while (helpElement != nullptr)
 	{
 		if (key > helpElement->key)
@@ -97,17 +89,13 @@ TreeElement* checkElementInTree(Tree* tree, int key)
 	return helpElement;
 }
 
-bool checkKeyInTree(Tree* tree, int key)
+bool isKeyInTree(Tree* tree, int key)
 {
 	TreeElement* findElement = checkElementInTree(tree, key);
-	if (findElement == nullptr)
-	{
-		return false;
-	}
-	return true;
+	return findElement != nullptr;
 }
 
-char* checkWordInTree(Tree* tree, int key)
+char* getWordInTree(Tree* tree, int key)
 {
 	TreeElement* findElement = checkElementInTree(tree, key);
 	if (findElement == nullptr)
@@ -117,9 +105,9 @@ char* checkWordInTree(Tree* tree, int key)
 	return findElement->word;
 }
 
-TreeElement* checkElementInTreeAndParent(Tree* tree, int key, TreeElement** parent)
+TreeElement* getElementInTreeAndParent(Tree* tree, int key, TreeElement** parent)
 {
-	TreeElement* helpElement = tree->head;
+	TreeElement* helpElement = tree->root;
 	while (helpElement != nullptr)
 	{
 		if (key > helpElement->key)
@@ -166,84 +154,84 @@ void setChild(TreeElement* parent, TreeElement* oldChild, TreeElement* newChild)
 void checkElementForDelete(Tree* tree, int key)
 {
 	TreeElement* parent = nullptr;
-	TreeElement* elementForDeletion = checkElementInTreeAndParent(tree, key, &parent);
+	TreeElement* elementForDeletion = getElementInTreeAndParent(tree, key, &parent);
 	if (elementForDeletion == nullptr)
 	{
 		return;
 	}
 	if (elementForDeletion->leftChild == nullptr && elementForDeletion->rightChild == nullptr)
 	{
-		if (tree->head == elementForDeletion)
+		if (tree->root == elementForDeletion)
 		{
-			deleteElement(tree->head);
-			tree->head = nullptr;
+			delete(tree->root);
+			tree->root = nullptr;
 			return;
 		}
 		setChild(parent, elementForDeletion, nullptr);
-		deleteElement(elementForDeletion);
+		delete(elementForDeletion);
 		return;
 	}
 	if (elementForDeletion->leftChild == nullptr && elementForDeletion->rightChild != nullptr)
 	{
-		if (tree->head == elementForDeletion)
+		if (tree->root == elementForDeletion)
 		{
-			tree->head = elementForDeletion->rightChild;
-			deleteElement(elementForDeletion);
+			tree->root = elementForDeletion->rightChild;
+			delete(elementForDeletion);
 			return;
 		}
 		setChild(parent, elementForDeletion, elementForDeletion->rightChild);
-		deleteElement(elementForDeletion);
+		delete(elementForDeletion);
 		return;
 	}
 	if (elementForDeletion->rightChild == nullptr && elementForDeletion->leftChild != nullptr)
 	{
-		if (tree->head == elementForDeletion)
+		if (tree->root == elementForDeletion)
 		{
-			tree->head = elementForDeletion->leftChild;
-			deleteElement(elementForDeletion);
+			tree->root = elementForDeletion->leftChild;
+			delete(elementForDeletion);
 			return;
 		}  
 		setChild(parent, elementForDeletion, elementForDeletion->leftChild);
-		deleteElement(elementForDeletion);
+		delete(elementForDeletion);
 		return;
 	}
-	TreeElement* parentOfÑhangeElement = elementForDeletion;
-	TreeElement* changeElement = findLeftMax(elementForDeletion, &parentOfÑhangeElement);
-	if (tree->head == elementForDeletion)
+	TreeElement* parentOfChangeElement = elementForDeletion;
+	TreeElement* changeElement = findLeftMax(elementForDeletion, &parentOfChangeElement);
+	if (tree->root == elementForDeletion)
 	{
 		if (elementForDeletion->leftChild == changeElement)
 		{
-			tree->head = changeElement;
+			tree->root = changeElement;
 			changeElement->rightChild = elementForDeletion->rightChild;
-			deleteElement(elementForDeletion);
+			delete(elementForDeletion);
 			return;
 		}
-		tree->head = changeElement;
-		parentOfÑhangeElement->rightChild = changeElement->leftChild;
+		tree->root = changeElement;
+		parentOfChangeElement->rightChild = changeElement->leftChild;
 		changeElement->leftChild = elementForDeletion->leftChild;
 		changeElement->rightChild = elementForDeletion->rightChild;
-		deleteElement(elementForDeletion);
+		delete(elementForDeletion);
 		return;
 	}
 	if (elementForDeletion->leftChild == changeElement)
 	{
 		setChild(parent, elementForDeletion, changeElement);
 		changeElement->rightChild = elementForDeletion->rightChild;
-		deleteElement(elementForDeletion);
+		delete(elementForDeletion);
 		return;
 	}
-	parentOfÑhangeElement->rightChild = changeElement->leftChild;
+	parentOfChangeElement->rightChild = changeElement->leftChild;
 	setChild(parent, elementForDeletion, changeElement);
 	changeElement->leftChild = elementForDeletion->leftChild;
 	changeElement->rightChild = elementForDeletion->rightChild;
-	deleteElement(elementForDeletion);
+	delete(elementForDeletion);
 }
 
 void deleteTree(Tree* tree)
 {
 	while (!empty(tree))
 	{
-		checkElementForDelete(tree, tree->head->key);
+		checkElementForDelete(tree, tree->root->key);
 	}
 	delete tree;
 }

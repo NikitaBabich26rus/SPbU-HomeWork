@@ -18,9 +18,9 @@ bool test()
 	}
 	fclose(file);
 	list = mergeSort(list);
-	bool rezult = checkSort(list);
+	bool result = checkSort(list);
 	deleteList(list);
-	return rezult;
+	return result;
 }
 
 int main()

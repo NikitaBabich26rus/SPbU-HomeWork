@@ -16,12 +16,14 @@ List* merge(List* leftList, List* rightList)
 	{
 		transferLastValues(rightList, list);
 	}
+	delete leftList;
+	delete rightList;
 	return list;
 }
 
 List* mergeSort(List* list)
 {
-	int size = takeListSize(list);
+	int size = getListSize(list);
 	if (size < 2)
 	{
 		return list;

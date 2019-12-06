@@ -25,7 +25,7 @@ void createNewLeftList(List* list, List* leftList, int size);
 void createNewRightList(List* list, List* rightList, int size);
 
 // Возвращает размер списка
-int takeListSize(List* list);
+int getListSize(List* list);
 
 // Проверка списка на пустоту 
 bool empty(List* list);

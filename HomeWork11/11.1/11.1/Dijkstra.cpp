@@ -1,8 +1,7 @@
 #include "List.h"
 #include "Dijkstra.h"
 
-
-int dijkstra(int graph[][size], int distance[][size], bool used[], List* countries[], int sizeOfGraph, int currentVertex, int counter)
+void dijkstra(int graph[][size], int distance[][size], bool used[], List* countries[], int sizeOfGraph, int currentVertex)
 {
 	int minDistance = maxDistance;
 	int minDistanceNumber = -1;
@@ -16,9 +15,8 @@ int dijkstra(int graph[][size], int distance[][size], bool used[], List* countri
 	}
 	if (minDistanceNumber == -1)
 	{
-		return counter;
+		return;
 	}
-	counter--;
 	used[minDistanceNumber] = true;
 	push(countries[currentVertex], minDistanceNumber);
 	for (int i = 0; i < sizeOfGraph; i++)
@@ -28,16 +26,12 @@ int dijkstra(int graph[][size], int distance[][size], bool used[], List* countri
 			distance[currentVertex][i] = distance[currentVertex][minDistanceNumber] + graph[minDistanceNumber][i];
 		}
 	}
-	return counter;
 }
-
-
 
 void algorithm(int graph[][size], int capitals[], int amountOfCapitals, int sizeOfGraph, List* countries[])
 {
-	int counter = sizeOfGraph;
 	int distance[size][size]{};
-	bool used[10]{};
+	bool used[size]{};
 	for (int i = 0; i < amountOfCapitals; i++)
 	{
 		countries[capitals[i]] = nullptr;
@@ -51,11 +45,11 @@ void algorithm(int graph[][size], int capitals[], int amountOfCapitals, int size
 			}
 		}
 	}
-	while (counter)
+	for (int j = 0; j < sizeOfGraph; j++)
 	{
 		for (int i = 0; i < amountOfCapitals; i++)
 		{
-			counter = dijkstra(graph, distance, used, countries, sizeOfGraph, capitals[i], counter);
+			dijkstra(graph, distance, used, countries, sizeOfGraph, capitals[i]);
 		}
 	}
 }

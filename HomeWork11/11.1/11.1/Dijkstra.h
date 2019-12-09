@@ -1,6 +1,6 @@
 #pragma once
 
-const int maxDistance = 1000000;
+const int maxDistance = 10000000000;
 const int size = 100;
 
 // Алгоритм выбирающий подходящую вершину для запуска алгоритма Дейкстры

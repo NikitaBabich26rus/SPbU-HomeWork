@@ -19,31 +19,52 @@ bool test()
 	int country3[1]{ 2 };
 	int country4[2]{ 3, 4 };
 	int graphTest[size][size]{};
-	int capitals[3]{ 1, 2, 3 }; // Столицы : 2, 3, 4.
 
-	createEdge(graphTest, 1, 2, 12);
-	createEdge(graphTest, 2, 3, 27);
-	createEdge(graphTest, 2, 5, 48);
-	createEdge(graphTest, 3, 4, 37);
-	createEdge(graphTest, 4, 5, 13);
-
+	FILE* file = fopen("11.1Test.txt", "r");
+	int n = 0;
+	fscanf(file, "%d", &n);
+	int m = 0;
+	fscanf(file, "%d", &m);
+	for (int i = 0; i < m; i++)
+	{
+		int k = 0;
+		fscanf(file, "%d", &k);
+		int t = 0;
+		fscanf(file, "%d", &t);
+		int length = 0;
+		fscanf(file, "%d", &length);
+		createEdge(graphTest, k, t, length);
+	}
+	int k = 0;
+	fscanf(file, "%d", &k);
+	if (k == 0)
+	{
+		return true;
+	}
+	int* capitals = new int[k] {};
 	List* countries[size];
-	algorithm(graphTest, capitals, 3, 5, countries);
+	for (int i = 0; i < k; i++)
+	{
+		fscanf(file, "%d", &capitals[i]);
+		capitals[i]--;
+	}
+	algorithm(graphTest, capitals, k, n, countries);
 	if (!checkCountry(countries[1], country2, 2))
 	{
-		deleteList(countries[1]);
 		test1 = false;
 	}
 	if (!checkCountry(countries[2], country3, 1))
 	{
-		deleteList(countries[2]);
 		test2 = false;
 	}
 	if (!checkCountry(countries[3], country4, 2))
 	{
-		deleteList(countries[3]);
 		test3 = false;
 	}
+	deleteList(countries[1]);
+	deleteList(countries[2]);
+	deleteList(countries[3]);
+	delete[] capitals;
 	return test1 && test2 && test3;
 }
 
@@ -54,39 +75,33 @@ int main()
 		return -1;
 	}
 	setlocale(LC_ALL, "Russian");
-	printf("Введите число городов : ");
-	int n = 0;
-	scanf("%d", &n);
-	printf("Введите число дорог : ");
-	int m = 0;
-	scanf("%d", &m);
 	int graph[size][size]{};
+	FILE* file = fopen("11.1Input.txt", "r");
+	int n = 0;
+	fscanf(file, "%d", &n);
+	int m = 0;
+	fscanf(file, "%d", &m);
 	for (int i = 0; i < m; i++)
 	{
-		printf("Введите номер города : ");
 		int k = 0;
-		scanf("%d", &k);
-		printf("Введите номер города : ");
+		fscanf(file, "%d", &k);
 		int t = 0;
-		scanf("%d", &t);
-		printf("Введите длину дороги между этими городами : ");
+		fscanf(file, "%d", &t);
 		int length = 0;
-		scanf("%d", &length);
+		fscanf(file, "%d", &length);
 		createEdge(graph, k, t, length);
 	}
 	int k = 0;
-	printf("Введите количество столиц : ");
-	scanf("%d", &k);
-	if (!k)
+	fscanf(file, "%d", &k);
+	if (k == 0)
 	{
-		return 0;
+		return true;
 	}
-	int* capitals = new int[k]{};
+	int* capitals = new int[k] {};
 	List* countries[size];
-	printf("Введите столицы : ");
 	for (int i = 0; i < k; i++)
 	{
-		scanf("%d", &capitals[i]);
+		fscanf(file, "%d", &capitals[i]);
 		capitals[i]--;
 	}
 	algorithm(graph, capitals, k, n, countries);
@@ -99,4 +114,5 @@ int main()
 		printf("\n");
 	}
 	delete[] capitals;
+	return 0;
 }

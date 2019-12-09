@@ -35,5 +35,8 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Test.txt" />
+    <Text Include="Text.txt" />
+    <Text Include="11.1Test.txt" />
+    <Text Include="11.1Input.txt" />
   </ItemGroup>
 </Project>

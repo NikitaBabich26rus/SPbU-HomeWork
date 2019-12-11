@@ -1,5 +1,6 @@
 #include "MergeSort.h"
 #include "List.h"
+#include <stdio.h>
 
 List* merge(List* leftList, List* rightList)
 {
@@ -16,8 +17,8 @@ List* merge(List* leftList, List* rightList)
 	{
 		transferLastValues(rightList, list);
 	}
-	delete leftList;
-	delete rightList;
+	deleteList(leftList);
+	deleteList(rightList);
 	return list;
 }
 

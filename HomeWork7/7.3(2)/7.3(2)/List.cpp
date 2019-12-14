@@ -2,19 +2,19 @@
 #include <string.h>
 #include <stdio.h>
 
-struct List
-{
-	ListElement* head = nullptr;
-	ListElement* tail = nullptr;
-	int size = 0;
-};
-
 struct ListElement
 {
 	char mainString[sizeOfString]{};
 	char sideString[sizeOfString]{};
 	ListElement* next = nullptr;
-	ListElement* previos = nullptr;
+	ListElement* previous = nullptr;
+};
+
+struct List
+{
+	ListElement* head = nullptr;
+	ListElement* tail = nullptr;
+	int size = 0;
 };
 
 List* createList()
@@ -44,7 +44,7 @@ void push(List* list, char mainString[], char sideString[])
 		return;
 	}
 	list->tail->next = new ListElement;
-	list->tail->next->previos = list->tail;
+	list->tail->next->previous = list->tail;
 	list->tail = list->tail->next;
 	strcpy(list->tail->mainString, mainString);
 	strcpy(list->tail->sideString, sideString);
@@ -68,7 +68,7 @@ void createNewRightList(List* list, List* rightList, int size)
 	for (int i = size - 1; i >= size / 2; i--)
 	{
 		push(rightList, helpElement->mainString, helpElement->sideString);
-		helpElement = helpElement->previos;
+		helpElement = helpElement->previous;
 	}
 }
 
@@ -82,21 +82,24 @@ void createNewLeftList(List* list, List* leftList, int size)
 	}
 }
 
-void deleteElement(List* list)
+void deleteHead(List* list)
 {
-	if (list->head->next == nullptr)
+	if (!empty(list))
 	{
+		if (list->head->next == nullptr)
+		{
+			delete list->head;
+			list->head = nullptr;
+			list->tail = nullptr;
+			list->size = 0;
+			return;
+		}
+		ListElement* helpElement = list->head->next;
 		delete list->head;
-		list->head = nullptr;
-		list->tail = nullptr;
-		list->size = 0;
-		return;
+		list->head = helpElement;
+		list->size = list->size - 1;
+		list->head->previous = nullptr;
 	}
-	ListElement* helpElement = list->head->next;
-	delete list->head;
-	list->head = helpElement;
-	list->size = list->size - 1;
-	list->head->previos = nullptr;
 }
 
 void pushToNewList(List* list, List* leftList, List* rightList)
@@ -104,11 +107,11 @@ void pushToNewList(List* list, List* leftList, List* rightList)
 	if (strcmp(leftList->head->mainString, rightList->head->mainString) >= 0)
 	{
 		push(list, rightList->head->mainString, rightList->head->sideString);
-		deleteElement(rightList);
+		deleteHead(rightList);
 		return;
 	}
 	push(list, leftList->head->mainString, leftList->head->sideString);
-	deleteElement(leftList);
+	deleteHead(leftList);
 }
 
 void transferLastValues(List* oldList, List* newList)
@@ -146,7 +149,7 @@ void deleteList(List* list)
 			ListElement* helpElement = list->head->next;
 			delete list->head;
 			list->head = helpElement;
-			helpElement->previos = nullptr;
+			helpElement->previous = nullptr;
 		}
 		delete list->head;
 	}

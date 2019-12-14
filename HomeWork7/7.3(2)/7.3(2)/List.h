@@ -6,9 +6,6 @@ const int sizeOfString = 50;
 // Список
 struct List;
 
-// Элемент списка
-struct ListElement;
-
 // Создать список
 List* createList();
 

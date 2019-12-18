@@ -9,9 +9,6 @@ struct ListElement;
 // Список 
 struct List;
 
-// Хеш-таблица
-struct HashTable;
-
 // Создать список
 List* createList();
 
@@ -30,11 +27,20 @@ bool containsInList(List* list, char word[]);
 // Удалить список
 void deleteList(List* list);
 
-// Перенести элементы из списка старой хеш-таблицы в новую хеш-таблицу
-void pushToNewTableFromOldList(List* oldList, HashTable* newTable);
-
 // Получить размер списка
 int getSizeOfList(List* list);
+
+// Получить первый элемент списка
+ListElement* getListHead(List* list);
+
+// Получить слово, принадлежащее элементу списка
+char* getWordOfListElement(ListElement* element);
+
+// Получить количество элемента списка
+int getAmountOfListElement(ListElement* element);
+
+// Получить указатель на следущий элемент списка
+ListElement* getNextListElement(ListElement* element);
 
 // Проверка элемента на принадлежность списку
 // Если принадлежит, то добавить такой же элемент

@@ -6,7 +6,7 @@
 
 bool test()
 {
-	HashTable* table = createHashTable();
+	HashTable* table = createHashTable(3);
 	char str1[10]{ "a" };
 	char str2[10]{ "c" };
 	char str3[10]{ "a" };
@@ -41,7 +41,7 @@ int main()
 		return -1;
 	}
 	setlocale(LC_ALL, "Russian");
-	HashTable* table = createHashTable();
+	HashTable* table = createHashTable(3);
 	FILE* file = fopen("Input.txt", "r");
 	
 	while (!feof(file))

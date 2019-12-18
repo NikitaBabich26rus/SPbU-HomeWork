@@ -7,25 +7,27 @@
 struct HashTable
 {
 	int amountOfDifferentElements = 0;
-	int hashSize = 3;
+	int hashSize = 5;
 	List** arrayOfTable = new List*[hashSize];
 };
 
-HashTable* createHashTable()
+HashTable* createHashTable(int hashSize)
 {
-	HashTable* table = new HashTable;
-	for (int i = 0; i < table->hashSize; i++)
+	HashTable* newTable = new HashTable;
+	newTable->hashSize = hashSize;
+	newTable->arrayOfTable = new List * [newTable->hashSize];
+	for (int i = 0; i < newTable->hashSize; i++)
 	{
-		table->arrayOfTable[i] = createList();
+		newTable->arrayOfTable[i] = createList();
 	}
-	return table;
+	return newTable;
 }
 
 int hashFunction(HashTable* table, char word[])
 {
 	int result = 0;
 	for (int i = 0; word[i] != '\0'; ++i)
-		result = (result + word[i]) % table->hashSize;
+		result = (result + word[i]) % (table->hashSize);
 	return result;
 }
 
@@ -42,7 +44,9 @@ HashTable* addToTable(HashTable* table, char word[], int amount)
 		addToList(table->arrayOfTable[hashFunction(table, word)], word, amount);
 		if (table->amountOfDifferentElements / float(table->hashSize) > 1.2)
 		{
+			outputResultOfProgram(table);
 			table = resizeOfTable(table);
+			outputResultOfProgram(table);
 		}
 	}
 	return table;
@@ -74,13 +78,13 @@ void outputResultOfProgram(HashTable* table)
 {
 	float sumOfListLengths = 0;
 	float amountOfLists = 0;
-	int maxListLenght = 0;
+	int maxListLength = 0;
 	for (int i = 0; i < table->hashSize; i++)
 	{
 		int listLength = getSizeOfList(table->arrayOfTable[i]);
-		if (listLength > maxListLenght)
+		if (listLength > maxListLength)
 		{
-			maxListLenght = listLength;
+			maxListLength = listLength;
 		}
 		sumOfListLengths += listLength;
 		if (listLength > 0)
@@ -91,7 +95,7 @@ void outputResultOfProgram(HashTable* table)
 	printf("Коэффицент заполнения хеш-таблицы : ");
 	printf("%f\n", table->amountOfDifferentElements / float(table->hashSize));
 	printf("Максимальная длина сегмента хеш-таблицы : ");
-	printf("%d\n", maxListLenght);
+	printf("%d\n", maxListLength);     
 	printf("Средняя длина сегмента хеш-таблицы : ");
 	printf("%f\n", float(sumOfListLengths / amountOfLists));
 }
@@ -101,16 +105,24 @@ List* getListFromTable(HashTable* table, char word[])
 	return  table->arrayOfTable[hashFunction(table, word)];
 }
 
+void pushToNewTableFromOldList(List* oldList, HashTable* newTable)
+{
+	if (!empty(oldList))
+	{
+		ListElement* currentElement = getListHead(oldList);
+		while (currentElement != nullptr)
+		{
+			List* helpList = getListFromTable(newTable, getWordOfListElement(currentElement));
+			addToList(helpList, getWordOfListElement(currentElement), getAmountOfListElement(currentElement));
+			currentElement = getNextListElement(currentElement);
+		}
+	}
+}
+
 HashTable* resizeOfTable(HashTable* oldTable)
 {
-	HashTable* newTable = new HashTable;
-	newTable->hashSize = oldTable->hashSize * 2;
+	HashTable* newTable = createHashTable(oldTable->hashSize * 2);
 	newTable->amountOfDifferentElements = oldTable->amountOfDifferentElements;
-	newTable->arrayOfTable = new List* [newTable->hashSize];
-	for (int i = 0; i < newTable->hashSize; i++)
-	{
-		newTable->arrayOfTable[i] = createList();
-	}
 	for (int i = 0; i < oldTable->hashSize; i++)
 	{
 		pushToNewTableFromOldList(oldTable->arrayOfTable[i], newTable);
@@ -118,3 +130,4 @@ HashTable* resizeOfTable(HashTable* oldTable)
 	deleteTable(oldTable);
 	return newTable;
 }
+

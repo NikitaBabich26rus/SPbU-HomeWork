@@ -7,7 +7,7 @@ struct HashTable;
 struct List;
 
 // Создать хеш-таблицу
-HashTable* createHashTable();
+HashTable* createHashTable(int hashSize);
 
 // Добавить элемент в хеш-таблицу
 HashTable* addToTable(HashTable* table, char word[], int amount);

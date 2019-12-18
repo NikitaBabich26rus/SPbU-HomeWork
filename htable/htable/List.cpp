@@ -13,6 +13,7 @@ struct ListElement
 struct List
 {
 	ListElement* head = nullptr;
+	int sizeOfList = 0;
 };
 
 List* createList()
@@ -27,15 +28,11 @@ bool empty(List* list)
 
 void addToList(List* list, char word[], int amount)
 {
+	list->sizeOfList += amount;
 	if (empty(list))
 	{
 		list->head = new ListElement;
 		strcpy(list->head->word, word);
-		list->head->amount = amount;
-		return;
-	}
-	if (strcmp(list->head->word, word) == 0)
-	{
 		list->head->amount = amount;
 		return;
 	}
@@ -50,7 +47,6 @@ void addToList(List* list, char word[], int amount)
 		strcpy(currentElement->next->word, word);
 	}
 	currentElement->next->amount = amount;
-	return;
 }
 
 bool containsInList(List* list, char word[])
@@ -118,17 +114,35 @@ void deleteList(List* list)
 	delete list;
 }
 
-void pushToNewTableFromOldList(List* oldList, HashTable* newTable)
+ListElement* getListHead(List* list)
 {
-	if (!empty(oldList))
+	if (!empty(list))
 	{
-		ListElement* currentElement = oldList->head;
-		while (currentElement != nullptr)
-		{
-			List* helpList = getListFromTable(newTable, currentElement->word);
-			addToList(helpList, currentElement->word, currentElement->amount);
-			currentElement = currentElement->next;
-		}
+		return list->head;
+	}
+}
+
+ListElement* getNextListElement(ListElement* element)
+{
+	if (element != nullptr)
+	{
+		return element->next;
+	}
+}
+
+char* getWordOfListElement(ListElement* element)
+{
+	if (element != nullptr)
+	{
+		return element->word;
+	}
+}
+
+int getAmountOfListElement(ListElement* element)
+{
+	if (element != nullptr)
+	{
+		return element->amount;
 	}
 }
 
@@ -138,12 +152,5 @@ int getSizeOfList(List* list)
 	{
 		return 0;
 	}
-	int counter = 0;
-	ListElement* currentElement = list->head;
-	while (currentElement != nullptr)
-	{
-		counter++;
-		currentElement = currentElement->next;
-	}
-	return counter;
+	return list->sizeOfList;
 }

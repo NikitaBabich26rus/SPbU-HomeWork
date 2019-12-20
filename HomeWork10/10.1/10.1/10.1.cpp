@@ -60,6 +60,5 @@ int main()
 	printf("\n");
 	outputStatistics(table);
 	deleteTable(table);
-	outputTable(table);
 	return 0;
 }

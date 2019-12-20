@@ -7,16 +7,15 @@
 struct HashTable
 {
 	int amountOfDifferentElements = 0;
-	int hashSize = 0;
-	List** arrayOfTable = new List*[hashSize];
+	int hashSize = 5;
+	List** arrayOfTable = nullptr;
 };
 
 HashTable* createHashTable(int hashSize)
 {
 	HashTable* newTable = new HashTable;
-	delete newTable->arrayOfTable;
 	newTable->hashSize = hashSize;
-	newTable->arrayOfTable = new List * [newTable->hashSize];
+	newTable->arrayOfTable = new List*[newTable->hashSize];
 	for (int i = 0; i < newTable->hashSize; i++)
 	{
 		newTable->arrayOfTable[i] = createList();
@@ -64,6 +63,7 @@ void deleteTable(HashTable* table)
 	{
 		deleteList(table->arrayOfTable[i]);
 	}
+	delete[] table->arrayOfTable;
 	delete table;
 }
 

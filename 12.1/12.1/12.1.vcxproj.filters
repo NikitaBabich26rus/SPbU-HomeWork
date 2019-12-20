@@ -18,9 +18,6 @@
     <ClCompile Include="12.1.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Source.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="Matiasevich.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -30,7 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Matiasevich.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

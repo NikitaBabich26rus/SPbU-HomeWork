@@ -2,26 +2,26 @@
 #include <locale.h>
 #include "Matiasevich.h"
 
-const int sizeOfString = 100000;
+const int sizeOfString = 5000;
 
 bool test()
 {
 	bool test = true;
 	char stringTest1[10]{ "abcdabce" };
-	char obrazTest1[10]{ "abce" };
-	if (Matiasevich(stringTest1, obrazTest1) != 4)
+	char stringForSearchingTest1[10]{ "abce" };
+	if (matiasevich(stringTest1, stringForSearchingTest1) != 4)
 	{
 		test = false;
 	}
 	char stringTest2[10]{ "abcdacde" };
-	char obrazTest2[10]{ "cd" };
-	if (Matiasevich(stringTest2, obrazTest2) != 2)
+	char stringForSearchingTest2[10]{ "cd" };
+	if (matiasevich(stringTest2, stringForSearchingTest2) != 2)
 	{
 		test = false;
 	}
 	char stringTest3[10]{ "aaaaaaaa" };
-	char obrazTest3[10]{ "gghg" };
-	if (Matiasevich(stringTest3, obrazTest3) != -1)
+	char stringForSearchingTest3[10]{ "gghg" };
+	if (matiasevich(stringTest3, stringForSearchingTest3) != -1)
 	{
 		test = false;
 	}
@@ -35,9 +35,9 @@ int main()
 		return -1;
 	}
 	setlocale(LC_ALL, "Russian");
-	char obraz[sizeOfString];
+	char stringForSearching[sizeOfString];
 	printf("Введите образ : ");
-	scanf("%s", obraz);
+	scanf("%s", stringForSearching);
 
 	FILE* file = fopen("Input.txt", "r");
 
@@ -49,7 +49,7 @@ int main()
 	fclose(file);
 
 	printf("Первое вхождение : ");
-	printf("%d", Matiasevich(string, obraz));
+	printf("%d", matiasevich(string, stringForSearching));
 	return 0;
 }
 

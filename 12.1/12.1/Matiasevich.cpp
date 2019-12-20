@@ -1,26 +1,16 @@
 #include "Matiasevich.h"
 #include <stdio.h>
+#include <string.h>
 
-int getSizeOfString(char string[])
+int* createPi(char stringForSearching[])
 {
-	for (int i = 0; true; i++)
-	{
-		if (string[i] == '\0')
-		{
-			return i - 1;
-		}
-	}
-}
-
-int* createPi(char obraz[])
-{
-	int size = getSizeOfString(obraz);
+	int size = strlen(stringForSearching) - 1;
 	int* pi = new int[size + 1] {};
 	int i = 1;
 	int j = 0;
 	while (i < size)
 	{
-		if (obraz[i] != obraz[j])
+		if (stringForSearching[i] != stringForSearching[j])
 		{
 			if (j == 0)
 			{
@@ -42,18 +32,18 @@ int* createPi(char obraz[])
 	return pi;
 }
 
-int Matiasevich(char string[], char obraz[])
+int matiasevich(char string[], char stringForSearching[])
 {
-	int* pi = createPi(obraz);
-	int stringSize = getSizeOfString(string);
-	int obrazSize = getSizeOfString(obraz);
+	int* pi = createPi(stringForSearching);
+	int stringSize = strlen(string) - 1;
+	int stringForSearchSize = strlen(stringForSearching) - 1;
 	int l = 0;
 	int k = 0;
 	while (k <= stringSize)
 	{
-		if (string[k] == obraz[l])
+		if (string[k] == stringForSearching[l])
 		{
-			if (l == obrazSize)
+			if (l == stringForSearchSize)
 			{
 				delete[] pi;
 				return k - l;

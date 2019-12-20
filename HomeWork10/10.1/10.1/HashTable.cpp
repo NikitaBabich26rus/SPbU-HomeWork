@@ -7,13 +7,14 @@
 struct HashTable
 {
 	int amountOfDifferentElements = 0;
-	int hashSize = 5;
-	List** arrayOfTable = new List * [hashSize];
+	int hashSize = 0;
+	List** arrayOfTable = new List*[hashSize];
 };
 
 HashTable* createHashTable(int hashSize)
 {
 	HashTable* newTable = new HashTable;
+	delete newTable->arrayOfTable;
 	newTable->hashSize = hashSize;
 	newTable->arrayOfTable = new List * [newTable->hashSize];
 	for (int i = 0; i < newTable->hashSize; i++)
@@ -27,7 +28,9 @@ int hashFunction(HashTable* table, char word[])
 {
 	int result = 0;
 	for (int i = 0; word[i] != '\0'; ++i)
-		result = (result + word[i]) % (table->hashSize);
+	{
+		result = (result + word[i]) % table->hashSize;
+	}
 	return result;
 }
 
@@ -61,7 +64,6 @@ void deleteTable(HashTable* table)
 	{
 		deleteList(table->arrayOfTable[i]);
 	}
-	delete[] table->arrayOfTable;
 	delete table;
 }
 
@@ -73,7 +75,7 @@ void outputTable(HashTable* table)
 	}
 }
 
-void outputResultOfProgram(HashTable* table)
+void outputStatistics(HashTable* table)
 {
 	float sumOfListLengths = 0;
 	float amountOfLists = 0;

@@ -28,4 +28,4 @@ List* getListFromTable(HashTable* table, char word[]);
 HashTable* resizeOfTable(HashTable* oldTable);
 
 // Вывести результат программы
-void outputResultOfProgram(HashTable* table);
+void outputStatistics(HashTable* table);

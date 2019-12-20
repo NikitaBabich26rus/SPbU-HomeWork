@@ -12,6 +12,7 @@ bool test()
 	char str3[10]{ "a" };
 	char str4[10]{ "c" };
 	char str5[10]{ "d" };
+	char str6[10]{"adsd"};
 	table = addToTable(table, str1, 1);
 	table = addToTable(table, str2, 1);
 	table = addToTable(table, str3, 1);
@@ -23,6 +24,10 @@ bool test()
 		test = false;
 	}
 	if (!containsInTable(table, str2))
+	{
+		test = false;
+	}
+	if (containsInTable(table, str6))
 	{
 		test = false;
 	}
@@ -50,10 +55,11 @@ int main()
 		fscanf(file, "%s", word);
 		table = addToTable(table, word, 1);
 	}
-
+	fclose(file);
 	outputTable(table);
 	printf("\n");
-	outputResultOfProgram(table);
+	outputStatistics(table);
 	deleteTable(table);
+	outputTable(table);
 	return 0;
 }

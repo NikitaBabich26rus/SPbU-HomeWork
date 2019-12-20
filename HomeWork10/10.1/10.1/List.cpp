@@ -28,7 +28,7 @@ bool empty(List* list)
 
 void addToList(List* list, char word[], int amount)
 {
-	list->sizeOfList ++;
+	list->sizeOfList++;
 	if (empty(list))
 	{
 		list->head = new ListElement;

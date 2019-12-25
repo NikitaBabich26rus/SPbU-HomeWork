@@ -9,8 +9,9 @@ bool tests()
 	char string1[sizeOfString]{ "123.13E+1312" };
 	char string2[sizeOfString]{ "123.13E+1ff2" };
 	char string3[sizeOfString]{ "123E1123" };
-	char string4[sizeOfString]{ "123,13E-12313" };
+	char string4[sizeOfString]{ "123.13E-12313" };
 	bool test = true;
+
 	if (!analyzer(string1))
 	{
 		test = false;

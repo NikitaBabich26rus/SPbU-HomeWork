@@ -20,13 +20,15 @@ Tree* createTree()
 	return new Tree;
 }
 
-void createNumber(char string[], int *counter, int *value)
+int createNumber(char string[], int *counter)
 {
+	int value = 0;
 	while (string[*counter] >= '0' && string[*counter] <= '9')
 	{
-		*value = (*value) * 10 + (string[*counter] - '0');
+		value = value * 10 + (string[*counter] - '0');
 		(*counter)++;
 	}
+	return value;
 }
 
 TreeElement* addElementInTree(char string[], int *counter, TreeElement* parent)
@@ -43,23 +45,20 @@ TreeElement* addElementInTree(char string[], int *counter, TreeElement* parent)
 			return nullptr;
 		}
 	}
-	TreeElement* newElement;
 	if (string[*counter] >= '0' && string[*counter] <= '9')
 	{
-		int value = 0;
-		createNumber(string, counter, &value);
-		newElement = new TreeElement{ ' ', value, parent, nullptr, nullptr };
-		return newElement;
+		const int value = createNumber(string, counter);
+		return new TreeElement{ ' ', value, parent, nullptr, nullptr };
 	}
 	else
 	{
 		char function = string[*counter];
 		(*counter)++;
-		newElement = new TreeElement{ function, 0, parent, nullptr, nullptr };
+		auto newElement = new TreeElement{ function, 0, parent, nullptr, nullptr };
 		newElement->leftChild = addElementInTree(string, counter, newElement);
 		newElement->rightChild = addElementInTree(string, counter, newElement);
+		return newElement;
 	}
-	return newElement;
 }
 
 void buildTree(Tree* tree, char string[])
@@ -97,25 +96,25 @@ TreeElement* counting(TreeElement* element)
 	{
 		TreeElement* leftElement = counting(element->leftChild);
 		TreeElement* rightElement = counting(element->rightChild);
-		if (leftElement->parent->function == '+')
+		if (element->function == '+')
 		{
-			leftElement->parent->function = ' ';
-			leftElement->parent->value = leftElement->value + rightElement->value;
+			element->function = ' ';
+			element->value = leftElement->value + rightElement->value;
 		}
-		if (leftElement->parent->function == '-')
+		if (element->function == '-')
 		{
-			leftElement->parent->function = ' ';
-			leftElement->parent->value = leftElement->value - rightElement->value;
+			element->function = ' ';
+			element->value = leftElement->value - rightElement->value;
 		}
-		if (leftElement->parent->function == '*')
+		if (element->function == '*')
 		{
-			leftElement->parent->function = ' ';
-			leftElement->parent->value = leftElement->value * rightElement->value;
+			element->function = ' ';
+			element->value = leftElement->value * rightElement->value;
 		}
-		if (leftElement->parent->function == '/')
+		if (element->function == '/')
 		{
-			leftElement->parent->function = ' ';
-			leftElement->parent->value = leftElement->value / rightElement->value;
+			element->function = ' ';
+			element->value = leftElement->value / rightElement->value;
 		}
 	}
 	return element;

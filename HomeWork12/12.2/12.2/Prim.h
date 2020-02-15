@@ -4,7 +4,7 @@
 const int maxDistance = 1000000000;
 
 // Длина и высота массива
-const int size = 100;
+const int size = 20;
 
 // Алгоритм прима
 void prim(int graph[][size], int sizeOfGraph, int parent[], int startVertex);

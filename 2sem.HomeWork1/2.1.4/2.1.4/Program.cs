@@ -4,46 +4,111 @@ namespace _2._1._4
 {
     class Program
     {
-        private static int GetElementOfArray(int[,] array, ref int numberOfString, ref int numberOfColumn)
+
+        enum Command
         {
-            if (numberOfColumn == 0 && numberOfString != 0)
-            {
-                numberOfString--;
-                numberOfColumn = array.GetLength(0) - 1;
-                return array[numberOfString, numberOfColumn];
-            }
-            numberOfColumn--;
-            return array[numberOfString, numberOfColumn];
+            right,
+            left,
+            up,
+            down
         }
 
-        private static int[,] GetTheSpiralArray(int[,] array)
+        private static int[] GetTheSpiralArray(int[,] array)
         {
-            int[,] spiralArray = new int[array.GetLength(0), array.GetLength(0)];
+            int numberOfString = 0;
+            int numberOfColumn = array.GetLength(1) - 1;
+            int[] spiralArray = new int[array.Length];
+            Command command = Command.left;
+            int count = array.Length - 1;
+            bool[,] used = new bool[array.GetLength(1), array.GetLength(1)];
 
-            int numberOfString = array.GetLength(0) - 1;
-            int numberOfColumn = array.GetLength(0);
-            int mid = array.GetLength(0) / 2 + 1;
-
-            for (int count = 1; count <= mid; count++)
+            for (int i = 0; i < array.Length * array.Length; i++)
             {
-                for (int j = count - 1; j < array.GetLength(0) - count + 1; j++)
+                switch (command)
                 {
-                    spiralArray[count - 1, j] = GetElementOfArray(array, ref numberOfString, ref numberOfColumn);
-                }
+                    case Command.left:
+                        {
+                            if (used[numberOfString, numberOfColumn])
+                            {
+                                numberOfColumn++;
+                                numberOfString++;
+                                command = Command.down;
+                                break;
+                            }
+                            spiralArray[count] = array[numberOfString, numberOfColumn];
+                            used[numberOfString, numberOfColumn] = true;
+                            count--;
+                            if ((numberOfString == array.GetLength(0) / 2 + 1) && (numberOfColumn == array.GetLength(0) / 2 + 1))
+                            {
+                                return spiralArray;
+                            }
+                            if (numberOfColumn == 0)
+                            {
+                                numberOfString++;
+                                command = Command.down;
+                                break;
+                            }
+                            numberOfColumn--;
+                            break;
+                        }
+                    case Command.down:
+                        {
+                            if (used[numberOfString, numberOfColumn])
+                            {
+                                numberOfString--;
+                                numberOfColumn++;
+                                command = Command.right;
+                                break;
+                            }
+                            spiralArray[count] = array[numberOfString, numberOfColumn];
+                            used[numberOfString, numberOfColumn] = true;
+                            count--;
+                            if (numberOfString == array.GetLength(0) - 1)
+                            {
+                                numberOfColumn++;
+                                command = Command.right;
+                                break;
+                            }
+                            numberOfString++;
+                            break;
+                        }
+                    case Command.right:
+                        {
+                            if (used[numberOfString, numberOfColumn])
+                            {
+                                numberOfColumn--;
+                                numberOfString--;
+                                command = Command.up;
+                                break;
+                            }
+                            spiralArray[count] = array[numberOfString, numberOfColumn];
+                            used[numberOfString, numberOfColumn] = true;
+                            count--;
+                            if (numberOfColumn == array.GetLength(0) - 1)
+                            {
+                                numberOfString--;
+                                command = Command.up;
+                                break;
+                            }
+                            numberOfColumn++;
+                            break;
+                        }
+                    case Command.up:
+                        {
+                            if (used[numberOfString, numberOfColumn])
+                            {
+                                numberOfColumn--;
+                                numberOfString++;
+                                command = Command.left;
+                                break;
+                            }
+                            spiralArray[count] = array[numberOfString, numberOfColumn];
+                            used[numberOfString, numberOfColumn] = true;
+                            count--;
+                            numberOfString--;
+                            break;
+                        }
 
-                for (int j = count; j < array.GetLength(0) - count + 1; j++)
-                {
-                    spiralArray[j, array.GetLength(0) - count] = GetElementOfArray(array, ref numberOfString, ref numberOfColumn);
-                }
-
-                for (int j = array.GetLength(0) - count - 1; j >= count - 1; --j)
-                {
-                    spiralArray[array.GetLength(0) - count, j] = GetElementOfArray(array, ref numberOfString, ref numberOfColumn);
-                }
-
-                for (int j = array.GetLength(0) - count - 1; j >= count; j--)
-                {
-                    spiralArray[j, count - 1] = GetElementOfArray(array, ref numberOfString, ref numberOfColumn);
                 }
             }
             return spiralArray;
@@ -81,9 +146,13 @@ namespace _2._1._4
             OutputArray(array);
             Console.WriteLine();
 
-            int[,] spiralArray = GetTheSpiralArray(array);
+            int[] spiralArray = GetTheSpiralArray(array);
             Console.WriteLine("Массив заданный по спирали : ");
-            OutputArray(spiralArray);
+            
+            for (int i = 0; i < spiralArray.Length; i++)
+            {
+                Console.Write(spiralArray[i] + "  ");
+            }
         }
     }
 }

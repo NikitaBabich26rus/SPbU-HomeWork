@@ -7,109 +7,46 @@ namespace _2._1._4
 
         enum Command
         {
-            right,
-            left,
-            up,
-            down
+            Right,
+            Left,
+            Up,
+            Down
         }
 
         private static int[] GetTheSpiralArray(int[,] array)
         {
-            int numberOfString = 0;
-            int numberOfColumn = array.GetLength(1) - 1;
+            int numberOfString = array.GetLength(1) / 2;
+            int numberOfColumn = array.GetLength(1) / 2;
             int[] spiralArray = new int[array.Length];
-            Command command = Command.left;
-            int count = array.Length - 1;
-            bool[,] used = new bool[array.GetLength(1), array.GetLength(1)];
+            int count = 0;
+            spiralArray[count] = array[numberOfString, numberOfColumn];
+            var iStep = 1;
+            var jStep = 1;
 
-            for (int i = 0; i < array.Length * array.Length; i++)
+            for (int i = 1; i <= array.GetLength(0); i++)
             {
-                switch (command)
+                for (int j = 0; j < i; j++)
                 {
-                    case Command.left:
-                        {
-                            if (used[numberOfString, numberOfColumn])
-                            {
-                                numberOfColumn++;
-                                numberOfString++;
-                                command = Command.down;
-                                break;
-                            }
-                            spiralArray[count] = array[numberOfString, numberOfColumn];
-                            used[numberOfString, numberOfColumn] = true;
-                            count--;
-                            if ((numberOfString == array.GetLength(0) / 2 + 1) && (numberOfColumn == array.GetLength(0) / 2 + 1))
-                            {
-                                return spiralArray;
-                            }
-                            if (numberOfColumn == 0)
-                            {
-                                numberOfString++;
-                                command = Command.down;
-                                break;
-                            }
-                            numberOfColumn--;
-                            break;
-                        }
-                    case Command.down:
-                        {
-                            if (used[numberOfString, numberOfColumn])
-                            {
-                                numberOfString--;
-                                numberOfColumn++;
-                                command = Command.right;
-                                break;
-                            }
-                            spiralArray[count] = array[numberOfString, numberOfColumn];
-                            used[numberOfString, numberOfColumn] = true;
-                            count--;
-                            if (numberOfString == array.GetLength(0) - 1)
-                            {
-                                numberOfColumn++;
-                                command = Command.right;
-                                break;
-                            }
-                            numberOfString++;
-                            break;
-                        }
-                    case Command.right:
-                        {
-                            if (used[numberOfString, numberOfColumn])
-                            {
-                                numberOfColumn--;
-                                numberOfString--;
-                                command = Command.up;
-                                break;
-                            }
-                            spiralArray[count] = array[numberOfString, numberOfColumn];
-                            used[numberOfString, numberOfColumn] = true;
-                            count--;
-                            if (numberOfColumn == array.GetLength(0) - 1)
-                            {
-                                numberOfString--;
-                                command = Command.up;
-                                break;
-                            }
-                            numberOfColumn++;
-                            break;
-                        }
-                    case Command.up:
-                        {
-                            if (used[numberOfString, numberOfColumn])
-                            {
-                                numberOfColumn--;
-                                numberOfString++;
-                                command = Command.left;
-                                break;
-                            }
-                            spiralArray[count] = array[numberOfString, numberOfColumn];
-                            used[numberOfString, numberOfColumn] = true;
-                            count--;
-                            numberOfString--;
-                            break;
-                        }
-
+                    if (count < array.Length - 1)
+                    {
+                        count++;
+                        numberOfColumn += jStep;
+                        spiralArray[count] = array[numberOfString, numberOfColumn];
+                    }
                 }
+
+                for (int j = 0; j < i; j++)
+                {
+                    if (count < array.Length - 1)
+                    {
+                        count++;
+                        numberOfString += iStep;
+                        spiralArray[count] = array[numberOfString, numberOfColumn];
+                    }
+                }
+
+                jStep = -jStep;
+                iStep = -iStep;
             }
             return spiralArray;
         }
@@ -126,13 +63,10 @@ namespace _2._1._4
             }
         }
 
-        static void Main(string[] args)
+        private static int[,] CreateArray(int size)
         {
-            Console.Write("Введите размер матрицы : ");
-            int size = int.Parse(Console.ReadLine());
-
             int[,] array = new int[size, size];
-            Random rand = new Random();
+            var rand = new Random();
 
             for (int i = 0; i < array.GetLength(0); i++)
             {
@@ -141,6 +75,14 @@ namespace _2._1._4
                     array[i, j] = rand.Next(1, 9);
                 }
             }
+            return array;
+        }
+
+        static void Main(string[] args)
+        {
+            Console.Write("Введите размер матрицы : ");
+            int size = int.Parse(Console.ReadLine());
+            int[,] array = CreateArray(size);
 
             Console.WriteLine("Исходный массив : ");
             OutputArray(array);

@@ -4,50 +4,22 @@ namespace _2._1._5
 {
     class Program
     {
-        private static int[,] SortingOfFirstString(int[,] array, int[,] sortingArray)
+        private static int[,] ColumnSort(int[,] array)
         {
             for (int i = 0; i < array.GetLength(1); i++)
             {
                 for (int j = 0; j < array.GetLength(1) - 1; j++)
                 {
-                    if (sortingArray[0, j] > sortingArray[0, j + 1])
+                    if (array[0, j] > array[0, j + 1])
                     {
-                        (sortingArray[0, j], sortingArray[0, j + 1]) = (sortingArray[0, j + 1], sortingArray[0, j]);
-                    }
-                }
-            }
-            return sortingArray;
-        }
-
-        private static int[,] ColumnSort(int[,] array)
-        {
-            bool[] used = new bool[array.GetLength(1)];
-            int[,] sortingArray = new int[array.GetLength(0), array.GetLength(1)];
-
-            for (int i = 0; i < array.GetLength(1); i++)
-            {
-                sortingArray[0, i] = array[0, i];
-            }
-            SortingOfFirstString(array, sortingArray);
-
-            for (int i = 0; i < sortingArray.GetLength(1); i++)
-            {
-                bool check = true;
-                for (int j = 0; j < array.GetLength(1); j++)
-                {
-                    if (sortingArray[0, i] == array[0, j] && !used[j] && check)
-                    {
-                        used[j] = true;
-                        for (int count = 1; count < array.GetLength(0); count++)
+                        for (int k = 0; k < array.GetLength(0); k++)
                         {
-                            sortingArray[count, i] = array[count, j];
+                            (array[k, j], array[k, j + 1]) = (array[k, j + 1], array[k, j]);
                         }
-                        check = false;
                     }
                 }
             }
-
-            return sortingArray;
+            return array;
         }
         private static void OutputArray(int[,] array)
         {

@@ -36,8 +36,15 @@ namespace _2._2._1
 
                 if (command == 3)
                 {
-                    Console.Write("Размер списка : ");
-                    Console.WriteLine(list.GetSize());
+                    if (list.IsEmpty())
+                    {
+                        Console.WriteLine("Ваш список пуст");
+                    }
+                    else
+                    {
+                        Console.Write("Размер списка : ");
+                        Console.WriteLine(list.GetSize());
+                    }
                 }
 
                 if (command == 4)
@@ -54,7 +61,7 @@ namespace _2._2._1
 
                 if (command == 5)
                 {
-                    if (list.GetSize() == 0)
+                    if (list.IsEmpty())
                     {
                         Console.WriteLine("Ваш список пуст");
                     }

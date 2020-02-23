@@ -19,10 +19,7 @@ namespace _2._2._1
         private ListElement head;
         private int size;
 
-        public List CreateList()
-        {
-            return new List();
-        }
+        // Добавить элемент в список
         public void Add(int value, int position)
         {    
             if (position > size + 1 || position <= 0)
@@ -44,6 +41,7 @@ namespace _2._2._1
             size++;
         }
 
+        //Удалить элемент из списка
         public void Remove(int position)
         {
             if (position <= 0 || position > size)
@@ -70,14 +68,17 @@ namespace _2._2._1
             }
         }
 
+        // Получить размер списка
         public int GetSize()
         {
             return size;
         }
 
+        // Проверка списка на пустоту
         public bool IsEmpty()
         => size == 0 ? true : false;
 
+        // Получить значение элемента по его позиции
         public int GetElement(int position)
         {
             if (position > size || position <= 0)
@@ -96,6 +97,7 @@ namespace _2._2._1
             return currentElement.value;
         }
 
+        // Вывести список
         public void OutputList()
         {
             ListElement currentElement = head;

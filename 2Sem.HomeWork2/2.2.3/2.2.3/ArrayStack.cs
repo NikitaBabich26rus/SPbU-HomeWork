@@ -11,14 +11,18 @@ namespace _2._2._3
 
         public void Push(int value)
         {
-            stack[stackSize] = value;
+            if (stackSize == 0)
+            {
+                stack[stackSize] = value;
+            }
             stackSize++;
+            stack[stackSize] = value;
         }
 
         public int Pop()
         {
-            var currentElement = stack[stackSize - 1];
-            stack[stackSize - 1] = 0;
+            var currentElement = stack[stackSize];
+            stack[stackSize] = 0;
             stackSize--;
             return currentElement;
         }

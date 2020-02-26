@@ -7,9 +7,9 @@ namespace _2._2._3
     class Calculator
     {
 
-		private IStack stack;
+		private static IStack stack;
 
-		private int CreateNumber(ref int position, string expression)
+		private static int CreateNumber(ref int position, string expression)
 		{
 			string value = null;
 
@@ -23,7 +23,7 @@ namespace _2._2._3
 			return int.Parse(value);
 		}
 
-		public int Counting(string expression, bool choice)
+		public static int Counting(string expression, bool choice)
 		{
 			if (choice)
 			{
@@ -53,29 +53,29 @@ namespace _2._2._3
 			return stack.Pop();
 		}
 
-		void Operation(IStack stack, char operation)
+		private static void Operation(IStack stack, char operation)
 		{
 			int value1 = stack.Pop();
 			int value2 = stack.Pop();
 
 			if (operation == '+')
 			{
-				stack.Push(value1 + value2);
+				stack.Push(value2 + value1);
 			}
 
 			if (operation == '*')
 			{
-				stack.Push(value1 * value2);
+				stack.Push(value2 * value1);
 			}
 
 			if (operation == '-')
 			{
-				stack.Push(value1 - value2);
+				stack.Push(value2 - value1);
 			}
 
 			if (operation == '/')
 			{
-				stack.Push(value1 / value2);
+				stack.Push(value2 / value1);
 			}
 		}
 	}

@@ -18,6 +18,8 @@ namespace _2._2._2
             Console.WriteLine(myTable.IsContain("Christine"));
             Console.WriteLine(myTable.IsContain("Ivan"));
             Console.WriteLine(myTable.IsContain("Evan"));
+            myTable.Add("Evan");
+            myTable.Add("Evan");
             myTable.Remove("Evan");
             Console.WriteLine(myTable.IsContain("Evan"));
         }

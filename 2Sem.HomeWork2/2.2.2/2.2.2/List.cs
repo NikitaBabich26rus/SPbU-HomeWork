@@ -25,19 +25,30 @@ namespace _2._2._2
         // Добавить элемент в список
         public void Add(string value)
         {
-            sizeOfList++;
             if (head == null)
             {
                 head = new ListElement(value, null);
+                sizeOfList++;
                 return;
             }
+
+            if (head.value == value)
+            {
+                return;
+            }
+
             var currentElement1 = head;
             var currentElement2 = head.next;
             while (currentElement2 != null)
             {
+                if (currentElement2.value == value)
+                {
+                    return;
+                }
                 currentElement1 = currentElement2;
                 currentElement2 = currentElement2.next;
             }
+            sizeOfList++;
             currentElement1.next = new ListElement(value, null);
         }
 

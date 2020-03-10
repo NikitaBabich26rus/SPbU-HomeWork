@@ -4,16 +4,79 @@ using System.Text;
 
 namespace _2._4._1
 {
-    public class Tree
+	/// <summary>
+	/// Tree's class
+	/// </summary>
+	public class Tree
     {
 		private INode root { get; set; }
 
-		public void buildTree(string str)
+		/// <summary>
+		/// Check expression for correct
+		/// </summary>
+		/// <param name="expression">String with expression</param>
+		/// <returns>Correct of not</returns>
+		public bool IsExpressionCorrect(string expression)
 		{
+			int amountOfValues = 0;
+
+			for (int i = 0; i < expression.Length; i++)
+			{
+				if (expression[i] == ' ' || expression[i] == ')' || expression[i] == '(')
+				{
+					continue;
+				}
+				else if (char.IsDigit(expression[i]))
+				{
+					CreateNumber(ref i, expression);
+					amountOfValues++;
+					continue;
+				}
+				else if (expression[i] == '+' || expression[i] == '-' || expression[i] == '*' || expression[i] == '/')
+				{
+					amountOfValues--;
+				}
+				else
+				{
+					return false;
+				}
+			}
+
+			if (amountOfValues == 0)
+			{
+				return false;
+			}
+
+			return true;
+		}
+
+		/// <summary>
+		/// Create the tree by expression
+		/// </summary>
+		/// <param name="str">String with expression</param>
+		public void BuildTree(string str)
+		{
+			try
+			{
+				if (!IsExpressionCorrect(str))
+				{
+					throw new Exception();
+				}
+			}
+			catch (Exception)
+			{
+				Console.WriteLine("Некорректный ввод");
+				Environment.Exit(-1);
+			}
 			int counter = 0;
 			root = AddElementInTree(str, ref counter);
 		}
 
+		/// <summary>
+		/// Get operation for counting
+		/// </summary>
+		/// <param name="operation">Addition, division, multiplication or subtraction</param>
+		/// <returns>Operation</returns>
 		private Operation ChoiceOperation(char operation)
 		{
 			if (operation == '+')
@@ -34,6 +97,12 @@ namespace _2._4._1
 			return new Division();
 		}
 
+		/// <summary>
+		/// Add element in tree
+		/// </summary>
+		/// <param name="str">String with expression</param>
+		/// <param name="counter">Counter of string</param>
+		/// <returns>New tree element</returns>
 		private INode AddElementInTree(string str, ref int counter)
 		{
 			if (counter == str.Length)
@@ -67,6 +136,12 @@ namespace _2._4._1
 			}
 		}
 
+		/// <summary>
+		/// Get number from string
+		/// </summary>
+		/// <param name="position">Counter of string</param>
+		/// <param name="expression">String of expression</param>
+		/// <returns>Number</returns>
 		private static int CreateNumber(ref int position, string expression)
 		{
 			string value = null;
@@ -80,11 +155,18 @@ namespace _2._4._1
 			return int.Parse(value);
 		}
 
-		public int Counting() => root.Counting();
+		/// <summary>
+		/// Counting expression
+		/// </summary>
+		/// <returns>Result of expression</returns>
+		public double Counting() => root.Counting();
 
-		public int outputTree()
+		/// <summary>
+		/// Output exxpression
+		/// </summary>
+		public void OutputTree()
 		{
-			return Counting();
+			root.Print();
 		}
 	}
 }

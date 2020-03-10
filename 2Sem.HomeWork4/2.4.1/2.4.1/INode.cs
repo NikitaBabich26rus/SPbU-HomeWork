@@ -6,10 +6,16 @@ namespace _2._4._1
 {
     public interface INode
     {
-
+        /// <summary>
+        /// Expression output
+        /// </summary>
         public void Print();
 
-        public int Counting();
+        /// <summary>
+        /// Expression counting
+        /// </summary>
+        /// <returns>Result of counting</returns>
+        public double Counting();
 
     }
 }

@@ -9,9 +9,16 @@ namespace _2._4._1
         public INode LeftChild { get; set; }
         public INode RightChild { get; set; }
 
+        /// <summary>
+        /// Expression's output
+        /// </summary>
         abstract public void Print();
 
-        abstract public int Counting();
+        /// <summary>
+        /// Expression's counting
+        /// </summary>
+        /// <returns>Expression's result</returns>
+        abstract public double Counting();
 
     }
 }

@@ -7,8 +7,8 @@ namespace _2._4._1
         static void Main(string[] args)
         {
             var tree = new Tree();
-            tree.buildTree("( + (* 2 3) (- 5 6))");
-            Console.WriteLine(tree.outputTree());
+            tree.BuildTree("(/ 3 2 )");
+            Console.WriteLine(tree.Counting());
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System;
 
 namespace _2._4._1
 {
@@ -50,8 +51,7 @@ namespace _2._4._1
         [Test]
         public void InvalidExpressionTest()
         {
-            tree.BuildTree("( * (/ (+ 12 3) (- 6 1)))");
-            tree.Counting();
+            Assert.Throws<Exception>(() => tree.BuildTree("( * (/ (+ 12 3) (- 6 1)))"));
         }
     }
 }

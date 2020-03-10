@@ -56,17 +56,9 @@ namespace _2._4._1
 		/// <param name="str">String with expression</param>
 		public void BuildTree(string str)
 		{
-			try
+			if (!IsExpressionCorrect(str))
 			{
-				if (!IsExpressionCorrect(str))
-				{
-					throw new Exception();
-				}
-			}
-			catch (Exception)
-			{
-				Console.WriteLine("Некорректный ввод");
-				Environment.Exit(-1);
+				throw new Exception();
 			}
 			int counter = 0;
 			root = AddElementInTree(str, ref counter);

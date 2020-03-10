@@ -20,26 +20,19 @@ namespace _2._4._1
             RightChild.Print();
             Console.Write(")");
         }
-
         /// <summary>
         /// Division counting
         /// </summary>
         /// <returns>Result of division</returns>
         public override double Counting()
         {
-            double result = 0;
-            try
+            double value1 = LeftChild.Counting();
+            double value2 = RightChild.Counting();
+            if (value2 == 0)
             {
-                double value1 = LeftChild.Counting();
-                double value2 = RightChild.Counting();
-                result = LeftChild.Counting() / RightChild.Counting();
+                throw new DivideByZeroException();
             }
-            catch(DivideByZeroException)
-            {
-                Console.WriteLine("Некорректный ввод : деление на ноль");
-                Environment.Exit(1);
-            }
-            return result;
-        }       
+            return value1 / value2;
+        }
     }
 }

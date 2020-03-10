@@ -34,12 +34,12 @@ namespace _2._4._1
             Assert.AreEqual(7.3, addition.Counting());
         }
 
-        [Test]
-        public void AdditionByZeroTest()
-        {
-            leftChild.value = 1311.31;
-            rightChild.value = 0;
-            Assert.AreEqual(1311.31, addition.Counting());
-        }
+        //[Test]
+        //public void AdditionByZeroTest()
+        //{
+        //    leftChild.value = 1311.31;
+        //    rightChild.value = 0;
+        //    Assert.AreEqual(1311.31, addition.Counting());
+        //}
     }
 }

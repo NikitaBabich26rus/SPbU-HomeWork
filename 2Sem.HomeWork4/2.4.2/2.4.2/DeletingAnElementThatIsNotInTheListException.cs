@@ -4,6 +4,9 @@ using System.Text;
 
 namespace _2._4._2
 {
+    /// <summary>
+    /// Exception for delete elements, which is not contained in list 
+    /// </summary>
     public class DeletingAnElementThatIsNotInTheListException : Exception
     {
         public DeletingAnElementThatIsNotInTheListException() { }

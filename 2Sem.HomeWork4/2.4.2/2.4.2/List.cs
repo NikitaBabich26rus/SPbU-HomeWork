@@ -67,11 +67,11 @@ namespace _2._4._2
         /// Delete element of the list
         /// </summary>
         /// <param name="value">Value of element for deletion</param>
-        public void Remove(int value)
+        public void Delete(int value)
         {
             if (head == null)
             {
-                return;
+                throw new DeletingAnElementThatIsNotInTheListException("Error : Delete from empty list");
             }
             if (head.value == value)
             {
@@ -90,6 +90,8 @@ namespace _2._4._2
                     return;
                 }
             }
+
+            throw new DeletingAnElementThatIsNotInTheListException($"Error : {value} is not contained in the list");
         }
 
         /// <summary>
@@ -127,37 +129,6 @@ namespace _2._4._2
         /// </summary>
         /// <returns>Empty or not</returns>
         public bool IsEmpty() => sizeOfList == 0;
-
-        /// <summary>
-        /// Delete first element of list
-        /// </summary>
-        /// <returns>Deleted element</returns>
-        public virtual void Delete(int value)
-        {
-            if (head == null)
-            {
-                throw new DeleteFromEmptyListException("Error : Delete from empty list");
-            }
-
-            if (head.value == value)
-            {
-                head = head.next;
-                return;
-            }
-
-            var currentElement1 = head;
-            var currentElement2 = head.next;
-            while (currentElement2 != null)
-            {
-                if (currentElement2.value == value)
-                {
-                    currentElement1.next = currentElement2.next;
-                    return;
-                }
-                currentElement1 = currentElement2;
-                currentElement2 = currentElement2.next;
-            }
-        }
 
         /// <summary>
         /// Clear list

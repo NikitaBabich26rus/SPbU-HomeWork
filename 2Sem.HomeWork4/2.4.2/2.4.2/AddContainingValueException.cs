@@ -4,6 +4,9 @@ using System.Text;
 
 namespace _2._4._2
 {
+    /// <summary>
+    /// Exception for adding elements contained in a unique list
+    /// </summary>
     public class AddContainingValueException : Exception
     {
         public AddContainingValueException() { }

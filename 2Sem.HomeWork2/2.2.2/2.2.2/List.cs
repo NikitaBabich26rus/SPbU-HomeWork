@@ -53,11 +53,11 @@ namespace _2._2._2
         }
 
         // Удалить элемент из списка
-          public void Remove(string value)
-          {
+        public void Remove(string value)
+        {
             if (head == null)
             {
-                return;
+               return;
             }
             if (head.value == value)
             {
@@ -99,12 +99,12 @@ namespace _2._2._2
 
         // Получить размер списка
         public int GetSize()
-        => sizeOfList;
+            => sizeOfList;
   
 
         // Проверка списка на пустоту
         public bool IsEmpty()
-        => sizeOfList == 0 ? true : false;
+            => sizeOfList == 0;
 
         // Удалить и получить элемент списка
         public string Pop()

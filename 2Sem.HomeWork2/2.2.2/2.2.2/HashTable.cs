@@ -8,7 +8,6 @@ namespace _2._2._2
 	{
 		private List[] hashTableArray = new List[5];
 		private int amountOfElements = 0;
-		private int hashSize = 5;
 
 		public HashTable()
 		{
@@ -19,12 +18,12 @@ namespace _2._2._2
 		}
 
 		// Хеш функция
-		private int HashFunction(string value)
+		private int HashFunction(string value, int size)
 		{
 			int result = 0;
 			for (int i = 0; i < value.Length; ++i)
 			{
-				result = (result + value[i]) % hashSize;
+				result = (result + value[i]) % size;
 			}
 			return result;
 		}
@@ -32,10 +31,10 @@ namespace _2._2._2
 		// Добавить элемент в Хеш таблицу
 		public void Add(string value)
 		{
-			hashTableArray[HashFunction(value)].Add(value);
+			hashTableArray[HashFunction(value, hashTableArray.Length)].Add(value);
 			amountOfElements++;
 
-			if ((float)amountOfElements / (float)hashSize > 1.2)
+			if ((float)amountOfElements / (float)hashTableArray.Length > 1.2)
 			{
 				hashTableArray = HashTableResize();
 			}
@@ -44,9 +43,10 @@ namespace _2._2._2
 		// Изменить размер хеш таблицы
 		private List[] HashTableResize()
 		{
-			hashSize = hashSize * 2;
-			var newHashTableArray = new List[hashSize];
-			for (int i = 0; i < hashSize; i++)
+			int size = hashTableArray.Length * 2;
+			var newHashTableArray = new List[size];
+
+			for (int i = 0; i < newHashTableArray.Length; i++)
 			{
 				newHashTableArray[i] = new List();
 			}
@@ -58,7 +58,7 @@ namespace _2._2._2
 					var currentValue = hashTableArray[i].Pop();
 					if (currentValue != null)
 					{
-						newHashTableArray[HashFunction(currentValue)].Add(currentValue);
+						newHashTableArray[HashFunction(currentValue, newHashTableArray.Length)].Add(currentValue);
 					}
 				}
 			}
@@ -68,14 +68,12 @@ namespace _2._2._2
 		// Удалить элемент из хеш таблицы
 		public void Remove(string value)
 		{
-			hashTableArray[HashFunction(value)].Remove(value);
+			hashTableArray[HashFunction(value, hashTableArray.Length)].Remove(value);
 		}
 
 		// Проверка таблицы на наличие в ней элемента
 		public bool IsContain(string value)
-		{
-			return hashTableArray[HashFunction(value)].IsContain(value);
-		}
+			=> hashTableArray[HashFunction(value, hashTableArray.Length)].IsContain(value);
 	}
 }
 

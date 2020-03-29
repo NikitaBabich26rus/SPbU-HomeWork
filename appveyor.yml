@@ -3,8 +3,3 @@ before_build:
   - nuget restore 2Sem.HomeWork2/2.2.1/2.2.1.sln
 build:
   project: 2Sem.HomeWork2/2.2.1/2.2.1.sln
-  
-  before_build:
-  - nuget restore 2Sem.HomeWork6/2.6.1/2.6.1.sln
-build:
-  project: 2Sem.HomeWork6/2.6.1/2.6.1.sln

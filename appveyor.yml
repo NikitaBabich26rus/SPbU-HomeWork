@@ -1,0 +1,5 @@
+image: Visual Studio 2019
+before_build:
+  - nuget restore 2Sem.HomeWork6/2.6.1/2.6.1.sln
+build:
+  project: 2Sem.HomeWork6/2.6.1/2.6.1.sln

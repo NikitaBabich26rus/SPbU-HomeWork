@@ -5,7 +5,7 @@ using System.Text;
 namespace _2._6._2
 {
     /// <summary>
-    /// 
+    /// Exception for invalid map
     /// </summary>
     public class InvalidMapException : Exception
     {

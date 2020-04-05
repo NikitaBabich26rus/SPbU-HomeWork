@@ -5,15 +5,33 @@ using System.Text;
 namespace _2._6._2
 {
     /// <summary>
-    /// 
+    /// Events class
     /// </summary>
     public class EventLoop
     {
+        /// <summary>
+        /// Event for going to the top
+        /// </summary>
         public event EventHandler<EventArgs> UpHandler = (sender, args) => { };
+
+        /// <summary>
+        /// Event for going to the down
+        /// </summary>
         public event EventHandler<EventArgs> DownHandler = (sender, args) => { };
+
+        /// <summary>
+        /// Event for going on the left
+        /// </summary>
         public event EventHandler<EventArgs> LeftHandler = (sender, args) => { };
+
+        /// <summary>
+        /// Event for going on the right
+        /// </summary>
         public event EventHandler<EventArgs> RightHandler = (sender, args) => { };
 
+        /// <summary>
+        /// Class for going on the map
+        /// </summary>
         public void Run()
         {
             while (true)

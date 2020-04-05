@@ -6,12 +6,19 @@ using System.Threading.Tasks;
 
 namespace _2._6._2
 {
+    /// <summary>
+    /// Map`s class
+    /// </summary>
     public class GameMap
     {
         public int x { get; private set; } = -1;
         public int y { get; private set; } = -1;
         public bool[,] map { get; private set; }
 
+        /// <summary>
+        /// GameMap`s constructor
+        /// </summary>
+        /// <param name="file"></param>
         public GameMap(string file)
         {
             string line;
@@ -22,6 +29,10 @@ namespace _2._6._2
             CreateTheMap(line);
         }
 
+        /// <summary>
+        /// Create the map 
+        /// </summary>
+        /// <param name="line">String with map</param>
         public void CreateTheMap(string line)
         {
             int columnCounter = 0;
@@ -74,6 +85,11 @@ namespace _2._6._2
             }
         }
 
+        /// <summary>
+        /// Move on the map
+        /// </summary>
+        /// <param name="x">Coordinate x</param>
+        /// <param name="y">Coordinate y</param>
         public void MoveTo(int x, int y)
         {
             if (this.x + x < 0 || this.y + y < 0 || this.x + x >= map.GetLength(1) || this.y + y >= map.GetLength(0))
@@ -91,6 +107,9 @@ namespace _2._6._2
             }
         }
 
+        /// <summary>
+        /// Print the map
+        /// </summary>
         public void Print()
         {
 

@@ -18,13 +18,14 @@ namespace _2._6._2
         /// <summary>
         /// GameMap`s constructor
         /// </summary>
-        /// <param name="file"></param>
+        /// <param name="file">File with map</param>
         public GameMap(string file)
         {
             string line;
-            using (StreamReader sr = File.OpenText(file) )
+            using (var sr = new StreamReader(file))
             {
                 line = sr.ReadToEnd();
+                sr.Close();
             }
             CreateTheMap(line);
         }

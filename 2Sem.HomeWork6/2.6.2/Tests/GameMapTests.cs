@@ -8,7 +8,7 @@ namespace _2._6._2
         GameMap gameMap;
 
         [Test]
-        public void EmptyFileTest()
+        public void NotFoundFileTest()
         {
             Assert.Throws<FileNotFoundException>(() => gameMap = new GameMap("../../../GameMapTests1.txt"));
         }

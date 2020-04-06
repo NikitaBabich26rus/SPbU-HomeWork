@@ -22,7 +22,7 @@ namespace _2._6._2
         public GameMap(string file)
         {
             string line;
-            using (StreamReader sr = new StreamReader(file))
+            using (StreamReader sr = File.OpenText(file) )
             {
                 line = sr.ReadToEnd();
             }

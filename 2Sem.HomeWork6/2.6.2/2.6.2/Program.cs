@@ -13,7 +13,7 @@ namespace _2._6._2
         {
             try
             {
-                var game = new Game("../../../Map.txt");
+                var game = new Game("../../../Map1.txt");
                 var eventLoop = new EventLoop();
                 eventLoop.LeftHandler += game.ToTheLeft;
                 eventLoop.RightHandler += game.ToTheRight;

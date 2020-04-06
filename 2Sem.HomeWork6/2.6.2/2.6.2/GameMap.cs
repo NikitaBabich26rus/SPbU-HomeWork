@@ -72,7 +72,7 @@ namespace _2._6._2
                 {
                     map[k, l] = true;
                 }
-                if (line[count] == '\r')
+                if (line[count] == '\n')
                 {
                     count++;
                     k++;

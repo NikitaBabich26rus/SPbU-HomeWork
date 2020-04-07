@@ -20,7 +20,7 @@ namespace _2._6._2
             Assert.IsFalse(gameMap.map[0, 0]);
             Assert.IsFalse(gameMap.map[0, 1]);
             Assert.IsFalse(gameMap.map[0, 2]);
-            Assert.AreEqual(gameMap.x, 4);
+            Assert.AreEqual(gameMap.x, 5);
             Assert.AreEqual(gameMap.y, 7);
             Assert.IsTrue(gameMap.map[0, 4]);
             Assert.IsTrue(gameMap.map[0, 5]);

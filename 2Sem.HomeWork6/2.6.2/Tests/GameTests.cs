@@ -78,7 +78,7 @@ namespace _2._6._2
             {
                 game.ToTheRight(this, EventArgs.Empty);
             }
-            Assert.AreEqual(game.gameMap.x, x + 3);
+            Assert.AreEqual(game.gameMap.x, x + 2);
             Assert.AreEqual(game.gameMap.y, y);
         }
     }

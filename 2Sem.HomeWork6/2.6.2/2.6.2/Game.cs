@@ -15,7 +15,7 @@ namespace _2._6._2
         /// <summary>
         /// Game's constructor
         /// </summary>
-        /// <param name="file"></param>
+        /// <param name="file">File with map</param>
         public Game(string file)
         {
             gameMap = new GameMap(file);

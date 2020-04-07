@@ -74,7 +74,6 @@ namespace _2._6._2
                 }
                 if (line[count] == '\n')
                 {
-                    count++;
                     k++;
                     l = -1;
                 }

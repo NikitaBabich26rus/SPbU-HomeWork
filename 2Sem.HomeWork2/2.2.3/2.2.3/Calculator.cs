@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace _2._2._3
 {
     class Calculator
     {
+		private IStack stack;
 
-		private static IStack stack;
+		public Calculator(IStack stack)
+		{
+			this.stack = stack;
+		}
 
-		private static int CreateNumber(ref int position, string expression)
+		private int CreateNumber(ref int position, string expression)
 		{
 			string value = null;
 
@@ -23,17 +28,8 @@ namespace _2._2._3
 			return int.Parse(value);
 		}
 
-		public static int Counting(string expression, bool choice)
-		{
-			if (choice)
-			{
-				 stack = new ListStack();
-			}
-			else
-			{
-				stack = new ArrayStack();
-			}
-
+		public int Counting(string expression)
+		{ 
 			for (int i = 0; i < expression.Length; i++)
 			{
 				char symbol = expression[i];
@@ -53,7 +49,7 @@ namespace _2._2._3
 			return stack.Pop();
 		}
 
-		private static void Operation(IStack stack, char operation)
+		private void Operation(IStack stack, char operation)
 		{
 			int value1 = stack.Pop();
 			int value2 = stack.Pop();
@@ -75,6 +71,10 @@ namespace _2._2._3
 
 			if (operation == '/')
 			{
+				if (value1 == 0)
+				{
+					throw new DivideByZeroException();
+				}
 				stack.Push(value2 / value1);
 			}
 		}

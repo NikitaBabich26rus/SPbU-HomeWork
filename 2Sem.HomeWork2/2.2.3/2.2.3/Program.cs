@@ -6,12 +6,23 @@ namespace _2._2._3
     {
         static void Main(string[] args)
         {
-            // true - ListStack
-            // false - ArrayStack
-            Console.WriteLine(Calculator.Counting("2 5 * 3 4 * +", false));
-            Console.WriteLine(Calculator.Counting("17 10 + 3 * 9 /", true));
-            Console.WriteLine(Calculator.Counting("10 13 -", false));
-            Console.WriteLine(Calculator.Counting("121 11 /", true));
+            try
+            {
+                var calculatorWithListStack = new Calculator(new ListStack());
+                Console.WriteLine(calculatorWithListStack.Counting("4 5 +"));
+                Console.WriteLine(calculatorWithListStack.Counting("17 10 + 3 * 9 /"));
+                var calculatorWithArrayStack = new Calculator(new ArrayStack());
+                Console.WriteLine(calculatorWithArrayStack.Counting("10 13 -"));
+                Console.WriteLine(calculatorWithArrayStack.Counting("121 11 /"));
+            }
+            catch(PopFromEmptyStackException)
+            {
+                Console.WriteLine("Error : invalid expression.");
+            }
+            catch(DivideByZeroException)
+            {
+                Console.WriteLine("Error : division by zero.");
+            }
         }     
     }
 }

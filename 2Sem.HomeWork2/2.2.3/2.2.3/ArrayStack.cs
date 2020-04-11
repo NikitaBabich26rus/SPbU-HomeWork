@@ -7,13 +7,15 @@ namespace _2._2._3
     public class ArrayStack : IStack
     {
         private int[] stack = new int[100];
-        private int stackSize = 0;
+        private int stackSize = -1;
 
         public void Push(int value)
         {
-            if (stackSize == 0)
+            if (stackSize == -1)
             {
+                stackSize++;
                 stack[stackSize] = value;
+                return;
             }
             stackSize++;
             stack[stackSize] = value;
@@ -21,6 +23,10 @@ namespace _2._2._3
 
         public int Pop()
         {
+            if (stackSize == -1)
+            {
+                throw new PopFromEmptyStackException();
+            }
             var currentElement = stack[stackSize];
             stack[stackSize] = 0;
             stackSize--;
@@ -28,6 +34,6 @@ namespace _2._2._3
         }
 
         public bool IsEmpty()
-            => stackSize == 0 ? true : false;
+            => stackSize == -1;
     }
 }

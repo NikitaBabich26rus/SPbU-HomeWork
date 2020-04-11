@@ -21,23 +21,21 @@ namespace _2._2._3
 
         public void Push (int value)
         {
-            if (head == null)
-            {
-                head = new StackElement( value, null );
-                return;
-            }
-
             head = new StackElement(value, head);
         }
 
         public int Pop()
         {
+            if (head == null)
+            {
+                throw new PopFromEmptyStackException();
+            }
             var currentElement = head;
             head = head.next;
             return currentElement.value;
         }
 
         public bool IsEmpty()
-            => head == null ? true : false;
+            => head == null;
     }
 }

@@ -1,91 +1,80 @@
 using System;
 using NUnit.Framework;
-using System.Collections;
+using System.Collections.Generic;
 
 namespace _2._3._1
 {
     public class StackTests 
     {
-        private IStack listStack;
-        private IStack arrayStack;
-
-        [SetUp]
-        public void Setup()
+        [TestCaseSource(nameof(Stacks))]
+        public void StackShouldNotEmptyAfterPush(IStack stack)
         {
-            listStack = new ListStack();
-            arrayStack = new ArrayStack();
+            stack.Push(1);
+            Assert.IsFalse(stack.IsEmpty());
         }
 
-        [Test]
-        public void IsEmptyTest()
+        [TestCaseSource(nameof(Stacks))]
+        public void IsEmptyTest(IStack stack)
         {
-            Assert.IsTrue(listStack.IsEmpty());
-            Assert.IsTrue(arrayStack.IsEmpty());
+            Assert.IsTrue(stack.IsEmpty());
         }
 
-        [Test]
-        public void PopTest()
+        [TestCaseSource(nameof(Stacks))]
+        public void PopTest(IStack stack)
         {
-            listStack.Push(-21);
-            arrayStack.Push(-21);
-            Assert.AreEqual(-21, arrayStack.Pop().Item1);
-            Assert.AreEqual(-21, listStack.Pop().Item1);
+            stack.Push(-21);
+            Assert.AreEqual(-21, stack.Pop().Item1);
         }
 
-        [Test]
-        public void PushTest()
+        [TestCaseSource(nameof(Stacks))]
+        public void PushTest(IStack stack)
         {
-            listStack.Push(99999999);
-            arrayStack.Push(99999999);
-            Assert.IsFalse(listStack.IsEmpty());
-            Assert.IsFalse(listStack.IsEmpty());
+            stack.Push(99999999);
+            Assert.IsFalse(stack.IsEmpty());
         }
 
-        [Test]
-        public void PopFromEmptyStackTest()
+        [TestCaseSource(nameof(Stacks))]
+        public void PopFromEmptyStackTest(IStack stack)
         {
-            arrayStack.Pop();
+            stack.Pop();
         }
 
-        [Test]
-        public void TwoElementsPopTest()
+        [TestCaseSource(nameof(Stacks))]
+        public void TwoElementsPopTest(IStack stack)
         {
-            listStack.Push(1);
-            listStack.Push(2);
-            Assert.AreEqual(2, listStack.Pop().Item1);
-            Assert.AreEqual(1, listStack.Pop().Item1);
-
-            arrayStack.Push(1);
-            arrayStack.Push(2);
-            Assert.AreEqual(2, arrayStack.Pop().Item1);
-            Assert.AreEqual(1, arrayStack.Pop().Item1);
+            stack.Push(1);
+            stack.Push(2);
+            Assert.AreEqual(2, stack.Pop().Item1);
+            Assert.AreEqual(1, stack.Pop().Item1);
         }
 
-        [Test]
-        public void ManyElementsPushAndPopTest()
+        [TestCaseSource(nameof(Stacks))]
+        public void ManyElementsPushAndPopTest(IStack stack)
         {
             for (int i = 0; i <= 1000000; i++)
             {
-                listStack.Push(i);
-                arrayStack.Push(i);
+                stack.Push(i);
             }
 
             for (int i = 1000000; i >= 0; i--)
             {
-                Assert.AreEqual(i, listStack.Pop().Item1);
-                Assert.AreEqual(i, arrayStack.Pop().Item1);
+                Assert.AreEqual(i, stack.Pop().Item1);
             }
         }
         
-        [Test]
-        public void ClearTest()
+        [TestCaseSource(nameof(Stacks))]
+        public void ClearTest(IStack stack)
         {
-            listStack.Clear();
-            arrayStack.Clear();
-
-            Assert.IsTrue(listStack.IsEmpty());
-            Assert.IsTrue(arrayStack.IsEmpty());
-
+            stack.Clear();
+            Assert.IsTrue(stack.IsEmpty());
         }
+
+        private static IEnumerable<TestCaseData> Stacks
+        => new TestCaseData[]
+        {
+            new TestCaseData(new ArrayStack()),
+            new TestCaseData(new ListStack()),
+        };
+
     }
 }

@@ -120,7 +120,7 @@ namespace _2._3._2
         /// </summary>
         /// <returns>Size</returns>
         public int GetSize()
-        => sizeOfList;
+            => sizeOfList;
 
         /// <summary>
         /// Check list for emptiness

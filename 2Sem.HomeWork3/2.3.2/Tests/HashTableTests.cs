@@ -1,129 +1,106 @@
+using System;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace _2._3._2
 {
     public class HashTableTests
     {
+        private HashTable hashTable;
 
-        HashTable tableWithFirstFunction;
-        HashTable tableWithSecondFunction;
-
-        [SetUp]
-        public void Setup()
+        [TestCaseSource(nameof(HashFunctions))]
+        public void IsContainInEmptyHashTableTest(IHashFunction hashFunction)
         {
-            tableWithFirstFunction = new HashTable(new HashFunction1());
-            tableWithSecondFunction = new HashTable(new HashFunction2());
+            hashTable = new HashTable(hashFunction);
+            Assert.IsFalse(hashTable.IsContain("1234"));
         }
 
-        [Test]
-        public void IsContainInEmptyHashTableTest()
+        [TestCaseSource(nameof(HashFunctions))]
+        public void DeleteFromEmptyTest(IHashFunction hashFunction)
         {
-            Assert.IsFalse(tableWithFirstFunction.IsContain("1234"));
-            Assert.IsFalse(tableWithSecondFunction.IsContain("1234"));
+            hashTable = new HashTable(hashFunction);
+            hashTable.Remove("HwProj");
         }
 
-        [Test]
-        public void DeleteFromEmptyTest()
+        [TestCaseSource(nameof(HashFunctions))]
+        public void HashTableResizeTest(IHashFunction hashFunction)
         {
-            tableWithFirstFunction.Remove("HwProj");
-            tableWithSecondFunction.Remove("HwProj");
+            hashTable = new HashTable(hashFunction);
+            hashTable.Add("One");
+            hashTable.Add("Two");
+            hashTable.Add("Three");
+            Assert.IsTrue(hashTable.IsContain("One"));
+            Assert.IsTrue(hashTable.IsContain("Two"));
+            Assert.IsTrue(hashTable.IsContain("Three"));
         }
 
-        [Test]
-        public void HashTableResizeTest()
+        [TestCaseSource(nameof(HashFunctions))]
+        public void ChangeHashFunctionTest(IHashFunction hashFunction)
         {
-            Assert.AreEqual(2, tableWithFirstFunction.GetHashTableSize());
-            tableWithFirstFunction.Add("One");
-            tableWithFirstFunction.Add("Two");
-            tableWithFirstFunction.Add("Three");
-            Assert.AreEqual(4, tableWithFirstFunction.GetHashTableSize());
-            Assert.IsTrue(tableWithFirstFunction.IsContain("One"));
-            Assert.IsTrue(tableWithFirstFunction.IsContain("Two"));
-            Assert.IsTrue(tableWithFirstFunction.IsContain("Three"));
+            hashTable = new HashTable(hashFunction);
+            hashTable.Add("Test");
+            hashTable.ChangeHashFunction(new HashFunction2());
+            Assert.IsTrue(hashTable.IsContain("Test"));
 
-            Assert.AreEqual(2, tableWithSecondFunction.GetHashTableSize());
-            tableWithSecondFunction.Add("One");
-            tableWithSecondFunction.Add("Two");
-            tableWithSecondFunction.Add("Three");
-            Assert.AreEqual(4, tableWithSecondFunction.GetHashTableSize());
-            Assert.IsTrue(tableWithSecondFunction.IsContain("One"));
-            Assert.IsTrue(tableWithSecondFunction.IsContain("Two"));
-            Assert.IsTrue(tableWithSecondFunction.IsContain("Three"));
+            hashTable.ChangeHashFunction(new HashFunction1());
+            Assert.IsTrue(hashTable.IsContain("Test"));
         }
 
-        [Test]
-        public void ChangeHashFunctionTest()
+        [TestCaseSource(nameof(HashFunctions))]
+        public void AddTest(IHashFunction hashFunction)
         {
-            tableWithFirstFunction.Add("Test");
-            tableWithFirstFunction.ChangeHashFunction(new HashFunction2());
-            Assert.IsTrue(tableWithFirstFunction.IsContain("Test"));
-
-            tableWithSecondFunction.Add("Test");
-            tableWithSecondFunction.ChangeHashFunction(new HashFunction1());
-            Assert.IsTrue(tableWithSecondFunction.IsContain("Test"));
-
-            tableWithFirstFunction.ChangeHashFunction(new HashFunction1());
-            tableWithSecondFunction.ChangeHashFunction(new HashFunction2());
+            hashTable = new HashTable(hashFunction);
+            hashTable.Add("Hello");
+            Assert.IsTrue(hashTable.IsContain("Hello"));
         }
 
-        [Test]
-        public void AddTest()
+        [TestCaseSource(nameof(HashFunctions))]
+        public void ManyAddTest(IHashFunction hashFunction)
         {
-            tableWithFirstFunction.Add("Hello");
-            Assert.IsTrue(tableWithFirstFunction.IsContain("Hello"));
-            tableWithSecondFunction.Add("Hello");
-            Assert.IsTrue(tableWithSecondFunction.IsContain("Hello"));
-        }
-
-        [Test]
-        public void ManyAddTest()
-        {
+            hashTable = new HashTable(hashFunction);
             for (int i = 0; i <= 10000; i++)
             {
-                tableWithFirstFunction.Add(i.ToString());
-                tableWithSecondFunction.Add(i.ToString());
+                hashTable.Add(i.ToString());
             }
 
             for (int i = 0; i <= 10000; i++)
             {
-                Assert.IsTrue(tableWithFirstFunction.IsContain(i.ToString()));
-                Assert.IsTrue(tableWithSecondFunction.IsContain(i.ToString()));
+                Assert.IsTrue(hashTable.IsContain(i.ToString()));
             }
         }
 
-        [Test]
-        public void DeleteElementInHashTableTest()
+        [TestCaseSource(nameof(HashFunctions))]
+        public void DeleteElementInHashTableTest(IHashFunction hashFunction)
         {
-            tableWithFirstFunction.Add("Goodbye");
-            tableWithFirstFunction.Remove("Goodbye");
-            Assert.IsFalse(tableWithFirstFunction.IsContain("Goodbye"));
-
-            tableWithSecondFunction.Add("Goodbye");
-            tableWithSecondFunction.Remove("Goodbye");
-            Assert.IsFalse(tableWithSecondFunction.IsContain("Goodbye"));
+            hashTable = new HashTable(hashFunction);
+            hashTable.Add("Goodbye");
+            hashTable.Remove("Goodbye");
+            Assert.IsFalse(hashTable.IsContain("Goodbye"));
         }
 
-        [Test]
-        public void ManyPushAndDeleteTest()
+        [TestCaseSource(nameof(HashFunctions))]
+        public void ManyPushAndDeleteTest(IHashFunction hashFunction)
         {
+            hashTable = new HashTable(hashFunction);
             for (int i = 10001; i <= 20000; i++)
             {
-                tableWithFirstFunction.Add(i.ToString());
-                tableWithSecondFunction.Add(i.ToString());
+                hashTable.Add(i.ToString());
             }
             for (int i = 10001; i <= 20000; i++)
             {
-                tableWithFirstFunction.Remove(i.ToString());
-                tableWithSecondFunction.Remove(i.ToString());
+                hashTable.Remove(i.ToString());
             }
             for (int i = 10001; i <= 20000; i++)
             {
-                Assert.IsFalse(tableWithFirstFunction.IsContain(i.ToString()));
-                Assert.IsFalse(tableWithSecondFunction.IsContain(i.ToString()));
-
+                Assert.IsFalse(hashTable.IsContain(i.ToString()));
             }
         }
 
+        private static IEnumerable<TestCaseData> HashFunctions
+        => new TestCaseData[]
+        {
+            new TestCaseData(new HashFunction1()),
+            new TestCaseData(new HashFunction2()),
+        };
     }
-
 }

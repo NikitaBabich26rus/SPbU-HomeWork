@@ -11,7 +11,6 @@ namespace _2._3._2
 	{
 		private List[] hashTableArray = new List[2];
 		private int amountOfElements = 0;
-		private int hashTableSize = 2;
 		private IHashFunction hash;
 
 		/// <summary>
@@ -30,21 +29,22 @@ namespace _2._3._2
 		}
 
 		/// <summary>
-		/// Get size of the hash table
-		/// </summary>
-		/// <returns>Size</returns>
-		public int GetHashTableSize() => hashTableSize;
-
-		/// <summary>
 		/// Add element in hash table
 		/// </summary>
-		/// <param name="Element value"></param>
+		/// <param name="value">Element value</param>
 		public void Add(string value)
 		{
-			hashTableArray[hash.HashFunction(value, hashTableSize)].Add(value);
+			int hashValue = hash.HashFunction(value, hashTableArray.Length);
+			if (hashValue < 0 || hashValue >= hashTableArray.Length)
+
+			{
+				throw new InvalidHashValueException();
+			}
+
+			hashTableArray[hashValue].Add(value);
 			amountOfElements++;
 
-			if ((float)amountOfElements / (float)hashTableSize > 1.2)
+			if ((float)amountOfElements / (float)hashTableArray.Length > 1.2)
 			{
 				hashTableArray = HashTableResize();
 			}
@@ -57,9 +57,9 @@ namespace _2._3._2
 		public void ChangeHashFunction(IHashFunction newHash)
 		{
 			hash = newHash;
-			var newHashTableArray = new List[hashTableSize];
+			var newHashTableArray = new List[hashTableArray.Length];
 			
-			for (int i = 0; i < hashTableSize; i++)
+			for (int i = 0; i < hashTableArray.Length; i++)
 			{
 				newHashTableArray[i] = new List();
 			}
@@ -71,7 +71,7 @@ namespace _2._3._2
 					var currentValue = hashTableArray[i].Pop();
 					if (currentValue != null)
 					{
-						newHashTableArray[hash.HashFunction(currentValue, hashTableSize)].Add(currentValue);
+						newHashTableArray[hash.HashFunction(currentValue, hashTableArray.Length)].Add(currentValue);
 					}
 				}
 			}
@@ -84,10 +84,10 @@ namespace _2._3._2
 		/// <returns>New array of hash table</returns>
 		private List[] HashTableResize()
 		{
-			hashTableSize = hashTableSize * 2;
-			var newHashTableArray = new List[hashTableSize];
+			int size = hashTableArray.Length * 2;
+			var newHashTableArray = new List[size];
 
-			for (int i = 0; i < hashTableSize; i++)
+			for (int i = 0; i < newHashTableArray.Length; i++)
 			{
 				newHashTableArray[i] = new List();
 			}
@@ -99,7 +99,12 @@ namespace _2._3._2
 					var currentValue = hashTableArray[i].Pop();
 					if (currentValue != null)
 					{
-						newHashTableArray[hash.HashFunction(currentValue, hashTableSize)].Add(currentValue);
+						int hashValue = hash.HashFunction(currentValue, newHashTableArray.Length);
+						if (hashValue < 0 || hashValue >= newHashTableArray.Length)
+						{
+							throw new InvalidHashValueException();
+						}
+						newHashTableArray[hashValue].Add(currentValue);
 					}
 				}
 			}
@@ -112,9 +117,9 @@ namespace _2._3._2
 		/// <param name="value">Value Of element</param>
 		public void Remove(string value)
 		{
-			if (hashTableSize != 0)
+			if (hashTableArray.Length != 0)
 			{
-				hashTableArray[hash.HashFunction(value, hashTableSize)].Remove(value);
+				hashTableArray[hash.HashFunction(value, hashTableArray.Length)].Remove(value);
 			}
 		}
 
@@ -129,7 +134,7 @@ namespace _2._3._2
 			{
 				return false;
 			}
-			return hashTableArray[hash.HashFunction(value, hashTableSize)].IsContain(value);
+			return hashTableArray[hash.HashFunction(value, hashTableArray.Length)].IsContain(value);
 		}
 	}
 }

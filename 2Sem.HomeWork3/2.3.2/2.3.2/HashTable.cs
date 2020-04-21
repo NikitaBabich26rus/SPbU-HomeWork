@@ -36,9 +36,8 @@ namespace _2._3._2
 		{
 			int hashValue = hash.HashFunction(value, hashTableArray.Length);
 			if (hashValue < 0 || hashValue >= hashTableArray.Length)
-
 			{
-				throw new InvalidHashValueException();
+				hashValue = 0;
 			}
 
 			hashTableArray[hashValue].Add(value);
@@ -46,7 +45,7 @@ namespace _2._3._2
 
 			if ((float)amountOfElements / (float)hashTableArray.Length > 1.2)
 			{
-				hashTableArray = HashTableResize();
+				HashTableResize();
 			}
 		}
 
@@ -58,35 +57,22 @@ namespace _2._3._2
 		{
 			hash = newHash;
 			var newHashTableArray = new List[hashTableArray.Length];
-			
-			for (int i = 0; i < hashTableArray.Length; i++)
-			{
-				newHashTableArray[i] = new List();
-			}
-
-			for (int i = 0; i < hashTableArray.Length; i++)
-			{
-				while (!hashTableArray[i].IsEmpty())
-				{
-					var currentValue = hashTableArray[i].Pop();
-					if (currentValue != null)
-					{
-						newHashTableArray[hash.HashFunction(currentValue, hashTableArray.Length)].Add(currentValue);
-					}
-				}
-			}
-			hashTableArray = newHashTableArray;
+			hashTableArray = TransferDataFromTheOldTableToTheNew(newHashTableArray);
 		}
 
 		/// <summary>
 		/// Resize of hash table
 		/// </summary>
 		/// <returns>New array of hash table</returns>
-		private List[] HashTableResize()
+		private void HashTableResize()
 		{
 			int size = hashTableArray.Length * 2;
 			var newHashTableArray = new List[size];
+			hashTableArray = TransferDataFromTheOldTableToTheNew(newHashTableArray);
+		}
 
+		private List[] TransferDataFromTheOldTableToTheNew(List[] newHashTableArray)
+		{
 			for (int i = 0; i < newHashTableArray.Length; i++)
 			{
 				newHashTableArray[i] = new List();
@@ -102,7 +88,7 @@ namespace _2._3._2
 						int hashValue = hash.HashFunction(currentValue, newHashTableArray.Length);
 						if (hashValue < 0 || hashValue >= newHashTableArray.Length)
 						{
-							throw new InvalidHashValueException();
+							hashValue = 0;
 						}
 						newHashTableArray[hashValue].Add(currentValue);
 					}

@@ -7,8 +7,8 @@ namespace _2._3._2
 	/// <summary>
 	/// Second hash function
 	/// </summary>
-    public class HashFunction1 : IHashFunction
-    {
+	public class HashFunction1 : IHashFunction
+	{
 		public int HashFunction(string value , int hashSize)
 		{
 			int result = 0;

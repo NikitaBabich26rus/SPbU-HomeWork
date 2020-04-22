@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 
 namespace _2._4._2
@@ -9,104 +10,128 @@ namespace _2._4._2
     /// </summary>
     public class List
     {
-        internal class ListElement
+        /// <summary>
+        /// List`s element
+        /// </summary>
+        private class ListElement
         {
+            internal int value;
+            internal ListElement next;
+
             /// <summary>
-            /// Element of the list
+            /// ListElement`s constructor
             /// </summary>
-            /// <param name="value">Value of node</param>
-            /// <param name="next">Pointer to the next node</param>
+            /// <param name="value"></param>
+            /// <param name="next"></param>
             public ListElement(int value, ListElement next)
             {
                 this.value = value;
                 this.next = next;
             }
-
-            public int value;
-            public ListElement next;
         }
-
         private ListElement head;
-
-        private int sizeOfList;
+        private int size;
 
         /// <summary>
         /// Add element in list
         /// </summary>
-        /// <param name="value">Value to add</param>
-        public virtual void Add(int value)
+        /// <param name="value">Element`s value</param>
+        /// <param name="position">Element`s position</param>
+        public virtual void Add(int value, int position)
         {
-            if (head == null)
-            {
-                head = new ListElement(value, null);
-                sizeOfList++;
-                return;
-            }
-
-            if (head.value == value)
+            if (position > size + 1 || position <= 0)
             {
                 return;
             }
-
-            var currentElement1 = head;
-            var currentElement2 = head.next;
-            while (currentElement2 != null)
+            if (position == 1)
             {
-                if (currentElement2.value == value)
-                {
-                    return;
-                }
-                currentElement1 = currentElement2;
-                currentElement2 = currentElement2.next;
-            }
-            sizeOfList++;
-            currentElement1.next = new ListElement(value, null);
-        }
-
-        /// <summary>
-        /// Delete element of the list
-        /// </summary>
-        /// <param name="value">Value of element for deletion</param>
-        public void Delete(int value)
-        {
-            if (head == null)
-            {
-                throw new DeletingAnElementThatIsNotInTheListException("Error : Delete from empty list");
-            }
-            if (head.value == value)
-            {
-                sizeOfList--;
-                head = head.next;
+                head = new ListElement(value, head);
+                size++;
                 return;
-            }
-            var currentElement1 = head;
-            var currentElement2 = currentElement1.next;
-            while (currentElement2 != null)
-            {
-                if (currentElement2.value == value)
-                {
-                    sizeOfList--;
-                    currentElement1.next = currentElement2.next;
-                    return;
-                }
-            }
-
-            throw new DeletingAnElementThatIsNotInTheListException($"Error : {value} is not contained in the list");
-        }
-
-        /// <summary>
-        /// Check element for list belong
-        /// </summary>
-        /// <param name="value">Value of element</param>
-        /// <returns>Belong or not</returns>
-        public bool IsContain(int value)
-        {
-            if (head == null)
-            {
-                return false;
             }
             ListElement currentElement = head;
-            while (currentElement != null)
+            for (int i = 1; position != i + 1; i++)
+            {
+                currentElement = currentElement.next;
+            }
+            currentElement.next = new ListElement(value, currentElement.next);
+            size++;
+        }
+
+        /// <summary>
+        /// Delete element in list by position
+        /// </summary>
+        /// <param name="position">Element`s position</param>
+        public void Delete(int position)
+        {
+            if (position <= 0 || position > size)
+            {
+                throw new DeletingAnElementThatIsNotInTheListException("Error : delete from empty list");
+            }
+            if (position == 1)
+            {
+                head = head.next;
+                size--;
+                return;
+            }
+
+            ListElement currentElement = head;
+            for (int i = 1; i <= size; i++)
+            {
+                if (position == i + 1)
+                {
+                    currentElement.next = currentElement.next.next;
+                    size--;
+                    return;
+                }
+                currentElement = currentElement.next;
+            }
+        }
+
+        /// <summary>
+        /// Check list for emptiness
+        /// </summary>
+        /// <returns>Is empty or not</returns>
+        public bool IsEmpty() => size == 0;
+
+        /// <summary>
+        /// Get list`s size
+        /// </summary>
+        /// <returns>List`s size</returns>
+        public int GetSize() => size;
+
+        /// <summary>
+        /// Get element in list by position
+        /// </summary>
+        /// <param name="position">Element`s position</param>
+        /// <returns>Element`s position</returns>
+        public int GetElement(int position)
+        {
+            if (position > size || position <= 0)
+            {
+                return -1;
+            }
+            ListElement currentElement = head;
+            for (int i = 1; i <= size; i++)
+            {
+                if (position == i)
+                {
+                    return currentElement.value;
+                }
+                currentElement = currentElement.next;
+            }
+            return currentElement.value;
+        }
+
+        /// <summary>
+        /// Check the element for contain in list
+        /// </summary>
+        /// <param name="value">element`s value</param>
+        /// <returns>Is contain or not</returns>
+        public bool IsContain(int value)
+        {
+            var currentElement = head;
+            while(currentElement != null)
             {
                 if (currentElement.value == value)
                 {
@@ -118,25 +143,17 @@ namespace _2._4._2
         }
 
         /// <summary>
-        /// Get size of list
+        /// List output
         /// </summary>
-        /// <returns>Size</returns>
-        public int GetSize()
-            => sizeOfList;
-
-        /// <summary>
-        /// Check list for emptiness
-        /// </summary>
-        /// <returns>Empty or not</returns>
-        public bool IsEmpty() => sizeOfList == 0;
-
-        /// <summary>
-        /// Clear list
-        /// </summary>
-        public void Clear()
+        public void OutputList()
         {
-            head = null;
-            sizeOfList = 0;
+            ListElement currentElement = head;
+            for (int i = 1; i <= size; i++)
+            {
+                Console.Write(currentElement.value + " ");
+                currentElement = currentElement.next;
+            }
+            Console.WriteLine();
         }
     }
 }

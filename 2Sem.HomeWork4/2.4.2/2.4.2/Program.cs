@@ -9,7 +9,7 @@ namespace _2._4._2
             try
             {
                 var list = new UniqueList();
-                list.Delete(5);
+                list.Delete(1);
                 Console.WriteLine(list.IsContain(5));
             }
             catch (AddContainingValueException ex)

@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System;
 
 namespace _2._4._1
 {
@@ -21,25 +22,25 @@ namespace _2._4._1
         [Test]
         public void DivisionOfLargeNumbersTest()
         {
-            leftChild.value = 100000000;
-            rightChild.value = 2;
+            leftChild.Value = 100000000;
+            rightChild.Value = 2;
             Assert.AreEqual(50000000, division.Counting());
         }
 
         [Test]
         public void DivisionWithRemainderTest()
         {
-            leftChild.value = 3;
-            rightChild.value = 2;
+            leftChild.Value = 3;
+            rightChild.Value = 2;
             Assert.AreEqual(1.5, division.Counting());
         }
 
         [Test]
         public void DivisionByZeroTest()
         {
-            leftChild.value = 1311.31;
-            rightChild.value = 0;
-            division.Counting();
+            leftChild.Value = 1311.31;
+            rightChild.Value = 0;
+            Assert.Throws<DivideByZeroException>(() => division.Counting());
         }
     }
 }

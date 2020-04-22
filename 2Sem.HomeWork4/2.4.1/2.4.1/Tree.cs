@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace _2._4._1
@@ -9,7 +10,7 @@ namespace _2._4._1
 	/// </summary>
 	public class Tree
     {
-		private INode root { get; set; }
+		private INode root;
 
 		/// <summary>
 		/// Check expression for correct
@@ -42,12 +43,7 @@ namespace _2._4._1
 				}
 			}
 
-			if (amountOfValues == 0)
-			{
-				return false;
-			}
-
-			return true;
+			return amountOfValues != 0;
 		}
 
 		/// <summary>
@@ -58,7 +54,7 @@ namespace _2._4._1
 		{
 			if (!IsExpressionCorrect(str))
 			{
-				throw new Exception();
+				throw new InvalidExpressionException();
 			}
 			int counter = 0;
 			root = AddElementInTree(str, ref counter);
@@ -71,22 +67,30 @@ namespace _2._4._1
 		/// <returns>Operation</returns>
 		private Operation ChoiceOperation(char operation)
 		{
-			if (operation == '+')
+			Operation newElement;
+			switch (operation)
 			{
-				return new Addition();
-			}
+				case '+':
+					newElement = new Addition();
+					newElement.OperationSign = '+';
+					break;
 
-			if (operation == '-')
-			{
-				return new Subtraction();
-			}
+				case '-':
+					newElement = new Subtraction();
+					newElement.OperationSign = '-';
+					break;
 
-			if (operation == '*')
-			{
-				return new Multiplication();
-			}
+				case '*':
+					newElement = new Multiplication();
+					newElement.OperationSign = '*';
+					break;
 
-			return new Division();
+				default:
+					newElement = new Division();
+					newElement.OperationSign = '/';
+					break;
+			}
+			return newElement;
 		}
 
 		/// <summary>
@@ -116,6 +120,7 @@ namespace _2._4._1
 				int value = CreateNumber(ref counter, str);
 				return new Number(value);
 			}
+
 			else
 			{
 				char operation = str[counter];
@@ -156,9 +161,6 @@ namespace _2._4._1
 		/// <summary>
 		/// Output exxpression
 		/// </summary>
-		public void OutputTree()
-		{
-			root.Print();
-		}
+		public void OutputTree(){ root.Print(); }
 	}
 }

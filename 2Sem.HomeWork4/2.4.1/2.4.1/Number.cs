@@ -9,11 +9,14 @@ namespace _2._4._1
     /// </summary>
     public class Number : INode
     {
-        public double value { get; set; }
+        /// <summary>
+        /// Number`s value
+        /// </summary>
+        public double Value { get; set; }
 
         public Number(double value)
         {
-            this.value = value;
+            this.Value = value;
         }
 
         /// <summary>
@@ -21,14 +24,14 @@ namespace _2._4._1
         /// </summary>
         public void Print()
         {
-            Console.Write(value);
+            Console.Write(Value);
         }
 
         /// <summary>
         /// Return value of tree element
         /// </summary>
         /// <returns>value</returns>
-        public double Counting() => value;
+        public double Counting() => Value;
         
     }
 }

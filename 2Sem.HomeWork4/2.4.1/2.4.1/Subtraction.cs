@@ -16,7 +16,7 @@ namespace _2._4._1
         {
             Console.Write("(");
             LeftChild.Print();
-            Console.Write("-");
+            Console.Write(OperationSign);
             RightChild.Print();
             Console.Write(")");
         }

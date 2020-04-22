@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace _2._4._1
@@ -8,7 +9,7 @@ namespace _2._4._1
     /// Class Addition
     /// </summary>
     public class Addition : Operation
-    {
+    { 
         /// <summary>
         /// Output expression with addition
         /// </summary>
@@ -16,7 +17,7 @@ namespace _2._4._1
         {
             Console.Write("(");
             LeftChild.Print();
-            Console.Write("+");
+            Console.Write(OperationSign);
             RightChild.Print();
             Console.Write(")");
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 
 namespace _2._4._1
 {
@@ -9,14 +10,14 @@ namespace _2._4._1
             try
             {
                 var tree = new Tree();
-                tree.BuildTree("(/ 3 2 )");
+                tree.BuildTree("(/ 3 2)");
                 Console.WriteLine(tree.Counting());
             }
             catch(DivideByZeroException)
             {
                 Console.WriteLine("Invalide expression : Divide by zero");
             }
-            catch(Exception)
+            catch(InvalidExpressionException)
             {
                 Console.WriteLine("Invalide expression");
             }

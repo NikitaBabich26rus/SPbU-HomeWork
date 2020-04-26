@@ -15,7 +15,7 @@ namespace _2._6._1
             list = Functions.Map(list, x => x + 3);
             for (int i = 0; i < 5; i++)
             {
-                Assert.AreEqual(list[i], answerList[i]);
+                Assert.AreEqual(answerList[i], list[i]);
             }
         }
 
@@ -27,7 +27,7 @@ namespace _2._6._1
             list = Functions.Map(list, x => x * 5);
             for (int i = 0; i < 5; i++)
             {
-                Assert.AreEqual(list[i], answerList[i]);
+                Assert.AreEqual(answerList[i], list[i]);
             }
         }
 
@@ -39,7 +39,7 @@ namespace _2._6._1
             list = Functions.Map(list, x => x * x);
             for (int i = 0; i < 5; i++)
             {
-                Assert.AreEqual(list[i], answerList[i]);
+                Assert.AreEqual(answerList[i], list[i]);
             }
         }
 
@@ -51,7 +51,7 @@ namespace _2._6._1
             list = Functions.Map(list, x => x / 2);
             for (int i = 0; i < 5; i++)
             {
-                Assert.AreEqual(list[i], answerList[i]);
+                Assert.AreEqual(answerList[i], list[i]);
             }
         }
 
@@ -63,7 +63,7 @@ namespace _2._6._1
             list = Functions.Filter(list, x => x % 2 == 0);
             for (int i = 0; i < 2; i++)
             {
-                Assert.AreEqual(list[i], answerList[i]);
+                Assert.AreEqual(answerList[i], list[i]);
             }
         }
 
@@ -86,7 +86,7 @@ namespace _2._6._1
             int currentValue = 0;
             foreach (var listElement in list)
             {
-                Assert.AreEqual(listElement, currentValue * 2);
+                Assert.AreEqual(currentValue * 2, listElement);
                 currentValue++;
             }
         }
@@ -108,7 +108,7 @@ namespace _2._6._1
         {
             var list = new List<int>() {1, 2, 3, 4, 5 };
             int result = Functions.Fold(list, 1, (x, y) => x + y);
-            Assert.AreEqual(result, 16);
+            Assert.AreEqual(16, result);
         }
 
         [Test]
@@ -120,7 +120,7 @@ namespace _2._6._1
                 list.Add(i);
             }
             int result = Functions.Fold(list, 0, (x, y) => x + y);
-            Assert.AreEqual(result, 500500);
+            Assert.AreEqual(500500, result);
         }
 
         [Test]
@@ -128,7 +128,7 @@ namespace _2._6._1
         {
             var list = new List<int>() { 1, 2, 3};
             int result = Functions.Fold(list, 1000000, (x, y) => x * y);
-            Assert.AreEqual(result, 6000000);
+            Assert.AreEqual(6000000, result);
         }
     }
 

@@ -6,7 +6,7 @@ namespace _2._6._1
     {
         static void Main(string[] args)
         {
-            var func = new Functions();
+
         }
     }
 }

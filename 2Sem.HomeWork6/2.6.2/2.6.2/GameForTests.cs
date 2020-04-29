@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-
 namespace _2._6._2
 {
     /// <summary>
-    /// Game's class
+    /// Class game for tests.
     /// </summary>
-    public class Game
+    public class GameForTests
     {
         /// <summary>
         /// Map for game.
@@ -16,20 +15,20 @@ namespace _2._6._2
         public GameMap GameMap { get; private set; }
 
         /// <summary>
-        /// PLayer.
+        /// Player.
         /// </summary>
         public Player Player { get; private set; }
 
         /// <summary>
-        /// Game's constructor
+        /// GameForTests constructor
         /// </summary>
         /// <param name="file">File with Map</param>
-        public Game(string file)
+        public GameForTests(string file)
         {
             GameMap = new GameMap(file);
             GameMap.Print();
             Player = new Player(GameMap.X, GameMap.Y);
-        } 
+        }
 
         /// <summary>
         /// Go on the left
@@ -75,12 +74,7 @@ namespace _2._6._2
             {
                 return;
             }
-            Console.SetCursorPosition(Player.X, Player.Y);
-            Console.Write(' ');
             Player.Move(x, y);
-            Console.SetCursorPosition(Player.X, Player.Y);
-            Console.Write('@');
-            Console.SetCursorPosition(Player.X, Player.Y);
         }
     }
 }

@@ -18,7 +18,6 @@ namespace _2._6._2
                 eventLoop.RightHandler += game.ToTheRight;
                 eventLoop.UpHandler += game.ToTheUp;
                 eventLoop.DownHandler += game.ToTheDown;
-
                 eventLoop.Run();
             }
             catch (FileNotFoundException)

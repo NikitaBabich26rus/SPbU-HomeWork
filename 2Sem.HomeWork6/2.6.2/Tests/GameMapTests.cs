@@ -3,9 +3,9 @@ using System.IO;
 
 namespace _2._6._2
 {
-    public class Tests
+    public class GameMapTests
     {
-        GameMap gameMap;
+        private GameMap gameMap;
 
         [Test]
         public void NotFoundFileTest()
@@ -17,15 +17,15 @@ namespace _2._6._2
         public void CreateTheMapTests()
         {
             gameMap = new GameMap("../../../GameMapTests.txt");
-            Assert.IsFalse(gameMap.map[0, 0]);
-            Assert.IsFalse(gameMap.map[0, 1]);
-            Assert.IsFalse(gameMap.map[0, 2]);
-            Assert.AreEqual(gameMap.x, 5);
-            Assert.AreEqual(gameMap.y, 7);
-            Assert.IsTrue(gameMap.map[0, 4]);
-            Assert.IsTrue(gameMap.map[0, 5]);
-            Assert.IsTrue(gameMap.map[0, 6]);
-            Assert.IsFalse(gameMap.map[0, 7]);
+            Assert.IsFalse(gameMap.Map[0, 0]);
+            Assert.IsFalse(gameMap.Map[0, 1]);
+            Assert.IsFalse(gameMap.Map[0, 2]);
+            Assert.AreEqual(gameMap.X, 6);
+            Assert.AreEqual(gameMap.Y, 7);
+            Assert.IsTrue(gameMap.Map[0, 4]);
+            Assert.IsTrue(gameMap.Map[0, 5]);
+            Assert.IsFalse(gameMap.Map[0, 6]);
+            Assert.IsFalse(gameMap.Map[0, 7]);
         } 
     }
 }

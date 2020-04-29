@@ -30,7 +30,7 @@ namespace _2._6._2
         public event EventHandler<EventArgs> RightHandler = (sender, args) => { };
 
         /// <summary>
-        /// Class for going on the map
+        /// Class for going on the Map
         /// </summary>
         public void Run()
         {

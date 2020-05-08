@@ -1,0 +1,6 @@
+image: Visual Studio 2019
+before_build:
+  - nuget restore Test/test/test.sln
+
+build_script:
+  - dotnet build Test/test/test.sln

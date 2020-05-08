@@ -10,6 +10,8 @@ namespace _2._6._2
     /// </summary>
     public class Game
     {
+        private bool PassingTests;
+
         /// <summary>
         /// Map for game.
         /// </summary>
@@ -32,36 +34,36 @@ namespace _2._6._2
         } 
 
         /// <summary>
+        /// Game`s constructor for tests.
+        /// </summary>
+        /// <param name="file">File with Map</param>
+        /// <param name="PassingTests">Value for passing tests(True : If you want to passed tests)</param>
+        public Game(string file, bool PassingTests)
+        {
+            this.PassingTests = PassingTests;
+            GameMap = new GameMap(file);
+            Player = new Player(GameMap.X, GameMap.Y);
+        }
+
+        /// <summary>
         /// Go on the left
         /// </summary>
-        public void ToTheLeft(object sender, EventArgs args)
-        {
-            MoveTo(-1, 0);
-        }
+        public void ToTheLeft(object sender, EventArgs args) => MoveTo(-1, 0);
 
         /// <summary>
         /// Go on the right
         /// </summary>
-        public void ToTheRight(object sender, EventArgs args)
-        {
-            MoveTo(1, 0);
-        }
+        public void ToTheRight(object sender, EventArgs args) => MoveTo(1, 0);
 
         /// <summary>
         /// Go to the top
         /// </summary>
-        public void ToTheUp(object sender, EventArgs args)
-        {
-            MoveTo(0, -1);
-        }
+        public void ToTheUp(object sender, EventArgs args) => MoveTo(0, -1);
 
         /// <summary>
         /// Go to the down
         /// </summary>
-        public void ToTheDown(object sender, EventArgs args)
-        {
-            MoveTo(0, 1);
-        }
+        public void ToTheDown(object sender, EventArgs args) => MoveTo(0, 1);
 
         /// <summary>
         /// Move on the Map
@@ -73,6 +75,11 @@ namespace _2._6._2
             if (Player.X + x < 0 || Player.Y + y < 0 || Player.X + x >= GameMap.Map.GetLength(1)
                 || Player.Y + y >= GameMap.Map.GetLength(0) || GameMap.Map[Player.Y + y, Player.X + x])
             {
+                return;
+            }
+            if (PassingTests)
+            {
+                Player.Move(x, y);
                 return;
             }
             Console.SetCursorPosition(Player.X, Player.Y);

@@ -10,12 +10,12 @@ namespace _2._6._2
 {
     public class GameTests
     {
-        private GameForTests game;
+        private Game game;
 
         [SetUp]
         public void SetUp()
         {
-            game = new GameForTests("../../../GameMapTests.txt");
+            game = new Game("../../../GameMapTests.txt", true);
         }
 
         [Test]

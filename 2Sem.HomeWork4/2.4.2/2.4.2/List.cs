@@ -15,8 +15,8 @@ namespace _2._4._2
         /// </summary>
         private class ListElement
         {
-            internal int value;
-            internal ListElement next;
+            public int value;
+            public ListElement next;
 
             /// <summary>
             /// ListElement`s constructor

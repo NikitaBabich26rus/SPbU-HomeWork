@@ -10,17 +10,6 @@ namespace _2._4._1
     public class Division : Operation
     {
         /// <summary>
-        /// Output expression with division
-        /// </summary>
-        public override void Print()
-        {
-            Console.Write("(");
-            LeftChild.Print();
-            Console.Write(OperationSign);
-            RightChild.Print();
-            Console.Write(")");
-        }
-        /// <summary>
         /// Division counting
         /// </summary>
         /// <returns>Result of division</returns>

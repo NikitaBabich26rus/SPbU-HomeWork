@@ -10,18 +10,6 @@ namespace _2._4._1
     public class Multiplication : Operation
     {
         /// <summary>
-        /// Multiplication output
-        /// </summary>
-        public override void Print()
-        {
-            Console.Write("(");
-            LeftChild.Print();
-            Console.Write(OperationSign);
-            RightChild.Print();
-            Console.Write(")");
-        }
-
-        /// <summary>
         /// Result of multiplication
         /// </summary>
         /// <returns></returns>

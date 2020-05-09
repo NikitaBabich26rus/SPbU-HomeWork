@@ -14,6 +14,10 @@ namespace _2._4._1
         /// </summary>
         public double Value { get; set; }
 
+        /// <summary>
+        /// Number`s constructor.
+        /// </summary>
+        /// <param name="value">Element`s value</param>
         public Number(double value)
         {
             this.Value = value;

@@ -10,18 +10,6 @@ namespace _2._4._1
     public class Subtraction : Operation
     {
         /// <summary>
-        /// Subtraction's output
-        /// </summary>
-        public override void Print()
-        {
-            Console.Write("(");
-            LeftChild.Print();
-            Console.Write(OperationSign);
-            RightChild.Print();
-            Console.Write(")");
-        }
-
-        /// <summary>
         /// Subtraction's counting
         /// </summary>
         /// <returns>Subtraction's result</returns>

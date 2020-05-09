@@ -19,6 +19,5 @@ namespace _2._4._1
         /// </summary>
         /// <returns>Result of counting</returns>
         public double Counting();
-
     }
 }

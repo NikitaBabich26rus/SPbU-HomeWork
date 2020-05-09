@@ -5,7 +5,7 @@ using System.Text;
 namespace _2._3._2
 {
 	/// <summary>
-	/// Second hash function
+	/// First hash function
 	/// </summary>
 	public class HashFunction1 : IHashFunction
 	{

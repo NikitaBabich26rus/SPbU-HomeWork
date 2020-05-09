@@ -37,7 +37,7 @@ namespace _2._3._2
 			int hashValue = hash.HashFunction(value, hashTableArray.Length);
 			if (hashValue < 0 || hashValue >= hashTableArray.Length)
 			{
-				hashValue = 0;
+				hashValue = hashValue = System.Math.Abs(hashValue % hashTableArray.Length);
 			}
 
 			hashTableArray[hashValue].Add(value);
@@ -88,7 +88,7 @@ namespace _2._3._2
 						int hashValue = hash.HashFunction(currentValue, newHashTableArray.Length);
 						if (hashValue < 0 || hashValue >= newHashTableArray.Length)
 						{
-							hashValue = 0;
+							hashValue = System.Math.Abs(hashValue % newHashTableArray.Length);
 						}
 						newHashTableArray[hashValue].Add(currentValue);
 					}
@@ -105,7 +105,12 @@ namespace _2._3._2
 		{
 			if (hashTableArray.Length != 0)
 			{
-				hashTableArray[hash.HashFunction(value, hashTableArray.Length)].Remove(value);
+				var hashValue = hash.HashFunction(value, hashTableArray.Length);
+				if (hashValue < 0 || hashValue >= hashTableArray.Length)
+				{
+					return;
+				}
+				hashTableArray[hashValue].Remove(value);
 			}
 		}
 
@@ -116,11 +121,12 @@ namespace _2._3._2
 		/// <returns>Contained or not</returns>
 		public bool IsContain(string value)
 		{
-			if (amountOfElements == 0)
+			var hashValue = hash.HashFunction(value, hashTableArray.Length);
+			if (hashValue < 0 || hashValue >= hashTableArray.Length || amountOfElements == 0)
 			{
 				return false;
 			}
-			return hashTableArray[hash.HashFunction(value, hashTableArray.Length)].IsContain(value);
+			return hashTableArray[hashValue].IsContain(value);
 		}
 	}
 }

@@ -12,10 +12,23 @@ namespace _2._6._2
     {
         private Game game;
 
+        /// <summary>
+        /// Cursor for tests.
+        /// </summary>
+        private class TestCursor : ISetCursor
+        {
+            /// <summary>
+            /// Doing nothing.
+            /// </summary>
+            /// <param name="x">Coordinate x</param>
+            /// <param name="y">Coordinate y</param>
+            public void SetCursor(int x, int y) { }
+        }
+
         [SetUp]
         public void SetUp()
         {
-            game = new Game("../../../GameMapTests.txt", true);
+            game = new Game("../../../GameMapTests.txt", new TestCursor());
         }
 
         [Test]

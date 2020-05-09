@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 
-
 namespace _2._6._2
 {
     /// <summary>
@@ -10,7 +9,20 @@ namespace _2._6._2
     /// </summary>
     public class Game
     {
-        private bool PassingTests;
+        private ISetCursor cursor;
+
+        /// <summary>
+        /// Class for "Console.SetCursorPosition()" operation. 
+        /// </summary>
+        private class Cursor : ISetCursor
+        {
+            /// <summary>
+            /// Console.SetCursorPosition(x, y) operation.
+            /// </summary>
+            /// <param name="x">Coordinate x</param>
+            /// <param name="y">Coordinate y</param>
+            public void SetCursor(int x, int y) => Console.SetCursorPosition(x, y);
+        }
 
         /// <summary>
         /// Map for game.
@@ -28,20 +40,22 @@ namespace _2._6._2
         /// <param name="file">File with Map</param>
         public Game(string file)
         {
+            cursor = new Cursor();
             GameMap = new GameMap(file);
             GameMap.Print();
             Player = new Player(GameMap.X, GameMap.Y);
         } 
 
         /// <summary>
-        /// Game`s constructor for tests.
+        /// Game`s constructor with ISetCursor.
         /// </summary>
-        /// <param name="file">File with Map</param>
-        /// <param name="PassingTests">Value for passing tests(True : If you want to passed tests)</param>
-        public Game(string file, bool PassingTests)
+        /// <param name="file"></param>
+        /// <param name="cursor"></param>
+        public Game(string file, ISetCursor cursor)
         {
-            this.PassingTests = PassingTests;
+            this.cursor = cursor;
             GameMap = new GameMap(file);
+            GameMap.Print();
             Player = new Player(GameMap.X, GameMap.Y);
         }
 
@@ -77,17 +91,12 @@ namespace _2._6._2
             {
                 return;
             }
-            if (PassingTests)
-            {
-                Player.Move(x, y);
-                return;
-            }
-            Console.SetCursorPosition(Player.X, Player.Y);
+            cursor.SetCursor(Player.X, Player.Y);
             Console.Write(' ');
             Player.Move(x, y);
-            Console.SetCursorPosition(Player.X, Player.Y);
+            cursor.SetCursor(Player.X, Player.Y);
             Console.Write('@');
-            Console.SetCursorPosition(Player.X, Player.Y);
+            cursor.SetCursor(Player.X, Player.Y);
         }
     }
 }

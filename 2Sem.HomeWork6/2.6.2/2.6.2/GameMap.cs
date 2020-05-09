@@ -38,7 +38,6 @@ namespace _2._6._2
             using (var sr = new StreamReader(file))
             {
                 line = sr.ReadToEnd();
-                sr.Close();
             }
             CreateTheMap(line);
         }

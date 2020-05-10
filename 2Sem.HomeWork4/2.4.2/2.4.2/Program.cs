@@ -8,15 +8,19 @@ namespace _2._4._2
         {
             try
             {
-                var list = new UniqueList();
-                list.Delete(1);
-                Console.WriteLine(list.IsContain(5));
+                var list = new List();
+                list.Add(1, 1);
+                list.SetElementOnPosition(2, 3);
             }
             catch (AddContainingValueException ex)
             {
                 Console.WriteLine(ex.Message);
             }
             catch (DeletingAnElementThatIsNotInTheListException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (InvalidPositionException ex)
             {
                 Console.WriteLine(ex.Message);
             }

@@ -105,7 +105,7 @@ namespace _2._4._2
         /// </summary>
         /// <param name="position">Element`s position</param>
         /// <returns>Element`s position</returns>
-        public int GetElement(int position)
+        public int GetElementByPosition(int position)
         {
             if (position > size || position <= 0)
             {
@@ -121,6 +121,29 @@ namespace _2._4._2
                 currentElement = currentElement.next;
             }
             return currentElement.value;
+        }
+
+        /// <summary>
+        /// Set new value on position
+        /// </summary>
+        /// <param name="value">Element`s value</param>
+        /// <param name="position">Element`s position</param>
+        public void SetElementOnPosition(int value, int position)
+        {
+            if (position > size|| position <= 0)
+            {
+                throw new InvalidPositionException("Error : invalid position");
+            }
+            var currentElement = head;
+            for (int i = 1; true; i++)
+            {
+                if (i == position)
+                {
+                    currentElement.value = value;
+                    return;
+                }
+                currentElement = currentElement.next;
+            }
         }
 
         /// <summary>

@@ -4,26 +4,23 @@ using System.Text;
 
 namespace _2._4._2
 {
-    /// <summary>
-    /// Exception for adding elements contained in a unique list
-    /// </summary>
-    public class AddContainingValueException : Exception
+    public class InvalidPositionException : Exception
     {
-        public AddContainingValueException()
+        public InvalidPositionException()
         {
         }
 
-        public AddContainingValueException(string message)
+        public InvalidPositionException(string message)
             : base(message)
         {
         }
 
-        public AddContainingValueException(string message, Exception inner)
+        public InvalidPositionException(string message, Exception inner)
             : base(message, inner)
         {
         }
 
-        protected AddContainingValueException(
+        protected InvalidPositionException(
             System.Runtime.Serialization.SerializationInfo info,
             System.Runtime.Serialization.StreamingContext context)
             : base(info, context)

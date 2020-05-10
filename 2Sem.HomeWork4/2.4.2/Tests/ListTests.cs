@@ -43,6 +43,14 @@ namespace _2._4._2
         }
 
         [Test]
+        public void SetElementOnPositionTest()
+        {
+            list.Add(1, 1);
+            list.SetElementOnPosition(2, 1);
+            Assert.AreEqual(2, list.GetElementByPosition(1));
+        }
+
+        [Test]
         public void DeleteElementFromEmptyListTest()
         {
             Assert.Throws<DeletingAnElementThatIsNotInTheListException>(() => list.Delete(5));

@@ -24,7 +24,6 @@ namespace _2._3._2
 			{
 				hashTableArray[i] = new List();
 			}
-
 			this.hash = hash;
 		}
 
@@ -34,15 +33,9 @@ namespace _2._3._2
 		/// <param name="value">Element value</param>
 		public void Add(string value)
 		{
-			int hashValue = hash.HashFunction(value, hashTableArray.Length);
-			if (hashValue < 0 || hashValue >= hashTableArray.Length)
-			{
-				hashValue = hashValue = System.Math.Abs(hashValue % hashTableArray.Length);
-			}
-
+			int hashValue = ConvertHashCode(hash.HashFunction(value), hashTableArray.Length);
 			hashTableArray[hashValue].Add(value);
 			amountOfElements++;
-
 			if ((float)amountOfElements / (float)hashTableArray.Length > 1.2)
 			{
 				HashTableResize();
@@ -55,7 +48,7 @@ namespace _2._3._2
 		/// <param name="newHash">New hash function</param>
 		public void ChangeHashFunction(IHashFunction newHash)
 		{
-			hash = newHash;
+			this.hash = newHash;
 			var newHashTableArray = new List[hashTableArray.Length];
 			hashTableArray = TransferDataFromTheOldTableToTheNew(newHashTableArray);
 		}
@@ -71,13 +64,17 @@ namespace _2._3._2
 			hashTableArray = TransferDataFromTheOldTableToTheNew(newHashTableArray);
 		}
 
+		/// <summary>
+		/// Transfer data from the old hashTableArrar to the new hash table array.
+		/// </summary>
+		/// <param name="newHashTableArray">List array - new hash table array.</param>
+		/// <returns></returns>
 		private List[] TransferDataFromTheOldTableToTheNew(List[] newHashTableArray)
 		{
 			for (int i = 0; i < newHashTableArray.Length; i++)
 			{
 				newHashTableArray[i] = new List();
 			}
-
 			for (int i = 0; i < hashTableArray.Length; i++)
 			{
 				while (!hashTableArray[i].IsEmpty())
@@ -85,11 +82,7 @@ namespace _2._3._2
 					var currentValue = hashTableArray[i].Pop();
 					if (currentValue != null)
 					{
-						int hashValue = hash.HashFunction(currentValue, newHashTableArray.Length);
-						if (hashValue < 0 || hashValue >= newHashTableArray.Length)
-						{
-							hashValue = System.Math.Abs(hashValue % newHashTableArray.Length);
-						}
+						var hashValue = ConvertHashCode(hash.HashFunction(currentValue), newHashTableArray.Length);
 						newHashTableArray[hashValue].Add(currentValue);
 					}
 				}
@@ -103,14 +96,14 @@ namespace _2._3._2
 		/// <param name="value">Value Of element</param>
 		public void Remove(string value)
 		{
-			if (hashTableArray.Length != 0)
+			if (amountOfElements == 0)
 			{
-				var hashValue = hash.HashFunction(value, hashTableArray.Length);
-				if (hashValue < 0 || hashValue >= hashTableArray.Length)
-				{
-					return;
-				}
-				hashTableArray[hashValue].Remove(value);
+				return;
+			}
+			var hashValue = ConvertHashCode(hash.HashFunction(value), hashTableArray.Length);
+			if (!hashTableArray[hashValue].Remove(value))
+			{
+				amountOfElements--;
 			}
 		}
 
@@ -121,12 +114,19 @@ namespace _2._3._2
 		/// <returns>Contained or not</returns>
 		public bool IsContain(string value)
 		{
-			var hashValue = hash.HashFunction(value, hashTableArray.Length);
-			if (hashValue < 0 || hashValue >= hashTableArray.Length || amountOfElements == 0)
+			if (amountOfElements == 0)
 			{
 				return false;
 			}
+			var hashValue = ConvertHashCode(hash.HashFunction(value), hashTableArray.Length);
 			return hashTableArray[hashValue].IsContain(value);
 		}
+
+		/// <summary>
+		/// Convert the hash code.
+		/// </summary>
+		/// <param name="hashValue">Hash value.</param>
+		/// <returns>Array index value not beyond its scope.</returns>
+		private int ConvertHashCode(int hashValue, int size) => System.Math.Abs(hashValue % size);
 	}
 }

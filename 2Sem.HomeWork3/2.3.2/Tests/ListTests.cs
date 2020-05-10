@@ -4,7 +4,7 @@ namespace _2._3._2
 {
     public class ListTests
     {
-        List list;
+        private List list;
 
         [SetUp]
         public void Setup()
@@ -23,7 +23,6 @@ namespace _2._3._2
         {
             list.Add("Hello");
             Assert.IsFalse(list.IsEmpty());
-            list.Clear();
         }
 
         [Test]
@@ -32,7 +31,6 @@ namespace _2._3._2
             list.Add("Hello");
             list.Remove("Hello");
             Assert.IsTrue(list.IsEmpty());
-            list.Clear();
         } 
 
         [Test]
@@ -42,7 +40,6 @@ namespace _2._3._2
             Assert.IsTrue(list.IsContain("Hello"));
             list.Remove("Hello");
             Assert.IsFalse(list.IsContain("Hello"));
-            list.Clear();
         }
 
         [Test]
@@ -52,7 +49,6 @@ namespace _2._3._2
             list.Add("Goodbye");
             Assert.AreEqual("Hello", list.Pop());
             Assert.AreEqual("Goodbye", list.Pop());
-            list.Clear();
         }
 
         [Test]

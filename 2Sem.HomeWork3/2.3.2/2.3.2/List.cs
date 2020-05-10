@@ -27,7 +27,6 @@ namespace _2._3._2
         }
 
         private ListElement head;
-
         private int sizeOfList;
 
         /// <summary>
@@ -64,20 +63,21 @@ namespace _2._3._2
         }
 
         /// <summary>
-        /// Delete element of the list
+        /// Delete element of the list and return true if element was deleted.
         /// </summary>
         /// <param name="value">Value of element for deletion</param>
-        public void Remove(string value)
+        /// <returns>Was deleted or not.</returns>
+        public bool Remove(string value)
         {
             if (head == null)
             {
-                return;
+                return false;
             }
             if (head.value == value)
             {
                 sizeOfList--;
                 head = head.next;
-                return;
+                return true;
             }
             var currentElement1 = head;
             var currentElement2 = currentElement1.next;
@@ -87,9 +87,10 @@ namespace _2._3._2
                 {
                     sizeOfList--;
                     currentElement1.next = currentElement2.next;
-                    return;
+                    return true;
                 }
             }
+            return false;
         }
 
         /// <summary>

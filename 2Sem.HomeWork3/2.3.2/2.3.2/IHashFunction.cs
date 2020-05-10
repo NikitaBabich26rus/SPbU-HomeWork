@@ -9,6 +9,11 @@ namespace _2._3._2
     /// </summary>
     public interface IHashFunction
     {
-        public int HashFunction(string value, int hashSize);
+        /// <summary>
+        /// Get element`s hash code
+        /// </summary>
+        /// <param name="value">Element`s value.</param>
+        /// <returns>Element`s hash code.</returns>
+        public int HashFunction(string value);
     }
 }

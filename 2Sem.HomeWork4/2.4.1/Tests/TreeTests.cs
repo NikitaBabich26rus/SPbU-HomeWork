@@ -6,7 +6,7 @@ namespace _2._4._1
 {
     class TreeTests
     {
-        Tree tree;
+        private Tree tree;
 
         [SetUp]
         public void Setup()

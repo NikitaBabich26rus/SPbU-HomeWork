@@ -26,10 +26,7 @@ namespace _2._4._1
         /// <summary>
         /// Value output
         /// </summary>
-        public void Print()
-        {
-            Console.Write(Value);
-        }
+        public void Print() => Console.Write(Value);
 
         /// <summary>
         /// Return value of tree element

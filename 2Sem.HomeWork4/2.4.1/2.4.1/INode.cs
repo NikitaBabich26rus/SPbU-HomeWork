@@ -5,7 +5,7 @@ using System.Text;
 namespace _2._4._1
 {
     /// <summary>
-    /// Node`s interface
+    /// Node in an abstract syntax tree
     /// </summary>
     public interface INode
     {

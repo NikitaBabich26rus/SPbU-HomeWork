@@ -12,7 +12,7 @@ namespace _2._4._1
         /// <summary>
         /// Mathematical operation sign.
         /// </summary>
-        public char OperationSign { get; set; }
+        public virtual char OperationSign { get; set; }
 
         /// <summary>
         /// Left child of the leaf tree.

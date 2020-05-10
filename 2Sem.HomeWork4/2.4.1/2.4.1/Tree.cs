@@ -9,7 +9,7 @@ namespace _2._4._1
 	/// Tree's class
 	/// </summary>
 	public class Tree
-    {
+	{
 		private INode root;
 
 		/// <summary>
@@ -65,29 +65,25 @@ namespace _2._4._1
 		/// </summary>
 		/// <param name="operation">Addition, division, multiplication or subtraction</param>
 		/// <returns>Operation</returns>
-		private Operation ChoiceOperation(char operation)
+		private Operation ChooseOperationOperation(char operation)
 		{
 			Operation newElement;
 			switch (operation)
 			{
 				case '+':
 					newElement = new Addition();
-					newElement.OperationSign = '+';
 					break;
 
 				case '-':
 					newElement = new Subtraction();
-					newElement.OperationSign = '-';
 					break;
 
 				case '*':
 					newElement = new Multiplication();
-					newElement.OperationSign = '*';
 					break;
 
 				default:
 					newElement = new Division();
-					newElement.OperationSign = '/';
 					break;
 			}
 			return newElement;
@@ -125,7 +121,7 @@ namespace _2._4._1
 			{
 				char operation = str[counter];
 				counter++;
-				var newElement = ChoiceOperation(operation);
+				var newElement = ChooseOperationOperation(operation);
 
 				newElement.LeftChild = AddElementInTree(str, ref counter);
 				newElement.RightChild = AddElementInTree(str, ref counter);
@@ -159,8 +155,8 @@ namespace _2._4._1
 		public double Counting() => root.Counting();
 
 		/// <summary>
-		/// Output exxpression
+		/// Output expression
 		/// </summary>
-		public void OutputTree(){ root.Print(); }
+		public void OutputTree() => root.Print();
 	}
 }

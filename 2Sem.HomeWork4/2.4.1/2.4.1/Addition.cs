@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace _2._4._1
 {
@@ -9,7 +6,8 @@ namespace _2._4._1
     /// Class Addition
     /// </summary>
     public class Addition : Operation
-    { 
+    {
+        public override char OperationSign { get; set; } = '+';
         /// <summary>
         /// Addition counting
         /// </summary>

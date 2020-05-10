@@ -9,6 +9,8 @@ namespace _2._4._1
     /// </summary>
     public class Division : Operation
     {
+        public override char OperationSign { get; set; } = '/';
+
         /// <summary>
         /// Division counting
         /// </summary>

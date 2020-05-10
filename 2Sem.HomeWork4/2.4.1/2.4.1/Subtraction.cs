@@ -9,6 +9,8 @@ namespace _2._4._1
     /// </summary>
     public class Subtraction : Operation
     {
+        public override char OperationSign { get; set; } = '-';
+
         /// <summary>
         /// Subtraction's counting
         /// </summary>

@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace _2._4._2
+﻿namespace _2._4._2
 {
     /// <summary>
     /// List class without duplicate elements. 
     /// </summary>
     public class UniqueList : List
-    { 
+    {
         /// <summary>
-        /// Add new element in UniqueList
+        /// Add element, element is not contained in UniqueList.
         /// </summary>
-        /// <param name="value">Value of element</param>
+        /// <param name="value">Element`s position</param>
+        /// <param name="position">Element`s position</param>
         public override void Add(int value, int position)
         {
             if (IsContain(value))
@@ -20,6 +17,20 @@ namespace _2._4._2
                 throw new AddContainingValueException($"Error : {value} is contained in the list"); 
             }
             base.Add(value, position);
+        }
+
+        /// <summary>
+        /// Set element on position, element is not contained in UniqueList.
+        /// </summary>
+        /// <param name="value">Element`s value</param>
+        /// <param name="position">Element`s position</param>
+        public override void SetElementOnPosition(int value, int position)
+        {
+            if (IsContain(value))
+            {
+                throw new AddContainingValueException($"Error : {value} is contained in the list");
+            }
+            base.SetElementOnPosition(value, position);
         }
     }
 }

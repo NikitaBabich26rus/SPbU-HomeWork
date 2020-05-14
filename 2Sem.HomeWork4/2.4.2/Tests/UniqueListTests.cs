@@ -57,6 +57,23 @@ namespace _2._4._2
         }
 
         [Test]
+        public void SetElementOnPositionTest()
+        {
+            list.Add(1, 1);
+            list.SetElementOnPosition(2, 1);
+            Assert.IsTrue(list.IsContain(2));
+            Assert.IsFalse(list.IsContain(1));
+        }
+
+        [Test]
+        public void SetContainingElementOnPositionTest()
+        {
+            list.Add(1, 1);
+            list.Add(2, 2);
+            Assert.Throws<AddContainingValueException>(() => list.SetElementOnPosition(1, 2));
+        }
+
+        [Test]
         public void AddContainingValueTest()
         {
             list.Add(5, 1);

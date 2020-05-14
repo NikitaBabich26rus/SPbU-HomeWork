@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace _2._4._2
 {
+    /// <summary>
+    /// Exception for an erroneously specified element position in the list.
+    /// </summary>
     public class InvalidPositionException : Exception
     {
         public InvalidPositionException()

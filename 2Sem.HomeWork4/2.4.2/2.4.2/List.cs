@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
 
 namespace _2._4._2
 {
@@ -33,7 +30,7 @@ namespace _2._4._2
         private int size;
 
         /// <summary>
-        /// Add element in list
+        /// Add element in list.
         /// </summary>
         /// <param name="value">Element`s value</param>
         /// <param name="position">Element`s position</param>
@@ -74,7 +71,6 @@ namespace _2._4._2
                 size--;
                 return;
             }
-
             ListElement currentElement = head;
             for (int i = 1; i <= size; i++)
             {
@@ -128,7 +124,7 @@ namespace _2._4._2
         /// </summary>
         /// <param name="value">Element`s value</param>
         /// <param name="position">Element`s position</param>
-        public void SetElementOnPosition(int value, int position)
+        public virtual void SetElementOnPosition(int value, int position)
         {
             if (position > size|| position <= 0)
             {

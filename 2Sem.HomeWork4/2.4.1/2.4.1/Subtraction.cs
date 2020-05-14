@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace _2._4._1
+﻿namespace _2._4._1
 {
     /// <summary>
     /// Subtraction's class
     /// </summary>
     public class Subtraction : Operation
     {
-        public override char OperationSign { get; set; } = '-';
+        /// <summary>
+        /// Subtraction sign.
+        /// </summary>
+        protected override char OperationSign { get; set; } = '-';
 
         /// <summary>
         /// Subtraction's counting

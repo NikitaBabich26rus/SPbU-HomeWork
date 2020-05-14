@@ -1,13 +1,15 @@
-﻿using System;
-
-namespace _2._4._1
+﻿namespace _2._4._1
 {
     /// <summary>
     /// Class Addition
     /// </summary>
     public class Addition : Operation
     {
-        public override char OperationSign { get; set; } = '+';
+        /// <summary>
+        /// Addition sign.
+        /// </summary>
+        protected override char OperationSign { get; set; } = '+';
+
         /// <summary>
         /// Addition counting
         /// </summary>

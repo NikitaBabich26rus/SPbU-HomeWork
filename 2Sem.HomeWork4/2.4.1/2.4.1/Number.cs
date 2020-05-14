@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace _2._4._1
 {
@@ -33,6 +31,5 @@ namespace _2._4._1
         /// </summary>
         /// <returns>value</returns>
         public double Counting() => Value;
-        
     }
 }

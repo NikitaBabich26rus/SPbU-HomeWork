@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace _2._4._1
 {
@@ -12,7 +10,7 @@ namespace _2._4._1
         /// <summary>
         /// Mathematical operation sign.
         /// </summary>
-        public virtual char OperationSign { get; set; }
+        protected virtual char OperationSign { get; set; }
 
         /// <summary>
         /// Left child of the leaf tree.

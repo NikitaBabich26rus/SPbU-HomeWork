@@ -1,7 +1,7 @@
 image: Visual Studio 2019
 
 before_build:
-  - nuget restore 2Sem.HomeWork9/2.9.1/2.9.1.sln
+  - nuget restore Test2.1/Test1.3/Test1.3.sln
 
 build:
-  project: 2Sem.HomeWork9/2.9.1/2.9.1.sln
+  project: Test2.1/Test1.3/Test1.3.sln

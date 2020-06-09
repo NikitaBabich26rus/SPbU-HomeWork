@@ -1,4 +1,6 @@
-﻿namespace _2._4._2
+﻿using System.Threading.Tasks;
+
+namespace _2._4._2
 {
     /// <summary>
     /// List class without duplicate elements. 
@@ -14,6 +16,10 @@
         {
             if (IsContain(value))
             {
+                if (GetPositionByElementsValue(value) == position)
+                {
+                    return;
+                }
                 throw new AddContainingValueException($"Error : {value} is contained in the list"); 
             }
             base.Add(value, position);

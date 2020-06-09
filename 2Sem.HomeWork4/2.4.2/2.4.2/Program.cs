@@ -10,8 +10,7 @@ namespace _2._4._2
             {
                 var list = new UniqueList();
                 list.Add(1, 1);
-                list.Add(2, 2);
-                list.SetElementOnPosition(3, 1);
+                list.Add(1, 1);
             }
             catch (AddContainingValueException ex)
             {

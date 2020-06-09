@@ -105,7 +105,7 @@ namespace _2._4._2
         {
             if (position > size || position <= 0)
             {
-                return -1;
+                throw new InvalidPositionException("Error : invalid position");
             }
             ListElement currentElement = head;
             for (int i = 1; i <= size; i++)
@@ -173,6 +173,20 @@ namespace _2._4._2
                 currentElement = currentElement.next;
             }
             Console.WriteLine();
+        }
+
+        protected int GetPositionByElementsValue(int value)
+        {
+            ListElement currentElement = head;
+            for (int i = 1; i <= size; i++)
+            {
+                if (currentElement.value == value)
+                {
+                    return i;
+                }
+                currentElement = currentElement.next;
+            }
+            return 0;
         }
     }
 }

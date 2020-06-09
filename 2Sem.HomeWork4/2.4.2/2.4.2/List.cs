@@ -175,6 +175,11 @@ namespace _2._4._2
             Console.WriteLine();
         }
 
+        /// <summary>
+        /// Get element position by element`s value
+        /// </summary>
+        /// <param name="value">Element`s value</param>
+        /// <returns>Position</returns>
         protected int GetPositionByElementsValue(int value)
         {
             ListElement currentElement = head;

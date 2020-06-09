@@ -8,7 +8,7 @@
         /// <summary>
         /// Addition sign.
         /// </summary>
-        protected override char OperationSign { get; set; } = '+';
+        protected override char OperationSign { get; } = '+';
 
         /// <summary>
         /// Addition counting

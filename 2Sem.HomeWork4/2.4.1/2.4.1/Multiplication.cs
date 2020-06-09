@@ -8,7 +8,7 @@
         /// <summary>
         /// Multiplication sign.
         /// </summary>
-        protected override char OperationSign { get; set; } = '*';
+        protected override char OperationSign { get; } = '*';
 
         /// <summary>
         /// Get result of multiplication.

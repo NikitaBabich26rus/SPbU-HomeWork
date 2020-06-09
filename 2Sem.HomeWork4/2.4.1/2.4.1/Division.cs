@@ -10,7 +10,7 @@ namespace _2._4._1
         /// <summary>
         /// Division sign.
         /// </summary>
-        protected override char OperationSign { get; set; } = '/';
+        protected override char OperationSign { get; } = '/';
 
         /// <summary>
         /// Division counting

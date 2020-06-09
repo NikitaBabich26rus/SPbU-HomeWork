@@ -10,7 +10,7 @@ namespace _2._4._1
         /// <summary>
         /// Mathematical operation sign.
         /// </summary>
-        protected virtual char OperationSign { get; set; }
+        protected virtual char OperationSign { get; }
 
         /// <summary>
         /// Left child of the leaf tree.

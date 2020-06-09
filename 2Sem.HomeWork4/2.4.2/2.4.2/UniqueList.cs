@@ -16,10 +16,6 @@ namespace _2._4._2
         {
             if (IsContain(value))
             {
-                if (GetPositionByElementsValue(value) == position)
-                {
-                    return;
-                }
                 throw new AddContainingValueException($"Error : {value} is contained in the list"); 
             }
             base.Add(value, position);
@@ -34,6 +30,10 @@ namespace _2._4._2
         {
             if (IsContain(value))
             {
+                if (GetPositionByElementsValue(value) == position)
+                {
+                    return;
+                }
                 throw new AddContainingValueException($"Error : {value} is contained in the list");
             }
             base.SetElementOnPosition(value, position);

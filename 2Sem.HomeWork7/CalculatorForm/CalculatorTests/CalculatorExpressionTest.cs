@@ -48,7 +48,7 @@ namespace CalculatorForm
             calculator.AddNumber("1");
             calculator.AddComma();
             calculator.AddNumber("9");
-            Assert.AreEqual(1,9, Convert.ToDouble(calculator.CurrentEntry));
+            Assert.AreEqual("1,9", calculator.CurrentEntry);
             calculator.Clear();
             Assert.AreEqual("", calculator.CurrentEntry);
             Assert.AreEqual("", calculator.CurrentExpression);

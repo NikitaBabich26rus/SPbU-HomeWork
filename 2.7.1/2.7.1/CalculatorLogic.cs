@@ -3,7 +3,7 @@
 namespace _2._7._1
 {
     /// <summary>
-    /// Сalculator calculation logicю
+    /// Сalculator calculation logic.
     /// </summary>
     public class CalculatorLogic
     {
@@ -75,10 +75,18 @@ namespace _2._7._1
             {
                 return;
             }
+            var value1 = Convert.ToDouble(expression[0]);
+            var value2 = Convert.ToDouble(expression[1]);
+            if (operation == '/' && value2 == 0)
+            {
+                Clear();
+                CurrentEntry = "Error: division by zero";
+                return;
+            }
             isOperationSelected = false;
             isEqualSign = true;
             CurrentExpression += " " + expression[1] + " =";
-            double result = GetOperationResult(operation, Convert.ToDouble(expression[0]), Convert.ToDouble(expression[1]));
+            double result = GetOperationResult(operation, value1, value2);
             CurrentEntry = result.ToString();
             expression[0] = CurrentEntry;
             expression[1] = "";
@@ -109,10 +117,6 @@ namespace _2._7._1
                     break;
 
                 case '/':
-                    if (value2 == 0)
-                    {
-                        throw new DivideByZeroException();
-                    }
                     result = value1 / value2;
                     break;
             }
@@ -124,7 +128,7 @@ namespace _2._7._1
         /// </summary>
         public void ChangeSgn()
         {
-            if (CurrentEntry.Length == 0)
+            if (CurrentEntry.Length == 0 || CurrentEntry == "Error: division by zero")
             {
                 return;
             }
@@ -151,7 +155,7 @@ namespace _2._7._1
         /// </summary>
         public void Backspace()
         {
-            if (CurrentEntry.Length == 0 || !isEqualSign || (isOperationSelected && CurrentEntry == expression[0]))
+            if (CurrentEntry.Length == 0 || !isEqualSign || (isOperationSelected && CurrentEntry == expression[0]) || CurrentEntry == "Error: division by zero")
             {
                 return;
             }
@@ -212,7 +216,7 @@ namespace _2._7._1
         /// </summary>
         public void AddComma()
         {
-            if (CurrentEntry.Length == 0)
+            if (CurrentEntry.Length == 0 || CurrentEntry == "Error: division by zero")
             {
                 return;
             }

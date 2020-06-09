@@ -49,7 +49,8 @@ namespace _2._7._1
             calculator.AddNumber("6");
             calculator.AddOperation("/");
             calculator.AddNumber("0");
-            Assert.Throws<DivideByZeroException>(() => calculator.Counting());
+            calculator.Counting();
+            Assert.AreEqual("Error: division by zero", calculator.CurrentEntry);
         }
 
         [Test]

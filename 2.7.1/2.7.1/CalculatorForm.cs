@@ -64,5 +64,15 @@ namespace _2._7._1
             this.labelCurrentExpression.Text = calculator.CurrentExpression;
             this.textBoxResult.Text = calculator.CurrentEntry;
         }
+
+        private void CalculatorForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

@@ -6,7 +6,7 @@ namespace _2._9._1
     {
         static void Main(string[] args)
         {
-            GenericSet<int> set = new GenericSet<int>();
+            var set = new GenericSet<int>();
             set.Add(1);
             set.Add(2);
             set.Add(3);

@@ -50,8 +50,16 @@ namespace _2._9._1
         /// <param name="position">Start index in array</param>
         public void CopyTo(T[] array, int position)
         {
+            if (array == null)
+            {
+                throw new ArgumentException();
+            }
             foreach (var element in this)
             {
+                if (position >= array.Length || position < 0)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
                 array[position] = element;
                 position++;
             }
@@ -298,8 +306,16 @@ namespace _2._9._1
         /// <param name="collection">Element`s collection</param>
         public void ExceptWith(IEnumerable<T> collection)
         {
+            if (collection == null)
+            {
+                throw new ArgumentException();
+            }
             foreach (var element in collection)
             {
+                if (element == null)
+                {
+                    throw new ArgumentException();
+                }
                 Remove(element);
             }
         }
@@ -310,6 +326,14 @@ namespace _2._9._1
         /// <param name="collection">Element`s collection</param>
         public void IntersectWith(IEnumerable<T> collection)
         {
+            if (collection == null)
+            {
+                throw new ArgumentException();
+            }
+            if (collection == this)
+            {
+                return;
+            }
             var list = new List<T>();
             foreach (var element in this)
             {
@@ -331,6 +355,10 @@ namespace _2._9._1
         /// <returns>True - proper subset, false - otherwise</returns>
         public bool IsProperSubsetOf(IEnumerable<T> collection)
         {
+            if (collection == null)
+            {
+                throw new ArithmeticException();
+            }
             foreach (var element in this)
             {
                 if (!collection.Contains(element))
@@ -355,6 +383,10 @@ namespace _2._9._1
         /// <returns>True - proper superset, false - otherwise</returns>
         public bool IsProperSupersetOf(IEnumerable<T> collection)
         {
+            if (collection == null)
+            {
+                throw new ArithmeticException();
+            }
             foreach (var element in collection)
             {
                 if (!Contains(element))
@@ -379,6 +411,10 @@ namespace _2._9._1
         /// <returns>True - subset, false - otherwise</returns>
         public bool IsSubsetOf(IEnumerable<T> collection)
         {
+            if (collection == null)
+            {
+                throw new ArithmeticException();
+            }
             foreach (var element in this)
             {
                 if (!collection.Contains(element))
@@ -396,6 +432,10 @@ namespace _2._9._1
         /// <returns>True - superset, false - otherwise</returns>
         public bool IsSupersetOf(IEnumerable<T> collection)
         {
+            if (collection == null)
+            {
+                throw new ArithmeticException();
+            }
             foreach (var element in collection)
             {
                 if (!Contains(element))
@@ -413,6 +453,10 @@ namespace _2._9._1
         /// <returns>True if the current set and collection share at least one common element, false - otherwise</returns>
         public bool Overlaps(IEnumerable<T> collection)
         {
+            if (collection == null)
+            {
+                throw new ArithmeticException();
+            }
             foreach (var element in collection)
             {
                 if (Contains(element))
@@ -430,6 +474,10 @@ namespace _2._9._1
         /// <returns>True - contain the same elements, false - otherwise</returns>
         public bool SetEquals(IEnumerable<T> collection)
         {
+            if (collection == null)
+            {
+                throw new ArithmeticException();
+            }
             foreach (var element in collection)
             {
                 if (!Contains(element))
@@ -453,6 +501,10 @@ namespace _2._9._1
         /// <param name="collection">Element`s collection</param>
         public void SymmetricExceptWith(IEnumerable<T> collection)
         {
+            if (collection == null)
+            {
+                throw new ArithmeticException();
+            }
             var list = new List<T>();
             foreach (var element in collection)
             {
@@ -477,6 +529,10 @@ namespace _2._9._1
         /// <param name="collection">Element`s collection</param>
         public void UnionWith(IEnumerable<T> collection)
         {
+            if (collection == null)
+            {
+                throw new ArithmeticException();
+            }
             foreach (var element in collection)
             {
                 if (!Contains(element))

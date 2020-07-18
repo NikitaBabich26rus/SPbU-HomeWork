@@ -2,7 +2,7 @@ image: Visual Studio 2019
 
 before_build:
 
-  - nuget restore 2Sem.HomeWork6/2.6.2/2.6.2.sln
+  - nuget restore Test/test/test.sln
 
 build_script:
-  - dotnet build 2Sem.HomeWork6/2.6.2/2.6.2.sln
+  - dotnet build Test/test/test.sln

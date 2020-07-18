@@ -4,3 +4,4 @@ before_build:
   - nuget restore 2.7.1/2.7.1.sln
 build_script:
   - dotnet build 2.7.1/2.7.1.sln
+

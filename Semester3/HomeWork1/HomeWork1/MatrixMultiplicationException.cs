@@ -2,7 +2,10 @@
 
 namespace HomeWork1
 {
-    public class MatrixMultiplicationException: Exception
+    /// <summary>
+    /// Exception for incorrect matrix multiplication.
+    /// </summary>
+    public class MatrixMultiplicationException : Exception
     {
         public MatrixMultiplicationException() { }
 

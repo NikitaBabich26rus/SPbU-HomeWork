@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using System;
 
 namespace HomeWork1
 {
@@ -23,12 +24,13 @@ namespace HomeWork1
             }
 
             var matrixArrayC = new int[matrixArrayA.RowsCount(), matrixArrayB.ColumnsCount()];
-            var threads = new Thread[3];
+            var threads = new Thread[Environment.ProcessorCount];
             var step = matrixArrayC.GetLength(0) / threads.Length;
 
             if (step == 0)
             {
-                return SingleMultiplication(matrixA, matrixB);
+                threads = new Thread[matrixArrayC.GetLength(0)];
+                step = 1;
             }
 
             for (int i = 0; i < threads.Length; i++)
@@ -62,7 +64,7 @@ namespace HomeWork1
             {
                 thread.Join();
             }
-            
+
             return matrixArrayC;
         }
 
@@ -87,8 +89,6 @@ namespace HomeWork1
             {
                 for (var j = 0; j < matrixArrayB.ColumnsCount(); j++)
                 {
-                    matrixArrayC[i, j] = 0;
-
                     for (var k = 0; k < matrixArrayA.ColumnsCount(); k++)
                     {
                         matrixArrayC[i, j] += matrixArrayA[i, k] * matrixArrayB[k, j];
@@ -103,19 +103,13 @@ namespace HomeWork1
         /// </summary>
         /// <param name="matrix">Array for storing matrix</param>
         /// <returns>Rows count</returns>
-        private static int RowsCount(this int[,] matrix)
-        {
-            return matrix.GetUpperBound(0) + 1;
-        }
+        private static int RowsCount(this int[,] matrix) => matrix.GetUpperBound(0) + 1;
 
         /// <summary>
         /// Get columns count
         /// </summary>
         /// <param name="matrix">Array for storing matrix</param>
         /// <returns>Columns count</returns>
-        private static int ColumnsCount(this int[,] matrix)
-        {
-            return matrix.GetUpperBound(1) + 1;
-        }
+        private static int ColumnsCount(this int[,] matrix) => matrix.GetUpperBound(1) + 1;
     }
 }

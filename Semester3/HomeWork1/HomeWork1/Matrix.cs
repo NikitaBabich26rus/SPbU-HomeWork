@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-
 namespace HomeWork1
 {
     /// <summary>
@@ -17,7 +16,7 @@ namespace HomeWork1
         public int[,] MatrixArray { private set; get; }
 
         /// <summary>
-        /// Matrix constructor
+        /// Matrix constructor with file
         /// </summary>
         /// <param name="file">file whith matrix</param>
         public Matrix(string file)
@@ -34,9 +33,18 @@ namespace HomeWork1
         }
 
         /// <summary>
+        /// Matrix constructor with array
+        /// </summary>
+        /// <param name="matrixArray">Matrix array</param>
+        public Matrix(int[,] matrixArray)
+        {
+            this.MatrixArray = matrixArray;
+        }
+
+        /// <summary>
         /// Create MatrixArray by string list
         /// </summary>
-        /// <param name="matrix"></param>
+        /// <param name="matrix">String list</param>
         private void CreateTheArray(List<string> matrix)
         {
             if (matrix.Count == 0)
@@ -49,6 +57,10 @@ namespace HomeWork1
             for (int i = 0; i < this.MatrixArray.GetLength(0); i++)
             {
                 int[] currentArray = matrix[i].Split(' ').Select(x => int.Parse(x)).ToArray();
+                if (currentArray.Length != this.MatrixArray.GetLength(1))
+                {
+                    throw new MatrixMultiplicationException("Invalid matrix.");
+                }
                 for (int j = 0; j < this.MatrixArray.GetLength(1); j++)
                 {
                     this.MatrixArray[i, j] = currentArray[j];

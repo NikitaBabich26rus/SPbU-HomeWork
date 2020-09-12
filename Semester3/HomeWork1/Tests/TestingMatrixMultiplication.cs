@@ -1,6 +1,4 @@
 using NUnit.Framework;
-using System.Diagnostics;
-using System;
 
 namespace HomeWork1
 {
@@ -34,7 +32,7 @@ namespace HomeWork1
             }
             Assert.IsTrue(check);
         }
-        
+
         [Test]
         public void CheckinggSingleAndParallelMultiplicationsWithInvalidMatrices()
         {
@@ -46,26 +44,6 @@ namespace HomeWork1
         public void CheckinggSingleAndParallelMultiplicationsWithEmptyFile()
         {
             Assert.Throws<MatrixMultiplicationException>(() => new Matrix("./../../../EmptyFile.txt"));
-        }
-
-        [Test]
-        public void ComparisonOfTheSpeedSingleAndParallelMultiplications()
-        {
-            Stopwatch stopWatchParallelMultiplication = new Stopwatch();
-            stopWatchParallelMultiplication.Start();
-            var matrixResult1 = Operation.ParallelMultiplication(matrixA, matrixA);
-            stopWatchParallelMultiplication.Stop();
-
-            TimeSpan tsParallelMultiplication = stopWatchParallelMultiplication.Elapsed;
-
-            Stopwatch stopWatchSingleMultiplication = new Stopwatch();
-            stopWatchParallelMultiplication.Start();
-            var matrixResult2 = Operation.SingleMultiplication(matrixA, matrixA);
-            stopWatchParallelMultiplication.Stop();
-
-            TimeSpan tsSingleMultiplication = stopWatchParallelMultiplication.Elapsed;
-
-            Assert.IsTrue(tsParallelMultiplication.Milliseconds < tsSingleMultiplication.Milliseconds);
         }
     }
 }

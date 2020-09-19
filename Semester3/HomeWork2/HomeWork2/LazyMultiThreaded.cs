@@ -9,7 +9,7 @@ namespace HomeWork2
     {
         private Func<T> supplier;
         private T result;
-        private bool isCounted = false;
+        private volatile bool isCounted = false;
         private object locker = new object();
 
         /// <summary>
@@ -37,7 +37,12 @@ namespace HomeWork2
             }
             lock (this.locker)
             {
-                this.result = supplier();
+                if (isCounted)
+                {
+                    return this.result;
+                }
+                this.result = this.supplier();
+                this.supplier = null;
                 isCounted = true;
                 return this.result;
             }

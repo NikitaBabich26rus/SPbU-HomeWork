@@ -17,7 +17,7 @@ namespace HomeWork2
             {
                 for (int i = 0; i < 100000; i++)
                 {
-                    result++;
+                    Interlocked.Increment(ref result);
                 }
                 return result;
             });
@@ -40,7 +40,7 @@ namespace HomeWork2
             {
                 thread.Join();
             }
-            Assert.AreEqual(500000, result);
+            Assert.AreEqual(100000, result);
         }
 
         [Test]

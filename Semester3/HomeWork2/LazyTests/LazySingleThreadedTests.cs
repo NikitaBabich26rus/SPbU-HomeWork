@@ -5,12 +5,17 @@ namespace HomeWork2
 {
     public class LazySingleThreadedTests
     {
-        private LazySingleThreaded<string> lazySingleThreaded;
+        private LazySingleThreaded<int> lazySingleThreaded;
+        private int numberOfFunctionStarts;
 
         [SetUp]
         public void Setup()
         {
-            lazySingleThreaded = LazyFactory<string>.CreateSingleThreadedLazy(() => "Hello world");
+            lazySingleThreaded = LazyFactory<int>.CreateSingleThreadedLazy(() =>
+            {
+                numberOfFunctionStarts++;
+                return 5;
+            });
         }
 
         [Test]
@@ -18,7 +23,8 @@ namespace HomeWork2
         {
             for (int i = 0; i < 10000; i++)
             {
-                Assert.AreEqual("Hello world", lazySingleThreaded.Get());
+                Assert.AreEqual(5, lazySingleThreaded.Get());
+                Assert.AreEqual(1, numberOfFunctionStarts);
             }
         }
 

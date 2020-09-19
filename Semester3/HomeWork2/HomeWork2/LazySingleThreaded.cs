@@ -36,6 +36,7 @@ namespace HomeWork2
             }
             isCounted = true;
             this.value = this.supplier();
+            this.supplier = null;
             return this.value;
         }
     }

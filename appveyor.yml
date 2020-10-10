@@ -4,5 +4,5 @@ before_build:
 
   - nuget restore Semester3/HomeWork3/HomeWork3.sln
 
-build_script:
-  - dotnet build Semester3/HomeWork3/HomeWork3.sln
+test_script:
+  - dotnet test Semester3/HomeWork3/HomeWork3.sln

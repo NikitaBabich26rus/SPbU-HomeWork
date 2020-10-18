@@ -14,6 +14,7 @@ namespace HomeWork3
         private ConcurrentQueue<Action> queueTasks = new ConcurrentQueue<Action>();
         private static Object locker = new Object();
         private int numberOfThreadsCompletedWork;
+        private AutoResetEvent newTask = new AutoResetEvent(false);
         private readonly Thread[] threads;
 
         /// <summary>
@@ -24,7 +25,7 @@ namespace HomeWork3
         {
             if (amountOfThreads <= 0)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Error: The number of threads is less than one.");
             }
 
             this.threads = new Thread[amountOfThreads];
@@ -38,6 +39,10 @@ namespace HomeWork3
                         if (queueTasks.TryDequeue(out Action action))
                         {
                             action.Invoke();
+                        }
+                        else
+                        {
+                            newTask.WaitOne();
                         }
                     }
                     Interlocked.Increment(ref numberOfThreadsCompletedWork);
@@ -77,6 +82,7 @@ namespace HomeWork3
                 {
                     throw new InvalidOperationException("Thread pool is closed.");
                 }
+                newTask.Set();
                 queueTasks.Enqueue(action);
             }
         }
@@ -99,6 +105,7 @@ namespace HomeWork3
             private readonly Queue<Action> localQueue = new Queue<Action>();
             private static object locker = new object();
             private Func<TResult> function;
+            private AutoResetEvent resultSignal = new AutoResetEvent(false);
 
             /// <summary>
             /// Checking the task for completeness
@@ -106,9 +113,21 @@ namespace HomeWork3
             public bool IsCompleted { get; private set; }
 
             /// <summary>
-            /// Get tesult.
+            /// Get result and blocks the caller until the task is finished,
+            /// and throws an exception to the caller if the task threw an exception
             /// </summary>
-            public TResult Result { get; private set; }
+            public TResult Result {
+                get
+                {
+                    if (this.threadPool.cancelTokenSource.IsCancellationRequested)
+                    {
+                        throw new InvalidOperationException("Thread pool is closed.");
+                    }
+                    resultSignal.WaitOne();
+                    return this.Result;
+                }
+                private set { }
+            }
 
             /// <summary>
             /// My task constructor.
@@ -151,7 +170,7 @@ namespace HomeWork3
             {
                 try
                 {
-                    Result = function();
+                    this.Result = function();
                 }
                 catch
                 {
@@ -161,6 +180,7 @@ namespace HomeWork3
                 {
                     lock (locker)
                     {
+                        resultSignal.Set();
                         IsCompleted = true;
                         function = null;
                         while (localQueue.Count != 0)

@@ -77,7 +77,7 @@ namespace HomeWork3
                 flag = value;
                 return 12;
             });
-            Thread.Sleep(300);
+            Thread.Sleep(2000);
             Assert.AreEqual(5, flag);
         }
 
@@ -102,7 +102,7 @@ namespace HomeWork3
             task.ContinueWith((value) =>
             {
                 flag = value;
-                return 12;
+                return 11;
             });
             Thread.Sleep(600);
             Assert.AreEqual(5, flag);

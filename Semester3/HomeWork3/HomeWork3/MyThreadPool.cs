@@ -14,7 +14,8 @@ namespace HomeWork3
         private ConcurrentQueue<Action> queueTasks = new ConcurrentQueue<Action>();
         private static Object locker = new Object();
         private int numberOfThreadsCompletedWork;
-        private AutoResetEvent newTask = new AutoResetEvent(false);
+        private AutoResetEvent newTaskControl = new AutoResetEvent(false);
+        private AutoResetEvent shutDownControl = new AutoResetEvent(false);
         private readonly Thread[] threads;
 
         /// <summary>
@@ -42,10 +43,11 @@ namespace HomeWork3
                         }
                         else
                         {
-                            newTask.WaitOne();
+                            newTaskControl.WaitOne();
                         }
                     }
                     Interlocked.Increment(ref numberOfThreadsCompletedWork);
+                    shutDownControl.Set();
                 });
                 threads[i].Start();
             }
@@ -58,16 +60,32 @@ namespace HomeWork3
         /// <returns>Task</returns>
         public IMyTask<TResult> AddTask<TResult>(Func<TResult> function)
         {
-            if (cancelTokenSource.Token.IsCancellationRequested)
+            if (cancelTokenSource.IsCancellationRequested)
             {
                 throw new InvalidOperationException("Thread pool is closed.");
             }
 
             var task = new MyTask<TResult>(function, this);
 
-            AddAction(task.Counting);
+            AddActionInQueueTasks(task.Counting);
 
             return task;
+        }
+
+        /// <summary>
+        /// Add action in action`s queue and check cancelTokenSource.
+        /// </summary>
+        /// <param name="action">Task action</param>
+        private void AddActionInQueueTasks(Action action)
+        {
+            lock (locker)
+            {
+                if (cancelTokenSource.IsCancellationRequested)
+                {
+                    throw new InvalidOperationException("Thread pool is closed.");
+                }
+                AddAction(action);
+            }
         }
 
         /// <summary>
@@ -76,15 +94,8 @@ namespace HomeWork3
         /// <param name="action">Task action</param>
         private void AddAction(Action action)
         {
-            lock (locker)
-            {
-                if (cancelTokenSource.IsCancellationRequested)
-                {
-                    throw new InvalidOperationException("Thread pool is closed.");
-                }
-                newTask.Set();
-                queueTasks.Enqueue(action);
-            }
+            queueTasks.Enqueue(action);
+            newTaskControl.Set();
         }
 
         /// <summary>
@@ -92,7 +103,16 @@ namespace HomeWork3
         /// </summary>
         public void Shutdown()
         {
-            this.cancelTokenSource.Cancel();
+            lock (locker)
+            {
+                this.cancelTokenSource.Cancel();
+            }
+            newTaskControl.Set();
+            while (this.numberOfThreadsCompletedWork != this.threads.Length)
+            {
+                shutDownControl.WaitOne();
+                newTaskControl.Set();
+            }
             queueTasks = null;
         }
 
@@ -104,7 +124,9 @@ namespace HomeWork3
             private readonly MyThreadPool threadPool;
             private readonly Queue<Action> localQueue = new Queue<Action>();
             private static object locker = new object();
+            private TResult taskResult;
             private Func<TResult> function;
+            private Exception taskException;
             private AutoResetEvent resultSignal = new AutoResetEvent(false);
 
             /// <summary>
@@ -119,14 +141,13 @@ namespace HomeWork3
             public TResult Result {
                 get
                 {
-                    if (this.threadPool.cancelTokenSource.IsCancellationRequested)
-                    {
-                        throw new InvalidOperationException("Thread pool is closed.");
-                    }
                     resultSignal.WaitOne();
-                    return this.Result;
+                    if (taskException != null)
+                    {
+                        throw new AggregateException(taskException);
+                    }
+                    return this.taskResult;
                 }
-                private set { }
             }
 
             /// <summary>
@@ -151,6 +172,10 @@ namespace HomeWork3
             /// <returns>New task</returns>
             public IMyTask<TNewResult> ContinueWith<TNewResult>(Func<TResult, TNewResult> func)
             {
+                if (threadPool.cancelTokenSource.IsCancellationRequested)
+                {
+                    throw new InvalidOperationException("Thread pool is closed.");
+                }
                 var newTask = new MyTask<TNewResult>(() => func(Result), threadPool);
                 lock (locker)
                 {
@@ -170,11 +195,11 @@ namespace HomeWork3
             {
                 try
                 {
-                    this.Result = function();
+                    this.taskResult = function();
                 }
-                catch
+                catch(Exception e)
                 {
-                    throw new AggregateException();
+                    taskException = e;
                 }
                 finally
                 {
@@ -185,7 +210,7 @@ namespace HomeWork3
                         function = null;
                         while (localQueue.Count != 0)
                         {
-                            threadPool.AddAction(localQueue.Dequeue());
+                            threadPool.AddActionInQueueTasks(localQueue.Dequeue());
                         }
                     }
                 }

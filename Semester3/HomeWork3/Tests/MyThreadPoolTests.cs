@@ -72,12 +72,12 @@ namespace HomeWork3
         {
             int flag = 0;
             var task = threadPool.AddTask(() => 5);
-            task.ContinueWith((value) =>
+            Thread.Sleep(200);
+            _=task.ContinueWith((value) =>
             {
                 flag = value;
                 return 12;
-            });
-            Thread.Sleep(2000);
+            }).Result;
             Assert.AreEqual(5, flag);
         }
 
@@ -86,7 +86,7 @@ namespace HomeWork3
         {
             var task = threadPool.AddTask(() => 5);
             threadPool.Shutdown();
-            Thread.Sleep(100);
+            Thread.Sleep(200);
             Assert.Throws<InvalidOperationException>(() => task.ContinueWith((value) => 12));
         }
 

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace HomeWork3
 {
@@ -15,9 +13,9 @@ namespace HomeWork3
         bool IsCompleted { get; }
 
         /// <summary>
-        /// Get tesult
+        /// Get result
         /// </summary>
-        TResult  Result { get; }
+        TResult Result { get; }
 
         /// <summary>
         /// Add new task based on result of this task.

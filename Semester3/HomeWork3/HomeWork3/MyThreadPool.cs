@@ -35,7 +35,7 @@ namespace HomeWork3
             {
                 threads[i] = new Thread(() =>
                 {
-                    while (!cancelTokenSource.IsCancellationRequested)
+                    while (!cancelTokenSource.IsCancellationRequested || !queueTasks.IsEmpty)
                     {
                         if (queueTasks.TryDequeue(out Action action))
                         {
@@ -44,6 +44,10 @@ namespace HomeWork3
                         else
                         {
                             newTaskControl.WaitOne();
+                            if (queueTasks.Count > 0)
+                            {
+                                newTaskControl.Set();
+                            }
                         }
                     }
                     Interlocked.Increment(ref numberOfThreadsCompletedWork);
@@ -64,11 +68,8 @@ namespace HomeWork3
             {
                 throw new InvalidOperationException("Thread pool is closed.");
             }
-
             var task = new MyTask<TResult>(function, this);
-
             AddActionInQueueTasks(task.Counting);
-
             return task;
         }
 
@@ -106,14 +107,14 @@ namespace HomeWork3
             lock (locker)
             {
                 this.cancelTokenSource.Cancel();
+                newTaskControl.Set();
             }
-            newTaskControl.Set();
             while (this.numberOfThreadsCompletedWork != this.threads.Length)
             {
                 shutDownControl.WaitOne();
                 newTaskControl.Set();
             }
-            queueTasks = null;
+            //queueTasks = null;
         }
 
         /// <summary>
@@ -127,7 +128,7 @@ namespace HomeWork3
             private TResult taskResult;
             private Func<TResult> function;
             private Exception taskException;
-            private AutoResetEvent resultSignal = new AutoResetEvent(false);
+            private ManualResetEvent resultSignal = new ManualResetEvent(false);
 
             /// <summary>
             /// Checking the task for completeness
@@ -138,7 +139,8 @@ namespace HomeWork3
             /// Get result and blocks the caller until the task is finished,
             /// and throws an exception to the caller if the task threw an exception
             /// </summary>
-            public TResult Result {
+            public TResult Result
+            {
                 get
                 {
                     resultSignal.WaitOne();
@@ -159,7 +161,7 @@ namespace HomeWork3
             {
                 if (function == null)
                 {
-                    throw new ArgumentException();
+                    throw new ArgumentNullException(nameof(function));
                 }
                 this.threadPool = threadPool;
                 this.function = function;
@@ -197,7 +199,7 @@ namespace HomeWork3
                 {
                     this.taskResult = function();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     taskException = e;
                 }
@@ -205,12 +207,12 @@ namespace HomeWork3
                 {
                     lock (locker)
                     {
-                        resultSignal.Set();
                         IsCompleted = true;
+                        resultSignal.Set();
                         function = null;
                         while (localQueue.Count != 0)
                         {
-                            threadPool.AddActionInQueueTasks(localQueue.Dequeue());
+                            threadPool.AddAction(localQueue.Dequeue());
                         }
                     }
                 }

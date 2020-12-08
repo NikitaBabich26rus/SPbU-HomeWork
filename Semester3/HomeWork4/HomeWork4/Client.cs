@@ -33,24 +33,21 @@ namespace HomeWork4
         public async Task<byte[]> Get(string path)
         {
             var client = new TcpClient(host, port);
-            using (var stream = client.GetStream())
+            using var stream = client.GetStream();
+
+            var writer = new StreamWriter(stream) { AutoFlush = true };
+            await writer.WriteLineAsync($"1 {path}");
+            var reader = new StreamReader(stream);
+            var size = Convert.ToInt32(await reader.ReadLineAsync());
+
+            if (size == -1)
             {
-                var writer = new StreamWriter(stream) { AutoFlush = true };
-                await writer.WriteLineAsync("1");
-                await writer.WriteLineAsync(path);
-                var reader = new StreamReader(stream);
-                var size = Convert.ToInt32(await reader.ReadLineAsync());
-
-                if (size == -1)
-                {
-                    Console.WriteLine("This file does not exist.");
-                    return null;
-                }
-
-                var content = new byte[size];
-                await reader.BaseStream.ReadAsync(content, 0, size);
-                return content;
+                return null;
             }
+
+            var content = new byte[size];
+            await reader.BaseStream.ReadAsync(content, 0, size);
+            return content;
         }
 
         /// <summary>
@@ -61,30 +58,27 @@ namespace HomeWork4
         public async Task<List<(string, bool)>> List(string path)
         {
             var client = new TcpClient(host, port);
-            using (var stream = client.GetStream())
+            using var stream = client.GetStream();
+
+            var writer = new StreamWriter(stream) { AutoFlush = true };
+            await writer.WriteLineAsync($"2 {path}");
+            var reader = new StreamReader(stream);
+            var size = Convert.ToInt32(await reader.ReadLineAsync());
+
+            if (size == -1)
             {
-                var writer = new StreamWriter(stream) { AutoFlush = true };
-                await writer.WriteLineAsync("2");
-                await writer.WriteLineAsync(path);
-                var reader = new StreamReader(stream);
-                var size = Convert.ToInt32(await reader.ReadLineAsync());
-
-                if (size == -1)
-                {
-                    Console.WriteLine("This folder does not exist.");
-                    return null;
-                }
-
-                var list = new List<(string, bool)>();
-
-                for (int i = 0; i < size; i++)
-                {
-                    var name = await reader.ReadLineAsync();
-                    var isDir = Convert.ToBoolean(await reader.ReadLineAsync());
-                    list.Add((name, isDir));
-                }
-                return list;
+                return null;
             }
+
+            var list = new List<(string, bool)>();
+
+            for (int i = 0; i < size; i++)
+            {
+                var name = await reader.ReadLineAsync();
+                var isDir = Convert.ToBoolean(await reader.ReadLineAsync());
+                list.Add((name, isDir));
+            }
+            return list;
         }
     }
 }

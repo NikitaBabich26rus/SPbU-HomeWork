@@ -34,7 +34,7 @@ namespace HomeWork4
         public async Task Start()
         {
             listener.Start();
-            while (!cancellationTokenSource.IsCancellationRequested)
+            while (!cancellationTokenSource.Token.IsCancellationRequested)
             {
                 var client = await listener.AcceptTcpClientAsync();
                 await Task.Run(() => Working(client));
@@ -53,29 +53,35 @@ namespace HomeWork4
         /// <param name="client">Tcp client</param>
         private async Task Working(TcpClient client)
         {
-            using (var stream = client.GetStream())
+            using var stream = client.GetStream();
+
+            var reader = new StreamReader(stream);
+            var writer = new StreamWriter(stream) { AutoFlush = true };
+            var data = await reader.ReadLineAsync();
+            var (command, path) = ParseData(data);
+
+            switch (command)
             {
-                var reader = new StreamReader(stream);
-                var writer = new StreamWriter(stream) { AutoFlush = true };
-                var comand = await reader.ReadLineAsync();
-                var path = await reader.ReadLineAsync();
+                case "1":
+                    await Get(path, writer);
+                    break;
 
-                switch (comand)
-                {
-                    case "1":
-                        await Get(path, writer);
-                        break;
+                case "2":
+                    await List(path, writer);
+                    break;
 
-                    case "2":
-                        await List(path, writer);
-                        break;
-
-                    default:
-                        Console.WriteLine("Input error.");
-                        break;
-                }
+                default:
+                    await writer.WriteLineAsync("Command error.");
+                    break;
             }
         }
+
+        /// <summary>
+        /// Data parsing.
+        /// </summary>
+        /// <param name="data">String with command and path</param>
+        /// <returns>Command and path</returns>
+        private (string, string) ParseData(string data) => (data.Split()[0], data.Split()[1]);
 
         /// <summary>
         /// Comand list.
@@ -123,10 +129,8 @@ namespace HomeWork4
             }
 
             await writer.WriteLineAsync($"{new FileInfo(path).Length}");
-            using (var fileStream = File.OpenRead(path))
-            {
-                await fileStream.CopyToAsync(writer.BaseStream);
-            }
+            using var fileStream = File.OpenRead(path);
+            await fileStream.CopyToAsync(writer.BaseStream);
         }
     }
 }

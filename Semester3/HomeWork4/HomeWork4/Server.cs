@@ -63,16 +63,15 @@ namespace HomeWork4
             switch (command)
             {
                 case "1":
-                    await Get(path, writer);
-                    break;
-
-                case "2":
                     await List(path, writer);
                     break;
 
-                default:
-                    await writer.WriteLineAsync("Command error.");
+                case "2":
+                    await Get(path, writer);
                     break;
+
+                default:
+                    throw new ArgumentException("Command error.");
             }
         }
 
@@ -127,8 +126,7 @@ namespace HomeWork4
                 await writer.WriteLineAsync("-1");
                 return;
             }
-
-            await writer.WriteLineAsync($"{new FileInfo(path).Length}");
+            await writer.WriteAsync($"{new FileInfo(path).Length} ");
             using var fileStream = File.OpenRead(path);
             await fileStream.CopyToAsync(writer.BaseStream);
         }

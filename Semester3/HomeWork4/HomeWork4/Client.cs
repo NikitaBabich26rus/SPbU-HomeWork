@@ -30,24 +30,30 @@ namespace HomeWork4
         /// </summary>
         /// <param name="path">Path to the file.</param>
         /// <returns><size: Long> <content: Bytes></returns>
-        public async Task<byte[]> Get(string path)
+        public async Task Get(string path, Stream fileStream)
         {
             var client = new TcpClient(host, port);
             using var stream = client.GetStream();
 
             var writer = new StreamWriter(stream) { AutoFlush = true };
-            await writer.WriteLineAsync($"1 {path}");
+            await writer.WriteLineAsync($"2 {path}");
             var reader = new StreamReader(stream);
-            var size = Convert.ToInt32(await reader.ReadLineAsync());
-
-            if (size == -1)
+            var buffer = new char[long.MaxValue.ToString().Length + 1];
+            var currentValue = '1';
+            var currentIndex = 0;
+            while (currentValue != ' ')
             {
-                return null;
+                await reader.ReadAsync(buffer, currentIndex, 1);
+                currentValue = buffer[currentIndex];
+                if (currentValue == '-')
+                {
+                    await reader.ReadAsync(buffer, currentIndex, 1);
+                    throw new ArgumentException("This file does not exist.");
+                }
+                currentIndex++;
             }
-
-            var content = new byte[size];
-            await reader.BaseStream.ReadAsync(content, 0, size);
-            return content;
+            await stream.CopyToAsync(fileStream);
+            fileStream.Position = 0;
         }
 
         /// <summary>
@@ -59,9 +65,8 @@ namespace HomeWork4
         {
             var client = new TcpClient(host, port);
             using var stream = client.GetStream();
-
             var writer = new StreamWriter(stream) { AutoFlush = true };
-            await writer.WriteLineAsync($"2 {path}");
+            await writer.WriteLineAsync($"1 {path}");
             var reader = new StreamReader(stream);
             var size = Convert.ToInt32(await reader.ReadLineAsync());
 

@@ -1,11 +1,13 @@
 ﻿open System
 
 let listReverse list = 
-    let rec reverse currentList newList =
+    let rec reverse currentList accumulator =
         if currentList = [] then
-            newList
+            accumulator
         else 
-            reverse (List.tail currentList) (List.head currentList :: newList)
+            match currentList with
+            | head :: tail -> reverse tail (head :: accumulator)
+            | [] -> accumulator
     reverse list []
 
 let getExponentListOfTwo n m =

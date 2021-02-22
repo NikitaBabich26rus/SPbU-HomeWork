@@ -18,9 +18,9 @@ namespace HomeWork5
         private MethodLists methods;
 
         /// <summary>
-        /// Tests info
+        /// Queue with class of tests.
         /// </summary>
-        public ConcurrentQueue<TestInfo> TestsInfo { get; private set; }
+        public ConcurrentQueue<ConcurrentQueue<TestInfo>> ClassQueue { get; private set; }
 
         /// <summary>
         /// Constructor for starting tests running.
@@ -33,12 +33,8 @@ namespace HomeWork5
             Parallel.ForEach(files, x => assemblies.Enqueue(Assembly.LoadFrom(x)));
             var classes = files.Select(Assembly.LoadFrom).Distinct().SelectMany(a => a.ExportedTypes).Where(t => t.IsClass);
             var types = classes.Where(c => c.GetMethods().Any(m => m.GetCustomAttributes().Any(a => a is Test)));
-            TestsInfo = new ConcurrentQueue<TestInfo>();
+            ClassQueue = new ConcurrentQueue<ConcurrentQueue<TestInfo>>();
             Parallel.ForEach(types, Testing);
-            /*foreach (var type in types)
-            {
-                Testing(type);
-            }*/
         }
 
         /// <summary>
@@ -48,36 +44,24 @@ namespace HomeWork5
         private void Testing(Type type)
         {
             DistributeMethodsByAttributes(type);
-            TestsInfo = new ConcurrentQueue<TestInfo>();
+            var testsInfo = new ConcurrentQueue<TestInfo>();
 
-            if (!AfterClassOrBeforeClassTesting(type, methods.BeforeClass))
+            if (!AfterClassOrBeforeClassTesting(testsInfo, methods.BeforeClass))
             {
+                ClassQueue.Enqueue(testsInfo);
                 return;
             }
 
             var currentQueue = new ConcurrentQueue<TestInfo>();
-            /*foreach (var test in methods.Tests)
-            {
-                RunTest(type, test, currentQueue);
-            }*/
-
             Parallel.ForEach(methods.Tests, (test) => RunTest(type, test, currentQueue));
-            /*Parallel.Invoke(
-                () =>
-                {
-                    foreach (var test in methods.Tests)
-                    {
-                        RunTest(type, test, currentQueue);
-                    }
-                }
-            );*/
 
-            if (!AfterClassOrBeforeClassTesting(type, methods.AfterClass))
+            if (!AfterClassOrBeforeClassTesting(testsInfo, methods.AfterClass))
             {
+                ClassQueue.Enqueue(testsInfo);
                 return;
             }
 
-            TestsInfo = currentQueue;
+            ClassQueue.Enqueue(currentQueue);
         }
 
         /// <summary>
@@ -172,20 +156,19 @@ namespace HomeWork5
         /// <param name="type">Set of methods</param>
         /// <param name="methods">Methods with attribute AfterClass or BeforeClass</param>
         /// <returns>Exception or null</returns>
-        private bool AfterClassOrBeforeClassTesting(Type type, List<MethodInfo> methods)
+        private bool AfterClassOrBeforeClassTesting(ConcurrentQueue<TestInfo> testsInfo, List<MethodInfo> methods)
         {
-            var instance = Activator.CreateInstance(type);
             foreach (var method in methods)
             {
                 try
                 {
-                    method.Invoke(instance, null);
+                    method.Invoke(null, null);
                 }
                 catch (Exception e)
                 {
                     foreach (var test in this.methods.Tests)
                     {
-                        TestsInfo.Enqueue(new TestInfo(test.Name, "Failed", e.Message, 0));
+                        testsInfo.Enqueue(new TestInfo(test.Name, "Failed", e.Message, 0));
                     }
                     return false;
                 }

@@ -5,3 +5,6 @@ before_build:
 
 build_script:
   - dotnet build Semester3/HomeWork5/HomeWork5.sln
+
+test_script:
+  - dotnet test Semester3/HomeWork5/HomeWork5.sln

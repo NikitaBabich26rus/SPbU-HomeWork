@@ -80,7 +80,7 @@ namespace HomeWork5
             }
             var instance = Activator.CreateInstance(type);
 
-            var exceptionBefore = AfterOrBeforeTesting(type, methods.Before);
+            var exceptionBefore = AfterOrBeforeTesting(instance, methods.Before);
             if (exceptionBefore != null)
             {
                 queue.Enqueue(new TestInfo(method.Name, "Failed", exceptionBefore, 0));
@@ -113,7 +113,7 @@ namespace HomeWork5
                 return;
             }
 
-            var exceptionAfter = AfterOrBeforeTesting(type, methods.After);
+            var exceptionAfter = AfterOrBeforeTesting(instance, methods.After);
             if (exceptionAfter != null)
             {
                 queue.Enqueue(new TestInfo(method.Name, "Failed", exceptionAfter, 0));
@@ -129,9 +129,8 @@ namespace HomeWork5
         /// <param name="type">Set of methods</param>
         /// <param name="methods">Methods with attribute After or Before</param>
         /// <returns>Exception or null</returns>
-        private string AfterOrBeforeTesting(Type type, List<MethodInfo> methods)
+        private string AfterOrBeforeTesting(object instance, List<MethodInfo> methods)
         {
-            var instance = Activator.CreateInstance(type);
             foreach (var method in methods)
             {
                 if (method.IsStatic)

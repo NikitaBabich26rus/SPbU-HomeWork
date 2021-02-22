@@ -10,34 +10,44 @@ namespace HomeWork5
         /// <param name="info">Info about test.</param>
         static void PrintInfo(TestInfo info)
         {
-            Console.WriteLine(info.Name);
-            Console.WriteLine(info.Result);
+            Console.WriteLine($"Test name: {info.Name}");
+            Console.WriteLine($"Result: {info.Result}");
             if (info.IgnoreReason != null)
             {
-                Console.WriteLine(info.IgnoreReason);
+                Console.WriteLine($"Ignore reason: {info.IgnoreReason}");
             }
-            Console.WriteLine(info.Time);
+            Console.WriteLine($"Time: {info.Time}");
             Console.WriteLine();
         }
 
         /// <summary>
-        /// Testing class with tests.
+        /// Testing classes with tests.
         /// </summary>
         /// <param name="file">File.</param>
         static void Testing(string file)
         {
             var tests = new MyNUnit(file);
-            tests.ClassQueue.TryDequeue(out var info);
-            var answer = info.ToArray();
-            foreach (var item in answer)
+            while (!tests.ClassQueue.IsEmpty)
             {
-                PrintInfo(item);
+                tests.ClassQueue.TryDequeue(out var info);
+                var answer = info.ToArray();
+                foreach (var item in answer)
+                {
+                    PrintInfo(item);
+                }
             }
         }
 
         static void Main(string[] args)
         {
-            Testing(args[0]);
+            try
+            {
+                Testing(args[0]);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }

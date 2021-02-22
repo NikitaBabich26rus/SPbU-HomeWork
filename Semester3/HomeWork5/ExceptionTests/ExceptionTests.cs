@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Attributes;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using Attributes;
 
 namespace ExceptionTests
 {

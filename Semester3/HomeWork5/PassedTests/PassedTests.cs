@@ -1,11 +1,8 @@
 ﻿using Attributes;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace PasedTests
+namespace PassedTests
 {
-    public class PasedTests
+    public class PassedTests
     {
         [BeforeClass]
         public static void BeforeClass()

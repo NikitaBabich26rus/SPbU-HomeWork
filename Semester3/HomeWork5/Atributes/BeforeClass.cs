@@ -7,6 +7,7 @@ namespace Attributes
     /// <summary>
     /// Attribute to run methods before class tests
     /// </summary>
+    [AttributeUsage(AttributeTargets.Method)]
     public class BeforeClass: Attribute
     {
     }

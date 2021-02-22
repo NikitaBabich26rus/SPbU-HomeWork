@@ -7,6 +7,7 @@ namespace Attributes
     /// <summary>
     /// Attribute to run tests
     /// </summary>
+    [AttributeUsage(AttributeTargets.Method)]
     public class Test: Attribute
     {
         /// <summary>

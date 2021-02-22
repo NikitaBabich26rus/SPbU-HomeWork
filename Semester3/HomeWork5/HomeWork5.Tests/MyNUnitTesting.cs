@@ -28,9 +28,9 @@ namespace HomeWork5.Tests
         }
 
         [Test]
-        public void PasedTests()
+        public void PassedTests()
         {
-            tests = new MyNUnit("../../../../PasedTests");
+            tests = new MyNUnit("../../../../PassedTests");
             var info = tests.TestsInfo.ToArray();
             Assert.IsTrue(IsEqual(info[0], "SucceededTest1", "Passed", null));
             Assert.IsTrue(IsEqual(info[1], "SucceededTest2", "Passed", null));

@@ -15,7 +15,7 @@ namespace HomeWork5
     /// </summary>
     public class MyNUnit
     {
-        MethodLists methods;
+        private MethodLists methods;
 
         /// <summary>
         /// Tests info
@@ -29,10 +29,16 @@ namespace HomeWork5
         public MyNUnit(string path)
         {
             var files = Directory.EnumerateFiles(path, "*.dll", SearchOption.AllDirectories);
+            var assemblies = new ConcurrentQueue<Assembly>();
+            Parallel.ForEach(files, x => assemblies.Enqueue(Assembly.LoadFrom(x)));
             var classes = files.Select(Assembly.LoadFrom).Distinct().SelectMany(a => a.ExportedTypes).Where(t => t.IsClass);
             var types = classes.Where(c => c.GetMethods().Any(m => m.GetCustomAttributes().Any(a => a is Test)));
             TestsInfo = new ConcurrentQueue<TestInfo>();
             Parallel.ForEach(types, Testing);
+            /*foreach (var type in types)
+            {
+                Testing(type);
+            }*/
         }
 
         /// <summary>
@@ -41,7 +47,7 @@ namespace HomeWork5
         /// <param name="type">Set of tests</param>
         private void Testing(Type type)
         {
-            ParseFileWithTests(type);
+            DistributeMethodsByAttributes(type);
             TestsInfo = new ConcurrentQueue<TestInfo>();
 
             if (!AfterClassOrBeforeClassTesting(type, methods.BeforeClass))
@@ -50,10 +56,21 @@ namespace HomeWork5
             }
 
             var currentQueue = new ConcurrentQueue<TestInfo>();
-            foreach (var test in methods.Tests)
+            /*foreach (var test in methods.Tests)
             {
                 RunTest(type, test, currentQueue);
-            }
+            }*/
+
+            Parallel.ForEach(methods.Tests, (test) => RunTest(type, test, currentQueue));
+            /*Parallel.Invoke(
+                () =>
+                {
+                    foreach (var test in methods.Tests)
+                    {
+                        RunTest(type, test, currentQueue);
+                    }
+                }
+            );*/
 
             if (!AfterClassOrBeforeClassTesting(type, methods.AfterClass))
             {
@@ -71,6 +88,12 @@ namespace HomeWork5
         /// <param name="queue">queue for test info</param>
         private void RunTest(Type type, MethodInfo method, ConcurrentQueue<TestInfo> queue)
         {
+            var property = (Test)Attribute.GetCustomAttribute(method, typeof(Test));
+            if (property.Ignore != null)
+            {
+                queue.Enqueue(new TestInfo(method.Name, "Ignored", property.Ignore, 0));
+                return;
+            }
             var instance = Activator.CreateInstance(type);
 
             var exceptionBefore = AfterOrBeforeTesting(type, methods.Before);
@@ -80,12 +103,6 @@ namespace HomeWork5
                 return;
             }
 
-            TestInfo currentTestInfo;
-            var property = (Test)Attribute.GetCustomAttribute(method, typeof(Test));
-            if (property.Ignore != null)
-            {
-                currentTestInfo = new TestInfo(method.Name, "Ignored", property.Ignore, 0);
-            }
             var stopWatch = new Stopwatch();
             var result = "Passed";
             try
@@ -93,7 +110,6 @@ namespace HomeWork5
                 stopWatch.Start();
                 method.Invoke(instance, null);
                 stopWatch.Stop();
-                currentTestInfo = new TestInfo(method.Name, result, null, stopWatch.ElapsedMilliseconds);
             }
             catch (Exception e)
             {
@@ -102,7 +118,15 @@ namespace HomeWork5
                 {
                     result = "Failed";
                 }
-                currentTestInfo = new TestInfo(method.Name, result, e.Message, stopWatch.ElapsedMilliseconds);
+                queue.Enqueue(new TestInfo(method.Name, result, e.Message, stopWatch.ElapsedMilliseconds));
+                return;
+            }
+
+            if (property.Expected != null)
+            {
+                result = "Failed";
+                queue.Enqueue(new TestInfo(method.Name, result, $"Test did not throw an exception: {property.Expected.ToString()}", stopWatch.ElapsedMilliseconds));
+                return;
             }
 
             var exceptionAfter = AfterOrBeforeTesting(type, methods.After);
@@ -112,7 +136,7 @@ namespace HomeWork5
                 return;
             }
 
-            queue.Enqueue(currentTestInfo);
+            queue.Enqueue(new TestInfo(method.Name, result, null, stopWatch.ElapsedMilliseconds));
         }
 
         /// <summary>
@@ -151,13 +175,8 @@ namespace HomeWork5
         private bool AfterClassOrBeforeClassTesting(Type type, List<MethodInfo> methods)
         {
             var instance = Activator.CreateInstance(type);
-
             foreach (var method in methods)
             {
-                if (!method.IsStatic)
-                {
-                    throw new InvalidOperationException("BeforeClass and AfterClass method must be static");
-                }
                 try
                 {
                     method.Invoke(instance, null);
@@ -175,10 +194,10 @@ namespace HomeWork5
         }
 
         /// <summary>
-        /// Parse set of tests by attributes
+        /// Distribute methods by attributes.
         /// </summary>
-        /// <param name="type">set of tests</param>
-        private void ParseFileWithTests(Type type)
+        /// <param name="type">Set of tests</param>
+        private void DistributeMethodsByAttributes(Type type)
         {
             methods = new MethodLists();
 
@@ -186,6 +205,8 @@ namespace HomeWork5
             {
                 foreach (var attribute in Attribute.GetCustomAttributes(method))
                 {
+                    ValidationOfTestForCorrectness(method, attribute);
+
                     if (attribute.GetType() == typeof(BeforeClass))
                     {
                         methods.BeforeClass.Add(method);
@@ -206,6 +227,41 @@ namespace HomeWork5
                     {
                         methods.AfterClass.Add(method);
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Validation test for correctness. 
+        /// </summary>
+        /// <param name="test">Test</param>
+        /// <param name="attribute">Attribute of test</param>
+        private void ValidationOfTestForCorrectness(MethodInfo test, Attribute attribute)
+        {
+            var attributeName = attribute.GetType().Name;
+            if (attributeName == typeof(Before).Name || attributeName == typeof(After).Name || attributeName == typeof(Test).Name)
+            {
+                if (test.ReturnType.Name != "Void")
+                {
+                    throw new InvalidOperationException("Methods with Test, After and Before attributes mustn't have return type.");
+                }
+
+                if (test.GetParameters().Length != 0)
+                {
+                    throw new InvalidOperationException("Methods with Test, After and Before attributes shouldn't have parameters.");
+                }
+
+                if (test.IsStatic)
+                {
+                    throw new InvalidOperationException("Methods with Test, After and Before attributes mustn't be static.");
+                }
+            }
+
+            if (attributeName == typeof(BeforeClass).Name || attributeName == typeof(AfterClass).Name)
+            {
+                if (!test.IsStatic)
+                {
+                    throw new InvalidOperationException("Methods with BeforeClass and AfterClass attributes must be static.");
                 }
             }
         }

@@ -15,7 +15,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Atributes\Attributes.csproj" />
     <ProjectReference Include="..\HomeWork5\HomeWork5.csproj" />
-    <ProjectReference Include="..\SimpleTests\SucceededTests.csproj" />
   </ItemGroup>
 
 </Project>

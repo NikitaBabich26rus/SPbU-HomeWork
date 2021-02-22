@@ -1,7 +1,6 @@
 image: Visual Studio 2019
 
 before_build:
-
   - nuget restore Semester3/HomeWork5/HomeWork5.sln
 
 build_script:

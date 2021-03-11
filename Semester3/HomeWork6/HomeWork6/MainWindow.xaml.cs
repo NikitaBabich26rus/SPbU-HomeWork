@@ -20,10 +20,36 @@ namespace HomeWork6
     /// </summary>
     public partial class MainWindow : Window
     {
+        private ViewModel viewModel = new ViewModel();
+
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = viewModel;
         }
 
+        private void ButtonConnect_Click(object sender, RoutedEventArgs e)
+        {
+            viewModel.serverPath = this.DownloadPath.Text;
+            viewModel.Connection(this.textBoxIP.Text, this.textBoxPort.Text);
+        }
+
+        private void listBox_MouseDoubleClick(object sender, RoutedEventArgs e)
+        {
+            if (((ListBox)sender).SelectedItem.ToString() == "..")
+            {
+                viewModel.EditListBox("..");
+                return;
+            }
+
+            if (viewModel.IsDirectory[((ListBox)sender).SelectedIndex])
+            {
+                viewModel.EditListBox(((ListBox)sender).SelectedItem.ToString());
+            }
+            else
+            {
+                viewModel.DownloadFile(((ListBox)sender).SelectedItem.ToString());
+            }
+        }
     }
 }

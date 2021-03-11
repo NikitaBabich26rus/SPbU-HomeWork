@@ -19,7 +19,8 @@
         <TabItem Header="Main">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="213*"/>
+                    <ColumnDefinition Width="57*"/>
+                    <ColumnDefinition Width="157*"/>
                     <ColumnDefinition Width="208*"/>
                     <ColumnDefinition Width="373*"/>
                 </Grid.ColumnDefinitions>
@@ -28,22 +29,27 @@
                     <RowDefinition Height="61*"/>
                     <RowDefinition Height="294*"/>
                 </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Grid.Column="0">
+                <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
                     <Label Content="IP:"/>
-                    <TextBox MinWidth="200"/>
+                    <TextBox x:Name="textBoxIP" MinWidth="200"/>
                 </StackPanel>
-                <StackPanel Grid.Row="0" Grid.Column="1">
+                <StackPanel Grid.Row="0" Grid.Column="2">
                     <Label Content="Port:"/>
-                    <TextBox MinWidth="200"/>
+                    <TextBox x:Name="textBoxPort" MinWidth="200"/>
                 </StackPanel>
-                <Button Content="Connect" Grid.Column="2" Grid.Row="0" Margin="30,15,30,8" RenderTransformOrigin="0.5,1.075"/>
-                <StackPanel Grid.Column="0" Margin="0,51,0,0" Grid.RowSpan="2">
+                <Button x:Name="Connect" Content="Connect" Grid.Column="3" Grid.Row="0" Margin="30,15,30,8"
+                        RenderTransformOrigin="0.5,1.075" Click="ButtonConnect_Click"
+                        IsEnabled="{Binding ConnectButtonIsEnabled, Mode=OneWay}"
+                />
+                <StackPanel Grid.Column="0" Margin="0,51,0,0" Grid.RowSpan="2" Grid.ColumnSpan="2">
                     <Label Content="Download folder"/>
-                    <TextBox MinWidth="200"/>
+                    <TextBox MinWidth="200" x:Name="DownloadPath"/>
                 </StackPanel>
-                <ListBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2"
-                         />
-                <Button Grid.Column="1" Grid.Row="1" Content="Download all" Margin="15,15,15,17"/>
+                <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="2"
+                         Margin="0,61,0,0" ItemsSource="{Binding Path=DirectoriesAndFiles, Mode=OneWay}" 
+                         MouseDoubleClick="listBox_MouseDoubleClick" x:Name="listBox"
+                />
+                <Button Grid.Column="2" Grid.Row="1" Content="Download all" Margin="15,15,15,17"/>
             </Grid>
         </TabItem>
 

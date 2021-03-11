@@ -4,7 +4,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace FTP
+namespace HomeWork6
 {
     /// <summary>
     /// Simple client
@@ -13,16 +13,18 @@ namespace FTP
     {
         private int port;
         private string host;
+        private ViewModel viewModel;
 
         /// <summary>
         /// Client constructor.
         /// </summary>
         /// <param name="host">Host name</param>
         /// <param name="port">Port name</param>
-        public Client(string host, int port)
+        public Client(string host, int port, ViewModel viewModel)
         {
             this.port = port;
             this.host = host;
+            this.viewModel = viewModel;
         }
 
         /// <summary>

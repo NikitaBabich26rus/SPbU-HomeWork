@@ -46,22 +46,31 @@ namespace HomeWork6
                 server = new Server("127.0.0.1", 8888);
                 client = new Client("127.0.0.1", 8888, this);
                 server.Start();
-                ShowCurrentFoldersAndFilesAsync();
             }
             catch (Exception)
             {
                 MessageBox.Show($"Не удалось подключиться к серверу {host}:{port}");
             }
+            ShowCurrentFoldersAndFilesAsync(serverPath);
+            MessageBox.Show($"Вы подключились к серверу {host}:{port}");
         }
 
-        private async void ShowCurrentFoldersAndFilesAsync(string path, bool isDirectory)
+        private async void ShowCurrentFoldersAndFilesAsync(string path)
         {
-            var foldersAndFiles = await client.List(serverPath);
-            if (currentServerPath != serverPath)
+            ClearFileList();
+            if (path == "..")
+            {
+                ShowCurrentFoldersAndFilesAsync(openFolder.Pop());
+                return;
+            }
+            var foldersAndFiles = await client.List(path);
+            if (path != serverPath)
             {
                 DirectoriesAndFiles.Add("..");
                 IsDirectory.Add(true);
+                openFolder.Push(currentServerPath);
             }
+            currentServerPath = path;
             foreach (var item in foldersAndFiles)
             {
                 DirectoriesAndFiles.Add(item.Item1);
@@ -69,9 +78,11 @@ namespace HomeWork6
             }
         }
 
-        public void EditListBox(string path, bool isDirectory)
+        private void ClearFileList() => DirectoriesAndFiles.Clear();
+
+        public void EditListBox(string path)
         {
-            ShowCurrentFoldersAndFilesAsync(path, isDirectory);
+            ShowCurrentFoldersAndFilesAsync(path);
         }
 
         public void OnPropertyChanged([CallerMemberName] string prop = "")

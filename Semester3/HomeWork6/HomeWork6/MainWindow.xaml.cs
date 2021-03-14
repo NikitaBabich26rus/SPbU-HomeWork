@@ -51,5 +51,10 @@ namespace HomeWork6
                 viewModel.DownloadFile(((ListBox)sender).SelectedItem.ToString());
             }
         }
+
+        private void ShowFolder_Click(object sender, RoutedEventArgs e)
+        {
+            viewModel.EditListBox(this.DownloadPath.Text);
+        }
     }
 }

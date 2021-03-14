@@ -49,7 +49,9 @@
                          Margin="0,61,0,0" ItemsSource="{Binding Path=DirectoriesAndFiles, Mode=OneWay}" 
                          MouseDoubleClick="listBox_MouseDoubleClick" x:Name="listBox"
                 />
-                <Button Grid.Column="2" Grid.Row="1" Content="Download all" Margin="15,15,15,17"/>
+                <Button x:Name="ShowFolder" Grid.Column="2" Grid.Row="1" Content="Show folder" Margin="15,15,15,17" Click="ShowFolder_Click"/>
+                <Button Grid.Column="3" Grid.Row="1" Content="Download all" Margin="30,15,30,17"/>
+                
             </Grid>
         </TabItem>
 

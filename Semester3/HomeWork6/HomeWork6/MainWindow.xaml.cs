@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace HomeWork6
 {
@@ -34,7 +23,7 @@ namespace HomeWork6
             viewModel.Connection(this.textBoxIP.Text, this.textBoxPort.Text);
         }
 
-        private void listBox_MouseDoubleClick(object sender, RoutedEventArgs e)
+        private void ShowFilesAndFolderslistBox_MouseDoubleClick(object sender, RoutedEventArgs e)
         {
             if (((ListBox)sender).SelectedItem.ToString() == "..")
             {
@@ -48,13 +37,12 @@ namespace HomeWork6
             }
             else
             {
-                viewModel.DownloadFile(((ListBox)sender).SelectedItem.ToString());
+                _ = viewModel.DownloadFile(((ListBox)sender).SelectedItem.ToString());
             }
         }
 
-        private void ShowFolder_Click(object sender, RoutedEventArgs e)
-        {
-            viewModel.EditListBox(this.DownloadPath.Text);
-        }
+        private void DownloadAllInFolderButton_Click(object sender, RoutedEventArgs e) => viewModel.DownloadAllFilesInFolderAsync();
+
+        private void DeleteDownloadedFilesButton_Click(object sender, RoutedEventArgs e) => viewModel.DeleteDownloadedFiles();
     }
 }

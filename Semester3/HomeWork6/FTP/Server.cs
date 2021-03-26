@@ -90,7 +90,6 @@ namespace FTP
         /// <returns><size: Int> (<name: String> <isDir: Boolean>)</returns>
         private async Task List(string path, StreamWriter writer)
         {
-            DirectoryInfo dir = new DirectoryInfo("../../../../FTP/Data");
             if (!Directory.Exists(path))
             {
                 await writer.WriteLineAsync("-1");

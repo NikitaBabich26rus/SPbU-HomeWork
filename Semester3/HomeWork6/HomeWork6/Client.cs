@@ -13,18 +13,16 @@ namespace HomeWork6
     {
         private int port;
         private string host;
-        private ViewModel viewModel;
 
         /// <summary>
         /// Client constructor.
         /// </summary>
         /// <param name="host">Host name</param>
         /// <param name="port">Port name</param>
-        public Client(string host, int port, ViewModel viewModel)
+        public Client(string host, int port)
         {
             this.port = port;
             this.host = host;
-            this.viewModel = viewModel;
         }
 
         /// <summary>

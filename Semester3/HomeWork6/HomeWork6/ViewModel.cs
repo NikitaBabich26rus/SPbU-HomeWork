@@ -1,5 +1,4 @@
-﻿using FTP;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -11,13 +10,14 @@ using System.Windows;
 
 namespace HomeWork6
 {
+    /// <summary>
+    /// ViewModel class for MVVM pattern;
+    /// </summary>
     public class ViewModel : INotifyPropertyChanged
     {
         private Client client;
 
-        private Server server;
-
-        public string serverPath;
+        private string serverPath;
 
         private string currentServerPath;
 
@@ -27,20 +27,35 @@ namespace HomeWork6
 
         private const string defaultIp = "127.0.0.1";
 
-        private const int defaultPort = 8888;
+        private const string defaultPort = "8888";
 
         private Stack<string> openFolder = new Stack<string>();
 
-        public ObservableCollection<string> DownloadingFiles { get; set; } = new ObservableCollection<string>();
+        /// <summary>
+        /// List for downloading files.
+        /// </summary>
+        public ObservableCollection<string> DownloadingFiles { get; } = new ObservableCollection<string>();
 
-        public ObservableCollection<string> DownloadedFiles { get; set; } = new ObservableCollection<string>();
+        /// <summary>
+        /// List for downloaded files.
+        /// </summary>
+        public ObservableCollection<string> DownloadedFiles { get; } = new ObservableCollection<string>();
 
-        public ObservableCollection<string> DirectoriesAndFiles { get; set; } = new ObservableCollection<string>();
+        /// <summary>
+        /// Current directories and files.
+        /// </summary>
+        public ObservableCollection<string> DirectoriesAndFiles { get; } = new ObservableCollection<string>();
 
-        public ObservableCollection<bool> IsDirectory { get; set; } = new ObservableCollection<bool>();
+        /// <summary>
+        /// Checks if the path is a directory.
+        /// </summary>
+        private ObservableCollection<bool> IsDirectory { get; } = new ObservableCollection<bool>();
 
         private string ip = defaultIp;
 
+        /// <summary>
+        /// Ip to connect.
+        /// </summary>
         public string Ip
         {
             get => ip;
@@ -51,9 +66,12 @@ namespace HomeWork6
             }
         }
 
-        private int port = defaultPort;
+        private string port = defaultPort;
 
-        public int Port
+        /// <summary>
+        /// Port to connect.
+        /// </summary>
+        public string Port
         {
             get => port;
             set
@@ -65,6 +83,9 @@ namespace HomeWork6
 
         private string pathToDownload = defaultPathToDownload;
 
+        /// <summary>
+        /// Path to download files.
+        /// </summary>
         public string PathToDownload
         {
             get => pathToDownload;
@@ -75,33 +96,107 @@ namespace HomeWork6
             }
         }
 
-        public void Connection(string ip, string port)
+        private CommandAsync connectCommand;
+
+        /// <summary>
+        /// Command for connection.
+        /// </summary>
+        public CommandAsync ConnectCommand
+        {
+            get
+            {
+                return connectCommand ??
+                  (connectCommand = new CommandAsync(async (object parameter) =>
+                  {
+                      await Connection();
+                  }));
+            }
+        }
+
+        /// <summary>
+        /// Command for download all files in folder.
+        /// </summary>
+        public CommandAsync DownloadAllInFolderCommand
+        {
+            get
+            {
+                return
+                (connectCommand = new CommandAsync(async (object parameter) =>
+                {
+                    await DownloadAllFilesInFolderAsync();
+                }));
+            }
+        }
+
+        /// <summary>
+        /// Command for delete downloaded files.
+        /// </summary>
+        public CommandAsync DeleteDownloadedFilesCommand
+        {
+            get
+            {
+                return
+                (connectCommand = new CommandAsync(async (object parameter) =>
+                {
+                    await DeleteDownloadedFilesAsync();
+                }));
+            }
+        }
+
+        /// <summary>
+        /// Command for download file or go to folder.
+        /// </summary>
+        public CommandAsync DownloadFileOrGoToAnotherFolderCommand
+        {
+            get
+            {
+                return
+                  (connectCommand = new CommandAsync(async (object parameter) =>
+                  {
+                      var index = Convert.ToInt32(parameter);
+                      if (IsDirectory[index])
+                      {
+                          await ShowCurrentFoldersAndFilesAsync(DirectoriesAndFiles[index]);
+                          return;
+                      }
+                      await DownloadFile(DirectoriesAndFiles[index]);
+                  }));
+            }
+        }
+
+        /// <summary>
+        /// Connection to server.
+        /// </summary>
+        private async Task Connection()
         {
             try
             {
-                if (InputValidation.IpValidation(ip) && InputValidation.PortValidation(port))
+                if (InputValidation.IpValidation(this.ip) && InputValidation.PortValidation(this.port))
                 {
                     MessageBox.Show("Incorrect port or ip.");
                     return;
                 }
-                server = new Server(ip, int.Parse(port));
-                client = new Client(ip, int.Parse(port), this);
-                _ = server.Start();
+                client = new Client(this.ip, int.Parse(this.port));
             }
             catch (Exception)
             {
-                MessageBox.Show($"Failed to connect to server {ip}:{port}");
+                MessageBox.Show($"Failed to connect to server {this.ip}:{this.port}");
                 return;
             }
-            ShowCurrentFoldersAndFilesAsync(serverPath);
+            serverPath = pathToDownload;
+            await ShowCurrentFoldersAndFilesAsync(serverPath);
         }
 
-        private async void ShowCurrentFoldersAndFilesAsync(string path)
+        /// <summary>
+        /// Show current folder.
+        /// </summary>
+        /// <param name="path">Path</param>
+        private async Task ShowCurrentFoldersAndFilesAsync(string path)
         {
             ClearFileList();
             if (path == "..")
             {
-                ShowCurrentFoldersAndFilesAsync(openFolder.Pop());
+                await ShowCurrentFoldersAndFilesAsync(openFolder.Pop());
                 return;
             }
             var foldersAndFiles = await client.List(path);
@@ -119,15 +214,13 @@ namespace HomeWork6
             }
         }
 
+        /// <summary>
+        /// Clear file list.
+        /// </summary>
         private void ClearFileList()
         {
             IsDirectory.Clear();
             DirectoriesAndFiles.Clear();
-        }
-
-        public void EditListBox(string path)
-        {
-            ShowCurrentFoldersAndFilesAsync(path);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -140,7 +233,11 @@ namespace HomeWork6
             }
         }
 
-        public async Task DownloadFile(string path)
+        /// <summary>
+        /// Download file
+        /// </summary>
+        /// <param name="path">Path</param>
+        private async Task DownloadFile(string path)
         {
             try
             {
@@ -165,12 +262,15 @@ namespace HomeWork6
             }
         }
 
-        public void DownloadAllFilesInFolderAsync()
+        /// <summary>
+        /// Download all files in folder.
+        /// </summary>
+        private Task DownloadAllFilesInFolderAsync()
         {
             if (client == null)
             {
                 MessageBox.Show("You are not connected to the server");
-                return;
+                return Task.CompletedTask;
             }
             var tasks = new List<Task>();
             for (int i = 0; i < DirectoriesAndFiles.Count; i++)
@@ -185,13 +285,17 @@ namespace HomeWork6
             {
                 item.RunSynchronously();
             }
+            return Task.CompletedTask;
         }
 
-        public void DeleteDownloadedFiles()
+        /// <summary>
+        /// Delete downloaded files.
+        /// </summary>
+        private Task DeleteDownloadedFilesAsync()
         {
             if (!Directory.Exists(pathToSaveFiles))
             {
-                return;
+                return Task.CompletedTask;
             }
             DownloadedFiles.Clear();
             var directory = new DirectoryInfo(pathToSaveFiles);
@@ -201,6 +305,7 @@ namespace HomeWork6
                 file.Delete();
             }
             Directory.Delete(pathToSaveFiles);
+            return Task.CompletedTask;
         }
     }
 }

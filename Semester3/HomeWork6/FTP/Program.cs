@@ -4,9 +4,10 @@ namespace FTP
 {
     class Program
     {
-        static void Main(string[] args)
+        static async System.Threading.Tasks.Task Main(string[] args)
         {
-            
+            var server = new Server("127.0.0.1", 8888);
+            await server.Start();
         }
     }
 }

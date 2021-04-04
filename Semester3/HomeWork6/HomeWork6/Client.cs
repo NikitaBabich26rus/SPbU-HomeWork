@@ -29,8 +29,7 @@ namespace HomeWork6
         /// Requests file downloading from the server.
         /// </summary>
         /// <param name="path">Path to the file.</param>
-        /// <returns><size: Long> <content: Bytes></returns>
-        public async Task Get(string path, Stream fileStream)
+        public async Task GetAsync(string path, Stream fileStream)
         {
             var client = new TcpClient(host, port);
             using var stream = client.GetStream();
@@ -54,14 +53,18 @@ namespace HomeWork6
             }
             await stream.CopyToAsync(fileStream);
             fileStream.Position = 0;
+            writer.Dispose();
+            reader.Dispose();
+            stream.Dispose();
+            client.Dispose();
         }
 
         /// <summary>
         /// Requests list of files in server's directory
         /// </summary>
         /// <param name="path">Path to the file.</param>
-        /// <returns><size: Int> (<name: String> <isDir: Boolean>)</returns>
-        public async Task<List<(string, bool)>> List(string path)
+        /// <returns>(<name: String> <isDir: Boolean>)</returns>
+        public async Task<List<(string, bool)>> ListAsync(string path)
         {
             var client = new TcpClient(host, port);
             using var stream = client.GetStream();
@@ -83,6 +86,10 @@ namespace HomeWork6
                 var isDir = Convert.ToBoolean(await reader.ReadLineAsync());
                 list.Add((name, isDir));
             }
+            client.Dispose();
+            stream.Dispose();
+            writer.Dispose();
+            reader.Dispose();
             return list;
         }
     }

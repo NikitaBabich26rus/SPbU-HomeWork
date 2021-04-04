@@ -98,6 +98,11 @@ namespace HomeWork6
 
         private CommandAsync connectCommand;
 
+        public ViewModel()
+        {
+
+        }
+
         /// <summary>
         /// Command for connection.
         /// </summary>
@@ -105,11 +110,22 @@ namespace HomeWork6
         {
             get
             {
-                return connectCommand ??
-                  (connectCommand = new CommandAsync(async (object parameter) =>
+                return
+                  new CommandAsync((object parameter) =>
                   {
-                      await Connection();
-                  }));
+                      return
+                      Task.Run(async () =>
+                      {
+                          try
+                          {
+                              await Connect();
+                          }
+                          catch (SocketException e)
+                          {
+                              MessageBox.Show(e.Message);
+                          }
+                      });
+                  });
             }
         }
 
@@ -121,10 +137,10 @@ namespace HomeWork6
             get
             {
                 return
-                (connectCommand = new CommandAsync(async (object parameter) =>
+                new CommandAsync(async (object parameter) =>
                 {
                     await DownloadAllFilesInFolderAsync();
-                }));
+                });
             }
         }
 
@@ -136,10 +152,10 @@ namespace HomeWork6
             get
             {
                 return
-                (connectCommand = new CommandAsync(async (object parameter) =>
+                new CommandAsync(async (object parameter) =>
                 {
                     await DeleteDownloadedFilesAsync();
-                }));
+                });
             }
         }
 
@@ -151,7 +167,7 @@ namespace HomeWork6
             get
             {
                 return
-                  (connectCommand = new CommandAsync(async (object parameter) =>
+                  new CommandAsync(async (object parameter) =>
                   {
                       var index = Convert.ToInt32(parameter);
                       if (IsDirectory[index])
@@ -160,14 +176,14 @@ namespace HomeWork6
                           return;
                       }
                       await DownloadFile(DirectoriesAndFiles[index]);
-                  }));
+                  });
             }
         }
 
         /// <summary>
         /// Connection to server.
         /// </summary>
-        private async Task Connection()
+        private async Task Connect()
         {
             try
             {
@@ -199,7 +215,7 @@ namespace HomeWork6
                 await ShowCurrentFoldersAndFilesAsync(openFolder.Pop());
                 return;
             }
-            var foldersAndFiles = await client.List(path);
+            var foldersAndFiles = await client.ListAsync(path);
             if (path != serverPath)
             {
                 DirectoriesAndFiles.Add("..");
@@ -247,7 +263,7 @@ namespace HomeWork6
                 }
                 DownloadingFiles.Add(path);
                 var fileStream = new MemoryStream();
-                await client.Get(path, fileStream);
+                await client.GetAsync(path, fileStream);
                 using var contentStreamReader = new StreamReader(fileStream);
                 var content = await contentStreamReader.ReadToEndAsync();
                 var currentPath = new DirectoryInfo(path).Name;

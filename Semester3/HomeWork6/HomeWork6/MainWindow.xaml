@@ -20,33 +20,33 @@
         <TabItem Header="Main">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="57*"/>
-                    <ColumnDefinition Width="157*"/>
-                    <ColumnDefinition Width="208*"/>
-                    <ColumnDefinition Width="373*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="51*"/>
-                    <RowDefinition Height="61*"/>
-                    <RowDefinition Height="294*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="6*"/>
                 </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,227,0" >
                     <Label Content="IP:"/>
-                    <TextBox x:Name="textBoxIP" MinWidth="200" Text="{Binding Path=Ip, Mode=TwoWay}"/>
+                    <TextBox MinWidth="200" Text="{Binding Path=Ip, Mode=TwoWay}"/>
                 </StackPanel>
-                <StackPanel Grid.Row="0" Grid.Column="2">
+                <StackPanel Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,340,0">
                     <Label Content="Port:"/>
-                    <TextBox x:Name="textBoxPort" MinWidth="200" Text="{Binding Path=Port, Mode=TwoWay}"/>
+                    <TextBox MinWidth="200" Text="{Binding Path=Port, Mode=TwoWay}"/>
                 </StackPanel>
-                <Button x:Name="Connect" Content="Connect" Grid.Column="3" Grid.Row="0" Margin="30,15,30,8"
-                        RenderTransformOrigin="0.5,1.075" Command="{Binding ConnectCommand}"
-                />
-                <StackPanel Grid.Column="0" Margin="0,51,0,0" Grid.RowSpan="2" Grid.ColumnSpan="2">
+                <StackPanel Grid.Column="2" Grid.Row="0">
+                    <Button x:Name="Connect" Content="Connect" Grid.Column="1" Grid.Row="1" VerticalAlignment="Stretch"
+                        Command="{Binding ConnectCommand}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="0" Margin="0,51,227,0" Grid.RowSpan="2" Grid.ColumnSpan="2">
                     <Label Content="Download folder"/>
                     <TextBox MinWidth="200" x:Name="DownloadPath" Text="{Binding Path=PathToDownload, Mode=TwoWay}"/>
                 </StackPanel>
-                <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="2" x:Name="viewFiles"
-                         Margin="0,61,0,0" ItemsSource="{Binding Path=DirectoriesAndFiles, Mode=OneWay}" HorizontalContentAlignment="Stretch">
+                <ListBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" x:Name="viewFiles"
+                         Margin="0,3,340,0" ItemsSource="{Binding Path=DirectoriesAndFiles, Mode=OneWay}" HorizontalContentAlignment="Stretch">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -61,8 +61,12 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-                <Button Grid.Column="3" Grid.Row="1" Content="Download all in folder" Margin="30,15,30,17" Command="{Binding DownloadAllInFolderCommand}"/>
-                <Button Grid.Column="2" Grid.Row="1" Content="Delete downloaded files" Command="{Binding DeleteDownloadedFilesCommand}"/>
+                <StackPanel Grid.Column="2" Grid.Row="1">
+                    <Button Content="Download all in folder" Margin="30,15,30,17" Command="{Binding DownloadAllInFolderCommand}" Height="27"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Grid.Row="1">
+                    <Button Content="Delete downloaded files" Margin="30,15,30,17" Command="{Binding DeleteDownloadedFilesCommand}" Height="28"/>
+                </StackPanel>
             </Grid>
         </TabItem>
 

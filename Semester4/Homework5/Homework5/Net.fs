@@ -7,7 +7,7 @@ type Computer(name: string, os: string, infected: bool) =
 
     member this.Name = name
 
-    member val Infected = false with get, set
+    member val Infected = infected with get, set
 
     member val GotInfectedThisTurn = false with get, set
 
@@ -22,23 +22,25 @@ type Net(computers: List<Computer>, adjacencyMatrix: List<List<bool>>) =
 
     let bfsStep(random: Random) =
         List.iter (fun (computer: Computer) -> if computer.GotInfectedThisTurn then computer.GotInfectedThisTurn <- false) computers
-
         for i in 0 .. computers.Length - 1 do
             if (computers.Item i).Infected && not (computers.Item i).GotInfectedThisTurn then
                 for j in 0 .. computers.Length - 1 do
+                    let rnd = random.NextDouble()
                     if (adjacencyMatrix.Item i).Item j && not (computers.Item j).Infected
-                        && random.NextDouble() >= (computers.Item j).ChanceOfInfection
+                        && rnd > (computers.Item j).ChanceOfInfection
                     then
                         (computers.Item j).GotInfectedThisTurn <- true
                         (computers.Item j).Infected <- true
 
-    let state =
+    let state() =
         for i in 0 .. computers.Length - 1 do
             let computer = computers.Item i
             printfn "Name: %s, OS: %s, is infected: %b" computer.Name computer.Os computer.Infected
+        printfn "\n"
 
     member this.Computers = computers
 
-    member this.Start (steps: int, frequency: int, random: Random) =
+    member this.Start (steps: int, random: Random) =
         for i in 1 .. steps do
             bfsStep(random)
+            state()

@@ -18,16 +18,16 @@ type Computer(name: string, os: string, infected: bool) =
         | "MacOS" -> 0.1
         | _ -> 0.0
 
+
 type Net(computers: List<Computer>, adjacencyMatrix: List<List<bool>>) =
 
-    let bfsStep(random: Random) =
+    let bfsStep(rnd: Double) =
         List.iter (fun (computer: Computer) -> if computer.GotInfectedThisTurn then computer.GotInfectedThisTurn <- false) computers
         for i in 0 .. computers.Length - 1 do
             if (computers.Item i).Infected && not (computers.Item i).GotInfectedThisTurn then
                 for j in 0 .. computers.Length - 1 do
-                    let rnd = random.NextDouble()
                     if (adjacencyMatrix.Item i).Item j && not (computers.Item j).Infected
-                        && rnd > (computers.Item j).ChanceOfInfection
+                        && rnd < (computers.Item j).ChanceOfInfection
                     then
                         (computers.Item j).GotInfectedThisTurn <- true
                         (computers.Item j).Infected <- true
@@ -42,5 +42,6 @@ type Net(computers: List<Computer>, adjacencyMatrix: List<List<bool>>) =
 
     member this.Start (steps: int, random: Random) =
         for i in 1 .. steps do
-            bfsStep(random)
+            let rnd = random.NextDouble()
+            bfsStep(rnd)
             state()

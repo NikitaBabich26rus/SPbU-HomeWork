@@ -17,4 +17,8 @@
     <Compile Include="NetTests.fs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Homework5\Homework5.fsproj" />
+  </ItemGroup>
+
 </Project>

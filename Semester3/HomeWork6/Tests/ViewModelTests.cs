@@ -42,11 +42,6 @@ namespace Tests
         [Test]
         public void ConnectionTest()
         {
-            for (int i = 0; i < 7; i++)
-            {
-                DispatcherUtil.DoEventsSync();
-                Thread.Sleep(100);
-            }
             Assert.AreEqual(2, viewModel.DirectoriesAndFiles.Count);
             Assert.AreEqual("../../../../FTP/Data\\TextFile.txt", viewModel.DirectoriesAndFiles[0]);
             Assert.AreEqual("../../../../FTP/Data\\Data1", viewModel.DirectoriesAndFiles[1]);

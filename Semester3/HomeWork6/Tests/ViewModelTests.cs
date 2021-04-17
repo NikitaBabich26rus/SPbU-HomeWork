@@ -32,7 +32,7 @@ namespace Tests
         public void TearDown()
         {
             viewModel.DeleteDownloadedFilesCommand.Execute(null);
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 5; i++)
             {
                 DispatcherUtil.DoEventsSync();
                 Thread.Sleep(100);

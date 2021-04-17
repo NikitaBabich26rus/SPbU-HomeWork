@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace HomeWork6
 {
@@ -15,6 +16,8 @@ namespace HomeWork6
     /// </summary>
     public class ViewModel : INotifyPropertyChanged
     {
+        private Dispatcher dispatcher = Dispatcher.CurrentDispatcher;
+
         private Client client;
 
         private string serverPath;
@@ -96,94 +99,80 @@ namespace HomeWork6
             }
         }
 
-        private CommandAsync connectCommand;
-
-        public ViewModel()
-        {
-
-        }
-
+        private bool isDisconnected = true;
+        
         /// <summary>
-        /// Command for connection.
+        /// Check connection with server.
         /// </summary>
-        public CommandAsync ConnectCommand
+        public bool IsDisconnected
         {
-            get
+            get => isDisconnected;
+            set
             {
-                return
-                  new CommandAsync((object parameter) =>
-                  {
-                      return
-                      Task.Run(async () =>
-                      {
-                          try
-                          {
-                              await Connect();
-                          }
-                          catch (SocketException e)
-                          {
-                              MessageBox.Show(e.Message);
-                          }
-                      });
-                  });
+                isDisconnected = value;
+                OnPropertyChanged("IsDisconnected");
             }
         }
 
         /// <summary>
-        /// Command for download all files in folder.
+        /// Command for downloading all files in the folder.
         /// </summary>
-        public CommandAsync DownloadAllInFolderCommand
-        {
-            get
-            {
-                return
-                new CommandAsync(async (object parameter) =>
-                {
-                    await DownloadAllFilesInFolderAsync();
-                });
-            }
-        }
+        public Command DownloadAllInFolderCommand { get; }
+
+        /// <summary>
+        /// Command for download file or go to another folder.
+        /// </summary>
+        public Command DownloadFileOrGoToAnotherFolderCommand { get; }
+
+        /// <summary>
+        /// Command for connect to server.
+        /// </summary>
+        public Command ConnectCommand { get; }
 
         /// <summary>
         /// Command for delete downloaded files.
         /// </summary>
-        public CommandAsync DeleteDownloadedFilesCommand
+        public Command DeleteDownloadedFilesCommand { get; }
+
+        /// <summary>
+        /// Initialize commands.
+        /// </summary>
+        public ViewModel()
         {
-            get
-            {
-                return
-                new CommandAsync(async (object parameter) =>
-                {
-                    await DeleteDownloadedFilesAsync();
-                });
-            }
+            ConnectCommand = new Command(ConnectAsync, (object parameter) => IsDisconnected);
+            DownloadFileOrGoToAnotherFolderCommand = new Command(DownloadFileOrGoToAnotherFolderAsync);
+            DeleteDownloadedFilesCommand = new Command(RunDeleteDownloadedFilesAsync);
+            DownloadAllInFolderCommand = new Command(RunDownloadAllFilesInFolderAsync);
         }
 
         /// <summary>
-        /// Command for download file or go to folder.
+        /// Start download all files in folder.
         /// </summary>
-        public CommandAsync DownloadFileOrGoToAnotherFolderCommand
+        private async void RunDownloadAllFilesInFolderAsync(object parameter) => await Task.Run(() => DownloadAllFilesInFolderAsync());
+
+        /// <summary>
+        /// Start delete downloaded files.
+        /// </summary>
+        private async void RunDeleteDownloadedFilesAsync(object parameter) => await Task.Run(() => DeleteDownloadedFilesAsync());
+        
+        /// <summary>
+        /// Download file or go to another folder.
+        /// </summary>
+        private async void DownloadFileOrGoToAnotherFolderAsync(object parameter)
         {
-            get
+            var index = Convert.ToInt32(parameter);
+            if (IsDirectory[index])
             {
-                return
-                  new CommandAsync(async (object parameter) =>
-                  {
-                      var index = Convert.ToInt32(parameter);
-                      if (IsDirectory[index])
-                      {
-                          await ShowCurrentFoldersAndFilesAsync(DirectoriesAndFiles[index]);
-                          return;
-                      }
-                      await DownloadFile(DirectoriesAndFiles[index]);
-                  });
+                await Task.Run(() => ShowCurrentFoldersAndFilesAsync(DirectoriesAndFiles[index]));
+                return;
             }
+            await Task.Run(() => DownloadFile(DirectoriesAndFiles[index]));
         }
 
         /// <summary>
         /// Connection to server.
         /// </summary>
-        private async Task Connect()
+        private async void ConnectAsync(object parameter)
         {
             try
             {
@@ -193,14 +182,16 @@ namespace HomeWork6
                     return;
                 }
                 client = new Client(this.ip, int.Parse(this.port));
+                serverPath = pathToDownload;
+                IsDisconnected = false;
+                await Task.Run(() => ShowCurrentFoldersAndFilesAsync(serverPath));
             }
             catch (Exception)
             {
                 MessageBox.Show($"Failed to connect to server {this.ip}:{this.port}");
+                IsDisconnected = true;
                 return;
             }
-            serverPath = pathToDownload;
-            await ShowCurrentFoldersAndFilesAsync(serverPath);
         }
 
         /// <summary>
@@ -208,8 +199,8 @@ namespace HomeWork6
         /// </summary>
         /// <param name="path">Path</param>
         private async Task ShowCurrentFoldersAndFilesAsync(string path)
-        {
-            ClearFileList();
+        { 
+            await dispatcher.BeginInvoke(() => ClearFileList());
             if (path == "..")
             {
                 await ShowCurrentFoldersAndFilesAsync(openFolder.Pop());
@@ -218,14 +209,14 @@ namespace HomeWork6
             var foldersAndFiles = await client.ListAsync(path);
             if (path != serverPath)
             {
-                DirectoriesAndFiles.Add("..");
+                await dispatcher.BeginInvoke(() => DirectoriesAndFiles.Add(".."));
                 IsDirectory.Add(true);
                 openFolder.Push(currentServerPath);
             }
             currentServerPath = path;
             foreach (var item in foldersAndFiles)
             {
-                DirectoriesAndFiles.Add(item.Item1);
+                await dispatcher.BeginInvoke(() => DirectoriesAndFiles.Add(item.Item1));
                 IsDirectory.Add(item.Item2);
             }
         }
@@ -261,7 +252,7 @@ namespace HomeWork6
                 {
                     Directory.CreateDirectory(pathToSaveFiles);
                 }
-                DownloadingFiles.Add(path);
+                await dispatcher.BeginInvoke(() => DownloadingFiles.Add(path));
                 var fileStream = new MemoryStream();
                 await client.GetAsync(path, fileStream);
                 using var contentStreamReader = new StreamReader(fileStream);
@@ -269,8 +260,8 @@ namespace HomeWork6
                 var currentPath = new DirectoryInfo(path).Name;
                 using var textFile = new StreamWriter(pathToSaveFiles + @"\" + currentPath);
                 textFile.WriteLine(content);
-                DownloadingFiles.Remove(path);
-                DownloadedFiles.Add(path);
+                await dispatcher.BeginInvoke(() => DownloadingFiles.Remove(path));
+                await dispatcher.BeginInvoke(() => DownloadedFiles.Add(path));
             }
             catch (SocketException)
             {
@@ -281,12 +272,12 @@ namespace HomeWork6
         /// <summary>
         /// Download all files in folder.
         /// </summary>
-        private Task DownloadAllFilesInFolderAsync()
+        private async Task DownloadAllFilesInFolderAsync()
         {
             if (client == null)
             {
                 MessageBox.Show("You are not connected to the server");
-                return Task.CompletedTask;
+                return;
             }
             var tasks = new List<Task>();
             for (int i = 0; i < DirectoriesAndFiles.Count; i++)
@@ -294,26 +285,22 @@ namespace HomeWork6
                 var localIndex = i;
                 if (!IsDirectory[localIndex])
                 {
-                    tasks.Add(new Task(async () => await DownloadFile(DirectoriesAndFiles[localIndex])));
+                    tasks.Add(Task.Run(async () => await DownloadFile(DirectoriesAndFiles[localIndex])));
                 }
             }
-            foreach (var item in tasks)
-            {
-                item.RunSynchronously();
-            }
-            return Task.CompletedTask;
+            await Task.WhenAll(tasks);
         }
 
         /// <summary>
         /// Delete downloaded files.
         /// </summary>
-        private Task DeleteDownloadedFilesAsync()
+        private async Task DeleteDownloadedFilesAsync()
         {
             if (!Directory.Exists(pathToSaveFiles))
             {
-                return Task.CompletedTask;
+                return;
             }
-            DownloadedFiles.Clear();
+            await dispatcher.BeginInvoke(() => DownloadedFiles.Clear());
             var directory = new DirectoryInfo(pathToSaveFiles);
             var files = directory.GetFiles();
             foreach (var file in files)
@@ -321,7 +308,6 @@ namespace HomeWork6
                 file.Delete();
             }
             Directory.Delete(pathToSaveFiles);
-            return Task.CompletedTask;
         }
     }
 }

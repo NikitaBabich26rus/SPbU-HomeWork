@@ -11,8 +11,8 @@ namespace HomeWork6
     /// </summary>
     public class Client
     {
-        private int port;
-        private string host;
+        private readonly int port;
+        private readonly string host;
 
         /// <summary>
         /// Client constructor.
@@ -31,7 +31,7 @@ namespace HomeWork6
         /// <param name="path">Path to the file.</param>
         public async Task GetAsync(string path, Stream fileStream)
         {
-            var client = new TcpClient(host, port);
+            using var client = new TcpClient(host, port);
             using var stream = client.GetStream();
 
             var writer = new StreamWriter(stream) { AutoFlush = true };
@@ -63,10 +63,10 @@ namespace HomeWork6
         /// Requests list of files in server's directory
         /// </summary>
         /// <param name="path">Path to the file.</param>
-        /// <returns>(<name: String> <isDir: Boolean>)</returns>
+        /// <returns>List<(<name: String> <isDir: Boolean>)></returns>
         public async Task<List<(string, bool)>> ListAsync(string path)
         {
-            var client = new TcpClient(host, port);
+            using var client = new TcpClient(host, port);
             using var stream = client.GetStream();
             var writer = new StreamWriter(stream) { AutoFlush = true };
             await writer.WriteLineAsync($"1 {path}");

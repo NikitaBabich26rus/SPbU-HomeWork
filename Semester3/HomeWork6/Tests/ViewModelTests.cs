@@ -21,7 +21,7 @@ namespace Tests
             server = new Server("127.0.0.1", 8888);
             _ = server.Start();
             viewModel.ConnectCommand.Execute(null);
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 7; i++)
             {
                 DispatcherUtil.DoEventsSync();
                 Thread.Sleep(100);
@@ -32,7 +32,7 @@ namespace Tests
         public void TearDown()
         {
             viewModel.DeleteDownloadedFilesCommand.Execute(null);
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 7; i++)
             {
                 DispatcherUtil.DoEventsSync();
                 Thread.Sleep(100);
@@ -42,6 +42,11 @@ namespace Tests
         [Test]
         public void ConnectionTest()
         {
+            for (int i = 0; i < 7; i++)
+            {
+                DispatcherUtil.DoEventsSync();
+                Thread.Sleep(100);
+            }
             Assert.AreEqual(2, viewModel.DirectoriesAndFiles.Count);
             Assert.AreEqual("../../../../FTP/Data\\TextFile.txt", viewModel.DirectoriesAndFiles[0]);
             Assert.AreEqual("../../../../FTP/Data\\Data1", viewModel.DirectoriesAndFiles[1]);
@@ -51,7 +56,7 @@ namespace Tests
         public void DownloadFileTest()
         {
             viewModel.DownloadFileOrGoToAnotherFolderCommand.Execute(0);
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 7; i++)
             {
                 DispatcherUtil.DoEventsSync();
                 Thread.Sleep(100);
@@ -66,7 +71,7 @@ namespace Tests
         public void ChangeDirectoryTest()
         {
             viewModel.DownloadFileOrGoToAnotherFolderCommand.Execute(1);
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 7; i++)
             {
                 DispatcherUtil.DoEventsSync();
                 Thread.Sleep(100);
@@ -81,19 +86,19 @@ namespace Tests
         public void DownloadAllFilesInDirectoryTest()
         {
             viewModel.DownloadFileOrGoToAnotherFolderCommand.Execute(1);
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 7; i++)
             {
                 DispatcherUtil.DoEventsSync();
                 Thread.Sleep(100);
             }
             viewModel.DownloadFileOrGoToAnotherFolderCommand.Execute(1);
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 7; i++)
             {
                 DispatcherUtil.DoEventsSync();
                 Thread.Sleep(100);
             }
             viewModel.DownloadFileOrGoToAnotherFolderCommand.Execute(2);
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 7; i++)
             {
                 DispatcherUtil.DoEventsSync();
                 Thread.Sleep(100);
@@ -114,13 +119,13 @@ namespace Tests
         public void DeleteAllFilesInDirectoryTest()
         {
             viewModel.DownloadFileOrGoToAnotherFolderCommand.Execute(0);
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 7; i++)
             {
                 DispatcherUtil.DoEventsSync();
                 Thread.Sleep(100);
             }
             viewModel.DeleteDownloadedFilesCommand.Execute(null);
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 7; i++)
             {
                 DispatcherUtil.DoEventsSync();
                 Thread.Sleep(100);

@@ -28,17 +28,12 @@ namespace MyNUnitRunner
         /// <param name="path">Path to assembly</param>
         public MyNUnit(string path)
         {
-            var files = Directory.EnumerateFiles(path, "*.dll", SearchOption.AllDirectories);
+            var files = Directory.EnumerateFiles(path + "/obj/Debug/net5.0", "*.dll");
             var assemblies = new ConcurrentQueue<Assembly>();
-            //Parallel.ForEach(files, x => assemblies.Enqueue(Assembly.LoadFrom(x)));
             var classes = files.Select(Assembly.LoadFrom).Distinct().SelectMany(a => a.ExportedTypes).Where(t => t.IsClass);
             var types = classes.Where(c => c.GetMethods().Any(m => m.GetCustomAttributes().Any(a => a is Test)));
             ClassQueue = new ConcurrentQueue<ConcurrentQueue<TestInfo>>();
-            //Parallel.ForEach(types, Testing);
-            foreach (var type in types)
-            {
-                Testing(type);
-            }
+            Parallel.ForEach(types, Testing);
         }
 
         /// <summary>

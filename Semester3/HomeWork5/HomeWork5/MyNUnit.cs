@@ -34,7 +34,11 @@ namespace HomeWork5
             var classes = files.Select(Assembly.LoadFrom).Distinct().SelectMany(a => a.ExportedTypes).Where(t => t.IsClass);
             var types = classes.Where(c => c.GetMethods().Any(m => m.GetCustomAttributes().Any(a => a is Test)));
             ClassQueue = new ConcurrentQueue<ConcurrentQueue<TestInfo>>();
-            Parallel.ForEach(types, Testing);
+            foreach (var type in types)
+            {
+                Testing(type);
+            }
+            //Parallel.ForEach(types, Testing);
         }
 
         /// <summary>

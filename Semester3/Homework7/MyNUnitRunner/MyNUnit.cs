@@ -28,9 +28,12 @@ namespace MyNUnitRunner
         /// <param name="path">Path to assembly</param>
         public MyNUnit(string path)
         {
-            var files = Directory.EnumerateFiles(path + "/obj/Debug/net5.0", "*.dll");
+            var files = Directory.EnumerateFiles(path , "*.dll", SearchOption.AllDirectories);
+            var selectFiles = from file in files
+                         where !file.Contains("ref")
+                         select file;  
             var assemblies = new ConcurrentQueue<Assembly>();
-            var classes = files.Select(Assembly.LoadFrom).Distinct().SelectMany(a => a.ExportedTypes).Where(t => t.IsClass);
+            var classes = selectFiles.Select(Assembly.LoadFrom).Distinct().SelectMany(a => a.ExportedTypes).Where(t => t.IsClass);
             var types = classes.Where(c => c.GetMethods().Any(m => m.GetCustomAttributes().Any(a => a is Test)));
             ClassQueue = new ConcurrentQueue<ConcurrentQueue<TestInfo>>();
             Parallel.ForEach(types, Testing);
@@ -74,7 +77,7 @@ namespace MyNUnitRunner
             var property = (Test)Attribute.GetCustomAttribute(method, typeof(Test));
             if (property.Ignore != null)
             {
-                queue.Enqueue(new TestInfo(method.Name, "Ignored", property.Ignore, 0));
+                queue.Enqueue(new TestInfo(method.Name, "Ignored", property.Ignore, new TimeSpan(0, 0, 0)));
                 return;
             }
             var instance = Activator.CreateInstance(type);
@@ -82,7 +85,7 @@ namespace MyNUnitRunner
             var exceptionBefore = AfterOrBeforeTesting(instance, methods.Before);
             if (exceptionBefore != null)
             {
-                queue.Enqueue(new TestInfo(method.Name, "Failed", exceptionBefore, 0));
+                queue.Enqueue(new TestInfo(method.Name, "Failed", exceptionBefore, new TimeSpan(0, 0, 0)));
                 return;
             }
 
@@ -101,25 +104,25 @@ namespace MyNUnitRunner
                 {
                     result = "Failed";
                 }
-                queue.Enqueue(new TestInfo(method.Name, result, e.Message, stopWatch.ElapsedMilliseconds));
+                queue.Enqueue(new TestInfo(method.Name, result, e.Message, stopWatch.Elapsed));
                 return;
             }
 
             if (property.Expected != null)
             {
                 result = "Failed";
-                queue.Enqueue(new TestInfo(method.Name, result, $"Test did not throw an exception: {property.Expected.ToString()}", stopWatch.ElapsedMilliseconds));
+                queue.Enqueue(new TestInfo(method.Name, result, $"Test did not throw an exception: {property.Expected.ToString()}", stopWatch.Elapsed));
                 return;
             }
 
             var exceptionAfter = AfterOrBeforeTesting(instance, methods.After);
             if (exceptionAfter != null)
             {
-                queue.Enqueue(new TestInfo(method.Name, "Failed", exceptionAfter, 0));
+                queue.Enqueue(new TestInfo(method.Name, "Failed", exceptionAfter, new TimeSpan(0, 0, 0)));
                 return;
             }
 
-            queue.Enqueue(new TestInfo(method.Name, result, null, stopWatch.ElapsedMilliseconds));
+            queue.Enqueue(new TestInfo(method.Name, result, null, stopWatch.Elapsed));
         }
 
         /// <summary>
@@ -166,7 +169,7 @@ namespace MyNUnitRunner
                 {
                     foreach (var test in this.methods.Tests)
                     {
-                        testsInfo.Enqueue(new TestInfo(test.Name, "Failed", e.Message, 0));
+                        testsInfo.Enqueue(new TestInfo(test.Name, "Failed", e.Message, new TimeSpan(0, 0, 0)));
                     }
                     return false;
                 }

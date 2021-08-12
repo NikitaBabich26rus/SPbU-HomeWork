@@ -1,0 +1,10 @@
+﻿@{
+    ViewData["Title"] = "Load the assembly";
+}
+
+<h1>Load the assembly</h1>
+
+<form style="margin-top: 3rem" asp-controller="Home" asp-action="LoadTheAssembly" method="post" enctype="multipart/form-data">
+    <input accept=".dll" type="file" name="file"/>
+    <input class="btn btn-dark" type="submit" value="Upload" />
+</form>

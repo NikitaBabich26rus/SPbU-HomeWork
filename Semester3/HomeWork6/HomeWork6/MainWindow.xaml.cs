@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
 
 namespace HomeWork6
 {
@@ -9,7 +7,7 @@ namespace HomeWork6
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ViewModel viewModel = new ViewModel();
+        private ViewModel viewModel = new();
 
         public MainWindow()
         {

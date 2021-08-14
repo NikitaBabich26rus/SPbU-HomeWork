@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HomeWork6" d:DataContext="{d:DesignInstance Type=local:ViewModel}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" MinHeight="450" MinWidth="800">
 
     <Window.Resources>
         <Style TargetType="TextBox">
@@ -29,24 +29,58 @@
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="6*"/>
                 </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,227,0" >
+                <StackPanel Grid.Row="0" Grid.Column="0">
                     <Label Content="IP:"/>
-                    <TextBox MinWidth="200" Text="{Binding Path=Ip, Mode=TwoWay}" IsEnabled="{Binding IsDisconnected, Mode=OneWay}"/>
+                    <TextBox x:Name="ipTextBox" MinWidth="200"
+                             IsEnabled="{Binding IsDisconnected, Mode=OneWay}"
+                    >
+                        <TextBox.Text>
+                            <Binding Path="Ip" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <local:IpValidation/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                 </StackPanel>
-                <StackPanel Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,340,0">
+                <StackPanel Grid.Row="0" Grid.Column="1">
                     <Label Content="Port:"/>
-                    <TextBox MinWidth="200" Text="{Binding Path=Port, Mode=TwoWay}" IsEnabled="{Binding IsDisconnected, Mode=OneWay}"/>
+                    <TextBox x:Name="portTextBox" MinWidth="200" IsEnabled="{Binding IsDisconnected, Mode=OneWay}">
+                        <TextBox.Text>
+                            <Binding Path="Port" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <local:PortValidation/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="0">
-                    <Button Content="Connect" Grid.Column="1" Grid.Row="1" VerticalAlignment="Stretch" Height="25" Width="190"
-                        Command="{Binding ConnectCommand}"/>
+                    <Button Content="Connect" Grid.Column="1" Grid.Row="1" VerticalAlignment="Stretch"
+                        Height="25" Width="190" Command="{Binding ConnectCommand}"
+                    >
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding ElementName=ipTextBox, Path=(Validation.HasError)}" Value="False" />
+                                            <Condition Binding="{Binding ElementName=portTextBox, Path=(Validation.HasError)}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="IsEnabled" Value="True"/>
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                 </StackPanel>
-                <StackPanel Grid.Column="0" Margin="0,51,227,0" Grid.RowSpan="2" Grid.ColumnSpan="2">
+                <StackPanel Grid.Column="0" Grid.Row="1">
                     <Label Content="Download folder"/>
                     <TextBox MinWidth="200" Text="{Binding Path=PathToDownload, Mode=TwoWay}" IsEnabled="{Binding IsDisconnected, Mode=OneWay}"/>
                 </StackPanel>
                 <ListBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" x:Name="viewFiles"
-                         Margin="0,3,340,0" ItemsSource="{Binding Path=DirectoriesAndFiles, Mode=OneWay}" HorizontalContentAlignment="Stretch">
+                         ItemsSource="{Binding Path=DirectoriesAndFiles, Mode=OneWay}" HorizontalContentAlignment="Stretch">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -62,10 +96,11 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
                 <StackPanel Grid.Column="2" Grid.Row="1">
-                    <Button Content="Download all in folder" Margin="30,15,30,17" Command="{Binding DownloadAllInFolderCommand}" Height="25" Width="190"/>
+                    <Button Content="Download all in folder" Command="{Binding DownloadAllInFolderCommand}" Height="25" Width="190"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Grid.Row="1">
-                    <Button Content="Delete downloaded files" Command="{Binding DeleteDownloadedFilesCommand}" Height="25" Width="190"/>
+                    <Button Content="Delete downloaded files" Command="{Binding DeleteDownloadedFilesCommand}" Height="25" Width="190"
+                            HorizontalAlignment="Left" Margin="0, 18, 0, 0"/>
                 </StackPanel>
             </Grid>
         </TabItem>
@@ -85,14 +120,14 @@
                     <RowDefinition Height="0.1*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Label Grid.Row="0" Grid.Column="0" Content="Downloading" Grid.ColumnSpan="5" Margin="1" Grid.RowSpan="2"/>
-                <Label Grid.Row="0" Grid.Column="5" Content="Downloaded" Grid.ColumnSpan="2" Margin="1" Grid.RowSpan="2"/>
+                <Label Grid.Row="0" Grid.Column="0" Content="Downloading" Grid.ColumnSpan="5" Grid.RowSpan="2"/>
+                <Label Grid.Row="0" Grid.Column="5" Content="Downloaded" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
 
-                <ListBox Grid.Row="1" Grid.Column="0" Margin="2,2,2,2" Grid.ColumnSpan="5"
+                <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"
                          ItemsSource="{Binding Path=DownloadingFiles, Mode=OneWay}"/>
                 <GridSplitter Grid.Row="1" Grid.Column="5" ShowsPreview="False" Width="3"
                     HorizontalAlignment="Center" />
-                <ListBox Grid.Row="1" Grid.Column="6" Margin="2,2,2,2" 
+                <ListBox Grid.Row="1" Grid.Column="6"
                          Name="DownloadedFile" ItemsSource="{Binding Path=DownloadedFiles, Mode=OneWay}"
                 />
             </Grid>

@@ -2,10 +2,7 @@ using FTP;
 using HomeWork6;
 using NUnit.Framework;
 using System.IO;
-using System.Security.Permissions;
 using System.Threading;
-using System.Windows.Threading;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Tests
 {
@@ -19,7 +16,7 @@ namespace Tests
         {
             viewModel = new ViewModel();
             server = new Server("127.0.0.1", 8888);
-            _ = server.Start();
+            _= server.Start();
             viewModel.ConnectCommand.Execute(null);
             for (int i = 0; i < 7; i++)
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -14,7 +15,8 @@ namespace FTP
     {
         private int port;
         private TcpListener listener;
-        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource cancellationTokenSource = new();
+        private List<Task> tasks = new();
 
         /// <summary>
         /// Server constructor
@@ -37,8 +39,10 @@ namespace FTP
             while (!cancellationTokenSource.Token.IsCancellationRequested)
             {
                 var client = await listener.AcceptTcpClientAsync();
-                await Task.Run(() => Working(client));
+                tasks.Add(Task.Run(() => Work(client)));
             }
+            var task = Task.WhenAll(tasks);
+            task.Wait();
             listener.Stop();
         }
 
@@ -51,12 +55,11 @@ namespace FTP
         /// Server process
         /// </summary>
         /// <param name="client">Tcp client</param>
-        private async Task Working(TcpClient client)
+        private async Task Work(TcpClient client)
         {
             using var stream = client.GetStream();
-
-            var reader = new StreamReader(stream);
-            var writer = new StreamWriter(stream) { AutoFlush = true };
+            using var reader = new StreamReader(stream);
+            using var writer = new StreamWriter(stream) { AutoFlush = true };
             var data = await reader.ReadLineAsync();
             var (command, path) = ParseData(data);
 

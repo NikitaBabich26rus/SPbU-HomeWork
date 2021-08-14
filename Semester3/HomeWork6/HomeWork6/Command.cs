@@ -1,23 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace HomeWork6
 {
+    /// <summary>
+    /// Command for client 
+    /// </summary>
     public class Command : ICommand
     {
         private readonly Predicate<object> _canExecute;
         private readonly Action<object> _execute;
 
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="execute">Execution action.</param>
         public Command(Action<object> execute)
             : this(execute, null)
         {
             _execute = execute;
         }
 
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="execute">Execution action.</param>
+        /// <param name="canExecute">Func that determines whether the command can execute.</param>
         public Command(Action<object> execute, Predicate<object> canExecute)
         {
             _execute = execute;

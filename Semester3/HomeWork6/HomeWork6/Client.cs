@@ -31,12 +31,13 @@ namespace HomeWork6
         /// <param name="path">Path to the file.</param>
         public async Task GetAsync(string path, Stream fileStream)
         {
-            using var client = new TcpClient(host, port);
+            var client = new TcpClient();
+            await client.ConnectAsync(host, port);
             using var stream = client.GetStream();
+            using var reader = new StreamReader(stream);
+            using var writer = new StreamWriter(stream) { AutoFlush = true };
 
-            var writer = new StreamWriter(stream) { AutoFlush = true };
             await writer.WriteLineAsync($"2 {path}");
-            var reader = new StreamReader(stream);
             var buffer = new char[long.MaxValue.ToString().Length + 1];
             var currentValue = '1';
             var currentIndex = 0;
@@ -53,10 +54,6 @@ namespace HomeWork6
             }
             await stream.CopyToAsync(fileStream);
             fileStream.Position = 0;
-            writer.Dispose();
-            reader.Dispose();
-            stream.Dispose();
-            client.Dispose();
         }
 
         /// <summary>
@@ -66,11 +63,13 @@ namespace HomeWork6
         /// <returns>List<(<name: String> <isDir: Boolean>)></returns>
         public async Task<List<(string, bool)>> ListAsync(string path)
         {
-            using var client = new TcpClient(host, port);
+            var client = new TcpClient();
+            await client.ConnectAsync(host, port);
             using var stream = client.GetStream();
-            var writer = new StreamWriter(stream) { AutoFlush = true };
+            using var reader = new StreamReader(stream);
+            using var writer = new StreamWriter(stream) { AutoFlush = true };
+
             await writer.WriteLineAsync($"1 {path}");
-            var reader = new StreamReader(stream);
             var size = Convert.ToInt32(await reader.ReadLineAsync());
 
             if (size == -1)
@@ -86,10 +85,6 @@ namespace HomeWork6
                 var isDir = Convert.ToBoolean(await reader.ReadLineAsync());
                 list.Add((name, isDir));
             }
-            client.Dispose();
-            stream.Dispose();
-            writer.Dispose();
-            reader.Dispose();
             return list;
         }
     }

@@ -32,27 +32,27 @@ namespace HomeWork6
 
         private const string defaultPort = "8888";
 
-        private Stack<string> openFolder = new Stack<string>();
+        private Stack<string> openFolder = new();
 
         /// <summary>
         /// List for downloading files.
         /// </summary>
-        public ObservableCollection<string> DownloadingFiles { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> DownloadingFiles { get; } = new();
 
         /// <summary>
         /// List for downloaded files.
         /// </summary>
-        public ObservableCollection<string> DownloadedFiles { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> DownloadedFiles { get; } = new();
 
         /// <summary>
         /// Current directories and files.
         /// </summary>
-        public ObservableCollection<string> DirectoriesAndFiles { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> DirectoriesAndFiles { get; } = new();
 
         /// <summary>
         /// Checks if the path is a directory.
         /// </summary>
-        private ObservableCollection<bool> IsDirectory { get; } = new ObservableCollection<bool>();
+        private ObservableCollection<bool> IsDirectory { get; } = new();
 
         private string ip = defaultIp;
 
@@ -64,6 +64,10 @@ namespace HomeWork6
             get => ip;
             set
             {
+                if (!isDisconnected)
+                {
+                    throw new Exception("Can't change the ip once connected");
+                }
                 ip = value;
                 OnPropertyChanged("Ip");
             }
@@ -79,6 +83,10 @@ namespace HomeWork6
             get => port;
             set
             {
+                if (!isDisconnected)
+                {
+                    throw new Exception("Can't change the port once connected");
+                }
                 port = value;
                 OnPropertyChanged("Port");
             }
@@ -94,13 +102,17 @@ namespace HomeWork6
             get => pathToDownload;
             set
             {
+                if (!isDisconnected)
+                {
+                    throw new Exception("Can't change the path once connected");
+                }
                 pathToDownload = value;
                 OnPropertyChanged("PathToDownload");
             }
         }
 
         private bool isDisconnected = true;
-        
+
         /// <summary>
         /// Check connection with server.
         /// </summary>
@@ -154,7 +166,7 @@ namespace HomeWork6
         /// Start delete downloaded files.
         /// </summary>
         private async void RunDeleteDownloadedFilesAsync(object parameter) => await Task.Run(() => DeleteDownloadedFilesAsync());
-        
+
         /// <summary>
         /// Download file or go to another folder.
         /// </summary>
@@ -176,11 +188,6 @@ namespace HomeWork6
         {
             try
             {
-                if (InputValidation.IpValidation(this.ip) && InputValidation.PortValidation(this.port))
-                {
-                    MessageBox.Show("Incorrect port or ip.");
-                    return;
-                }
                 client = new Client(this.ip, int.Parse(this.port));
                 serverPath = pathToDownload;
                 IsDisconnected = false;
@@ -199,7 +206,7 @@ namespace HomeWork6
         /// </summary>
         /// <param name="path">Path</param>
         private async Task ShowCurrentFoldersAndFilesAsync(string path)
-        { 
+        {
             await dispatcher.BeginInvoke(() => ClearFileList());
             if (path == "..")
             {

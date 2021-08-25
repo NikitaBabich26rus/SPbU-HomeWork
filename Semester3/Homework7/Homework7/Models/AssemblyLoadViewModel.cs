@@ -11,6 +11,6 @@ namespace Homework7.Models
 
         public string Id { get; set; }
 
-        public ICollection<TestViewModel> Tests { get; set; } = new List<TestViewModel>();
+        public List<TestViewModel> Tests { get; set; } = new();
     }
 }

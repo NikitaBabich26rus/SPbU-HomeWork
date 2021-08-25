@@ -9,8 +9,6 @@ namespace Homework7.Repository
 {
     public class HomeRepository : DbContext
     {
-        public DbSet<TestViewModel> Tests { get; set; }
-
         public DbSet<AssemblyLoadViewModel> Assemblies { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

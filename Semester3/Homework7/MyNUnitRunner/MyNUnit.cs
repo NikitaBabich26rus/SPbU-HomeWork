@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MyNUnitRunner
@@ -15,55 +16,68 @@ namespace MyNUnitRunner
     /// </summary>
     public class MyNUnit
     {
-        private MethodLists methods;
-
-        /// <summary>
-        /// Queue with class of tests.
-        /// </summary>
-        public ConcurrentQueue<ConcurrentQueue<TestInfo>> ClassQueue { get; private set; }
+        private ConcurrentQueue<AssemblyInfo> assembliesQueue = new();
 
         /// <summary>
         /// Constructor for starting tests running.
         /// </summary>
         /// <param name="path">Path to assembly</param>
-        public MyNUnit(string path)
+        public ConcurrentQueue<AssemblyInfo> MyNUnitRun(string path)
         {
-            var files = Directory.EnumerateFiles(path , "*.dll", SearchOption.AllDirectories);
-            var selectFiles = from file in files
-                         where !file.Contains("ref")
-                         select file;  
-            var assemblies = new ConcurrentQueue<Assembly>();
-            var classes = selectFiles.Select(Assembly.LoadFrom).Distinct().SelectMany(a => a.ExportedTypes).Where(t => t.IsClass);
-            var types = classes.Where(c => c.GetMethods().Any(m => m.GetCustomAttributes().Any(a => a is Test)));
-            ClassQueue = new ConcurrentQueue<ConcurrentQueue<TestInfo>>();
-            Parallel.ForEach(types, Testing);
+            var files = Directory.EnumerateFiles(path, "*.dll", SearchOption.AllDirectories);
+            var selectedFiles = from file in files
+                              where !file.Contains("ref")
+                              select file;
+            Parallel.ForEach(selectedFiles, (file) =>
+            {
+                assembliesQueue.Enqueue(AssemblyTesting(Assembly.LoadFrom(file)));
+            });
+            return assembliesQueue;
         }
 
         /// <summary>
-        /// Run tests
+        /// Testing assembly.
+        /// </summary>
+        /// <param name="assembly">Assembly for testing.</param>
+        private AssemblyInfo AssemblyTesting(Assembly assembly)
+        {
+            var assemblyInfo = new AssemblyInfo();
+            assemblyInfo.Name = assembly.GetName().Name;
+            var types = assembly.GetTypes();
+            foreach (var type in types)
+            {
+                var testsQueue = ClassTesting(type);
+                foreach (var test in testsQueue.ToArray())
+                {
+                    assemblyInfo.Tests.Enqueue(test);
+                }
+            }
+            return assemblyInfo;
+        }
+
+        /// <summary>
+        /// Run testing class.
         /// </summary>
         /// <param name="type">Set of tests</param>
-        private void Testing(Type type)
+        private ConcurrentQueue<TestInfo> ClassTesting(Type type)
         {
-            DistributeMethodsByAttributes(type);
+            var methods = DistributeMethodsByAttributes(type);
             var testsInfo = new ConcurrentQueue<TestInfo>();
 
-            if (!AfterClassOrBeforeClassTesting(testsInfo, methods.BeforeClass))
+            if (!AfterClassOrBeforeClassTesting(testsInfo, methods.AfterClass, methods.Tests))
             {
-                ClassQueue.Enqueue(testsInfo);
-                return;
+                return testsInfo;
             }
 
             var currentQueue = new ConcurrentQueue<TestInfo>();
-            Parallel.ForEach(methods.Tests, (test) => RunTest(type, test, currentQueue));
+            Parallel.ForEach(methods.Tests, (test) => RunTest(type, test, currentQueue, methods));
 
-            if (!AfterClassOrBeforeClassTesting(testsInfo, methods.AfterClass))
+            if (!AfterClassOrBeforeClassTesting(testsInfo, methods.BeforeClass, methods.Tests))
             {
-                ClassQueue.Enqueue(testsInfo);
-                return;
+                return testsInfo;
             }
 
-            ClassQueue.Enqueue(currentQueue);
+            return currentQueue;
         }
 
         /// <summary>
@@ -72,7 +86,7 @@ namespace MyNUnitRunner
         /// <param name="type">Set of tests</param>
         /// <param name="method">Method for testsing</param>
         /// <param name="queue">queue for test info</param>
-        private void RunTest(Type type, MethodInfo method, ConcurrentQueue<TestInfo> queue)
+        private void RunTest(Type type, MethodInfo method, ConcurrentQueue<TestInfo> queue, MethodLists methods)
         {
             var property = (Test)Attribute.GetCustomAttribute(method, typeof(Test));
             if (property.Ignore != null)
@@ -104,7 +118,7 @@ namespace MyNUnitRunner
                 {
                     result = "Failed";
                 }
-                queue.Enqueue(new TestInfo(method.Name, result, e.Message, stopWatch.Elapsed));
+                queue.Enqueue(new TestInfo(method.Name, result, e.InnerException.Message, stopWatch.Elapsed));
                 return;
             }
 
@@ -155,11 +169,11 @@ namespace MyNUnitRunner
         /// Run testing methods with attribute AfterClass and BeforeClass
         /// </summary>
         /// <param name="type">Set of methods</param>
-        /// <param name="methods">Methods with attribute AfterClass or BeforeClass</param>
+        /// <param name="methodsBeforeOrAfterClass">Methods with attribute AfterClass or BeforeClass</param>
         /// <returns>Exception or null</returns>
-        private bool AfterClassOrBeforeClassTesting(ConcurrentQueue<TestInfo> testsInfo, List<MethodInfo> methods)
+        private bool AfterClassOrBeforeClassTesting(ConcurrentQueue<TestInfo> testsInfo, List<MethodInfo> methodsBeforeOrAfterClass, List<MethodInfo> tests)
         {
-            foreach (var method in methods)
+            foreach (var method in methodsBeforeOrAfterClass)
             {
                 try
                 {
@@ -167,7 +181,7 @@ namespace MyNUnitRunner
                 }
                 catch (Exception e)
                 {
-                    foreach (var test in this.methods.Tests)
+                    foreach (var test in tests)
                     {
                         testsInfo.Enqueue(new TestInfo(test.Name, "Failed", e.Message, new TimeSpan(0, 0, 0)));
                     }
@@ -181,9 +195,9 @@ namespace MyNUnitRunner
         /// Distribute methods by attributes.
         /// </summary>
         /// <param name="type">Set of tests</param>
-        private void DistributeMethodsByAttributes(Type type)
+        private MethodLists DistributeMethodsByAttributes(Type type)
         {
-            methods = new MethodLists();
+            var methods = new MethodLists();
 
             foreach (var method in type.GetMethods())
             {
@@ -213,6 +227,7 @@ namespace MyNUnitRunner
                     }
                 }
             }
+            return methods;
         }
 
         /// <summary>

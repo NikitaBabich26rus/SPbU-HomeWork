@@ -1,40 +1,50 @@
-﻿@model List<TestViewModel>
+﻿@model List<AssemblyLoadViewModel>
 @{
     ViewData["Title"] = "Testing";
 }
 
-<div>
-    <input class="btn btn-dark" type="submit" value="Run tests" />
-</div>
+<form style="margin-top: 3rem" asp-controller="Home" asp-action="RunTests">
+    <p>
+        <input class="btn btn-dark" type="submit" value="Run tests" />
+    </p>
+</form>
 
-<table class="table table-striped table-dark">
-    <tr>
-        <th>Name</th>
-        <th>Passed/ Ignored/ Failed</th>
-        <th>Elapsed time/ Ignore message</th>
-        <th>Launch time</th>
-    </tr>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            if (item.Result == "Passed")
+@if (Model == null)
+{
+    return;
+}
+@foreach (var assembly in Model)
+{
+    <h1>@assembly.Name.ToString()</h1>
+    <table class="table table-striped table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Passed/ Ignored/ Failed</th>
+            <th>Elapsed time/ Ignore message</th>
+            <th>Launch time</th>
+        </tr>
+        <tbody>
+            @foreach (var item in assembly.Tests)
             {
-                <tr>
-                    <td>@item.Name</td>
-                    <td>@item.Result</td>
-                    <td>@item.Time</td>
-                    <td>@item.StartTime</td>
-                </tr>
+                if (item.Result == "Passed")
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Result</td>
+                        <td>@item.Time</td>
+                        <td>@item.StartTime</td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Result</td>
+                        <td>@item.IgnoreReason</td>
+                        <td>@item.StartTime</td>
+                    </tr>
+                }
             }
-            else 
-            {
-                <tr>
-                    <td>@item.Name</td>
-                    <td>@item.Result</td>
-                    <td>@item.IgnoreReason</td>
-                    <td>@item.StartTime</td>
-                </tr>
-            }
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+}

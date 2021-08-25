@@ -7,54 +7,71 @@ using MyNUnitRunner;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Homework7.Controllers
 {
     public class HomeController : Controller
     {
-        private HomeRepository _homeRepository;
-
-        private readonly ILogger<HomeController> _logger;
+        private HomeRepository homeRepository;
+        private readonly ILogger<HomeController> logger;
+        private readonly string pathToFolderWithTests = Directory.GetCurrentDirectory() + "\\Tests";
+        private MyNUnit myNUnit = new();
 
         public HomeController(ILogger<HomeController> logger)
         {
-            _logger = logger;
-            _homeRepository = new HomeRepository();
+            this.logger = logger;
+            this.homeRepository = new HomeRepository();
         }
 
         public IActionResult Index()
             => View();
 
         public IActionResult LoadAssemblyPage()
-            => View();
+            => View("LoadAssemblyPage");
 
-        [HttpPost]
-        public IActionResult LoadTheAssembly(IFormFile file)
+        public async Task<IActionResult> LoadTheAssembly(IFormFile file)
         {
-            return View();
+            if (file != null)
+            {
+                using var stream = new FileStream($"{Path.Combine(pathToFolderWithTests, file.FileName)}", FileMode.Create);
+                await file.CopyToAsync(stream);
+            }
+            return View("LoadAssemblyPage");
         }
 
         public IActionResult Testing()
+            => View("Testing");
+
+        public IActionResult RunTests()
         {
-            var tests = new MyNUnit("../PassedTests");
-            tests.ClassQueue.TryDequeue(out var info);
-            var infoArray = info.ToArray();
-            var testsList = new List<TestViewModel>();
-            foreach (var item in infoArray)
+            var assembliesTests = myNUnit.MyNUnitRun(pathToFolderWithTests);
+            var testsList = new List<AssemblyLoadViewModel>();
+            while (!assembliesTests.IsEmpty)
             {
-                var test = new TestViewModel();
-                test.Result = item.Result;
-                test.Name = item.Name;
-                test.StartTime = DateTime.Now;
-                if (item.Result == "Passed")
+                var assembly = new AssemblyLoadViewModel();
+                assembliesTests.TryDequeue(out var info);
+                assembly.Name = info.Name;
+                var infoArray = info.Tests.ToArray();
+                foreach (var item in infoArray)
                 {
-                    test.Time = item.Time;
+                    var test = new TestViewModel();
+                    test.Result = item.Result;
+                    test.Name = item.Name;
+                    test.StartTime = DateTime.Now;
+                    if (item.Result == "Passed")
+                    {
+                        test.Time = item.Time;
+                    }
+                    else
+                    {
+                        test.IgnoreReason = item.IgnoreReason;
+                    }
+                    assembly.Tests.Add(test);
                 }
-                else
-                {
-                    test.IgnoreReason = item.IgnoreReason;
-                }
-                testsList.Add(test);
+                testsList.Add(assembly);
+                //homeRepository.Assemblies.Add(assembly);
             }
             return View("Testing", testsList);
         }

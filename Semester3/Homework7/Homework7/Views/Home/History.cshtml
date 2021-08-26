@@ -1,13 +1,9 @@
-﻿@model List<AssemblyViewModel>
+﻿@model IEnumerable<AssemblyViewModel>
 @{
     ViewData["Title"] = "Testing";
 }
 
-<form style="margin-top: 3rem" asp-controller="Home" asp-action="RunTests">
-    <p>
-        <input class="btn btn-dark" type="submit" value="Run tests" />
-    </p>
-</form>
+<h1>History</h1>
 
 @if (Model == null)
 {

@@ -16,4 +16,10 @@
     <ProjectReference Include="..\MyNUnitRunner\MyNUnitRunner.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ExceptionTests\" />
+    <Folder Include="FailedTests\" />
+    <Folder Include="PassedTests\" />
+  </ItemGroup>
+
 </Project>

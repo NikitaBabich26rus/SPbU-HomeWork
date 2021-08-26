@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<LoadAssemblyViewModel>
+@{
     ViewData["Title"] = "Load the assembly";
 }
 
@@ -8,3 +9,19 @@
     <input accept=".dll" type="file" name="file" />
     <input class="btn btn-dark" type="submit" value="Upload" />
 </form>
+<form style="margin-top: 1rem" asp-controller="Home" asp-action="DeleteLoadAssemblies" method="post" enctype="multipart/form-data">
+    <input class="btn btn-dark" type="submit" value="Delete all" />
+</form>
+<h6>Загруженные сборки:</h6>
+@if (Model == null)
+{
+    return;
+}
+<ul>
+    @foreach(var item in Model)
+    {
+        <li>
+            @item.Name
+        </li>
+    }
+</ul>

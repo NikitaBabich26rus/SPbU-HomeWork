@@ -19,7 +19,7 @@ namespace MyNUnitRunner
         private ConcurrentQueue<AssemblyInfo> assembliesQueue = new();
 
         /// <summary>
-        /// Constructor for starting tests running.
+        /// Starting tests running.
         /// </summary>
         /// <param name="path">Path to assembly</param>
         public ConcurrentQueue<AssemblyInfo> MyNUnitRun(string path)

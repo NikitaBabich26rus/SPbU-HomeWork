@@ -1,19 +1,26 @@
 ﻿using Homework7.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Homework7.Repository
 {
+    /// <summary>
+    /// Repository class.
+    /// </summary>
     public class HomeRepository : DbContext
     {
-        public DbSet<AssemblyLoadViewModel> Assemblies { get; set; }
+        /// <summary>
+        /// History assembly testing.
+        /// </summary>
+        public DbSet<AssemblyViewModel> AssembliesHistory { get; set; }
+
+        /// <summary>
+        /// Loaded assemblies.
+        /// </summary>
+        public DbSet<LoadAssemblyViewModel> LoadAssemblies { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=TestsRunHistory;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Testing;Trusted_Connection=True;");
         }
     }
 }

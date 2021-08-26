@@ -1,31 +1,41 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Homework7.Models
 {
+    /// <summary>
+    /// View model for test.
+    /// </summary>
     public class TestViewModel
     {
         /// <summary>
-        /// Test result
+        /// Test id.
+        /// </summary>
+        [Key]
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Test result.
         /// </summary>
         public string Result { get; set; }
 
         /// <summary>
-        /// Test name
+        /// Test name.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Reason of ignore
+        /// Reason of ignore.
         /// </summary>
         public string IgnoreReason { get; set; }
 
         /// <summary>
-        /// Test run time
+        /// Test run time.
         /// </summary>
         public TimeSpan Time { get; set; }
 
         /// <summary>
-        /// Launch time
+        /// Launch time.
         /// </summary>
         public DateTime StartTime { get; set; }
     }

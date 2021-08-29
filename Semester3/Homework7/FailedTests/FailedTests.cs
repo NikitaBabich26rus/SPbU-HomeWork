@@ -16,7 +16,7 @@ namespace FailedTests
         [Test]
         public void FailedTest2()
         {
-            List<int> list = new List<int>();
+            var list = new List<int>();
             list[5] = 3;
         }
     }

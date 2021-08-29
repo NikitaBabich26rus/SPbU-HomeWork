@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Homework7.Controllers
 {
@@ -49,23 +50,33 @@ namespace Homework7.Controllers
         /// </summary>
         /// <param name="file">Path to assembly.</param>
         /// <returns>Current loaded assemblies.</returns>
-        public IActionResult LoadTheAssembly(IFormFile file)
+        public async Task<IActionResult> LoadTheAssembly(IFormFile file)
         {
-            if (file != null)
+            if (file != null && !FileIsContain(file.FileName))
             {
                 using var stream = new FileStream($"{Path.Combine(pathToFolderWithTests, file.FileName)}", FileMode.Create);
-                file.CopyTo(stream);
-                var assembly = homeRepository.LoadAssemblies.Add(new LoadAssemblyViewModel { Name = file.FileName });
-                homeRepository.SaveChanges();
+                await file.CopyToAsync(stream);
+                var assembly = await homeRepository.LoadAssemblies.AddAsync(new LoadAssemblyViewModel { Name = file.FileName });
+                await homeRepository.SaveChangesAsync();
             }
             return View("LoadAssemblyPage", homeRepository.LoadAssemblies.ToList());
         }
 
         /// <summary>
+        /// Checks whether the assembly is loaded.
+        /// </summary>
+        /// <param name="fileName">File name.</param>
+        /// <returns>Is loaded or not.</returns>
+        private bool FileIsContain(string fileName)
+            => homeRepository.LoadAssemblies
+                .ToList()
+                .Any(x => x.Name == fileName);
+
+        /// <summary>
         /// Delete loaded assemblies.
         /// </summary>
         /// <returns>View.</returns>
-        public IActionResult DeleteLoadAssemblies()
+        public async Task<IActionResult> DeleteLoadAssemblies()
         {
             if (Directory.EnumerateFileSystemEntries(pathToFolderWithTests).Any())
             {
@@ -76,7 +87,7 @@ namespace Homework7.Controllers
                 }
             }
             homeRepository.LoadAssemblies.RemoveRange(homeRepository.LoadAssemblies);
-            homeRepository.SaveChanges();
+            await homeRepository.SaveChangesAsync();
             return View("LoadAssemblyPage");
         }
 
@@ -91,7 +102,7 @@ namespace Homework7.Controllers
         /// Run testing.
         /// </summary>
         /// <returns>Results of testing.</returns>
-        public IActionResult RunTests()
+        public async Task<IActionResult> RunTests()
         {
             var assembliesTests = myNUnit.MyNUnitRun(pathToFolderWithTests);
             var testsList = new List<AssemblyViewModel>();
@@ -124,9 +135,9 @@ namespace Homework7.Controllers
                     Name = assembly.Name,
                     Tests = assembly.Tests
                 });
-                homeRepository.SaveChanges();
                 testsList.Add(assembly);
             }
+            await homeRepository.SaveChangesAsync();
             return View("Testing", testsList);
         }
 

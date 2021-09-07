@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Typography from "@material-ui/core/Typography";
+import * as moment from 'moment';
 
 const useStyles = makeStyles({
     table: {
@@ -20,6 +21,7 @@ export const RunTests = () => {
     const classes = useStyles()
 
     const getTestingResult = async () => {
+        let value
         const response = await fetch('http://localhost:5000/api/Home/runLoadedTests')
         const data = await response.json()
         let assemblies = []
@@ -29,6 +31,8 @@ export const RunTests = () => {
                     name: test.name,
                     result: test.result,
                     ignoreReason: test.ignoreReason,
+                    time: test.time.days + '.' + test.time.hours + '.' + test.time.minutes + '.'
+                        + test.time.seconds + '.' + test.time.milliseconds + '.' + test.time.ticks,
                     startTime: test.startTime
                 }
             })
@@ -42,6 +46,18 @@ export const RunTests = () => {
     }
 
     const getCell = (test) => {
+        if (test.result === 'Passed'){
+            return(
+                <TableRow>
+                    <TableCell component="th" scope="row">
+                        {test.name}
+                    </TableCell>
+                    <TableCell align="right">{test.result}</TableCell>
+                    <TableCell align="right">{test.time}</TableCell>
+                    <TableCell align="right">{test.startTime}</TableCell>
+                </TableRow>
+            )
+        }
         return(
             <TableRow>
                 <TableCell component="th" scope="row">
@@ -80,7 +96,7 @@ export const RunTests = () => {
                                         <TableRow>
                                             <TableCell>Name</TableCell>
                                             <TableCell align="right">Passed/ Ignored/ Failed</TableCell>
-                                            <TableCell align="right">Ignore message</TableCell>
+                                            <TableCell align="right">Ignore message/ Time</TableCell>
                                             <TableCell align="right">Launch time</TableCell>
                                         </TableRow>
                                     </TableHead>

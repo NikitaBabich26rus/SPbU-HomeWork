@@ -34,6 +34,8 @@ export const History = () => {
                     name: test.name,
                     result: test.result,
                     ignoreReason: test.ignoreReason,
+                    time: test.time.days + '.' + test.time.hours + '.' + test.time.minutes + '.'
+                        + test.time.seconds + '.' + test.time.milliseconds + '.' + test.time.ticks,
                     startTime: test.startTime
                 }
             })
@@ -48,6 +50,18 @@ export const History = () => {
     }
 
     const getCell = (test) => {
+        if (test.result === 'Passed'){
+            return(
+                <TableRow>
+                    <TableCell component="th" scope="row">
+                        {test.name}
+                    </TableCell>
+                    <TableCell align="right">{test.result}</TableCell>
+                    <TableCell align="right">{test.time}</TableCell>
+                    <TableCell align="right">{test.startTime}</TableCell>
+                </TableRow>
+            )
+        }
         return(
             <TableRow>
                 <TableCell component="th" scope="row">
@@ -91,7 +105,7 @@ export const History = () => {
                                         <TableRow>
                                             <TableCell>Name</TableCell>
                                             <TableCell align="right">Passed/ Ignored/ Failed</TableCell>
-                                            <TableCell align="right">Ignore message</TableCell>
+                                            <TableCell align="right">Ignore message/ Time</TableCell>
                                             <TableCell align="right">Launch time</TableCell>
                                         </TableRow>
                                     </TableHead>

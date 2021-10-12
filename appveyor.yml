@@ -1,6 +1,6 @@
 image: Visual Studio 2019
 
 before_build:
-  - nuget restore Semester3/Test2/Test2.sln
+  - nuget restore Semester3/Test3/Test3.sln
 build:
-  project: Semester3/Test2/Test2.sln
+  project: Semester3/Test3/Test3.sln

@@ -1,9 +1,9 @@
 image: Visual Studio 2019
 
 before_build:
-  - nuget restore Semester4/Homework1/Task2/Task2.sln
+  - nuget restore Semester3/HomeWork4/HomeWork4.sln
 
-build:
-  project: Semester4/Homework1/Task2/Task2.sln
-
+build_script:
+  - dotnet build Semester3/HomeWork4/HomeWork4.sln
+  
 

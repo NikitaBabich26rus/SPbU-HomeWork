@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31112.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Supermap", "Supermap\Supermap.fsproj", "{FD0B32A4-64F4-41B4-9B23-3B127FD54409}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FD0B32A4-64F4-41B4-9B23-3B127FD54409}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD0B32A4-64F4-41B4-9B23-3B127FD54409}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD0B32A4-64F4-41B4-9B23-3B127FD54409}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD0B32A4-64F4-41B4-9B23-3B127FD54409}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {01DAEB55-E3C3-43A5-8171-127DF64D07F2}
+	EndGlobalSection
+EndGlobal

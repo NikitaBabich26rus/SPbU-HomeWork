@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "MapForTree", "MapForTree\MapForTree.fsproj", "{46C6ADB2-2110-4726-9222-201112984E9F}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Tests", "Tests\Tests.fsproj", "{23B1C2FB-4C59-494E-92BC-A9C328BF6454}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{46C6ADB2-2110-4726-9222-201112984E9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46C6ADB2-2110-4726-9222-201112984E9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46C6ADB2-2110-4726-9222-201112984E9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46C6ADB2-2110-4726-9222-201112984E9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23B1C2FB-4C59-494E-92BC-A9C328BF6454}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23B1C2FB-4C59-494E-92BC-A9C328BF6454}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23B1C2FB-4C59-494E-92BC-A9C328BF6454}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23B1C2FB-4C59-494E-92BC-A9C328BF6454}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {258C3785-4EDA-41CC-A68D-B17B92345E13}
+	EndGlobalSection
+EndGlobal

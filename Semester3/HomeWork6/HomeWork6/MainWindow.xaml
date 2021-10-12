@@ -1,0 +1,136 @@
+﻿<Window x:Class="HomeWork6.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HomeWork6" d:DataContext="{d:DesignInstance Type=local:ViewModel}"
+        mc:Ignorable="d"
+        Title="MainWindow" MinHeight="450" MinWidth="800">
+
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="15"/>
+        </Style>
+
+    </Window.Resources>
+    <TabControl>
+        <TabItem Header="Main">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="6*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Grid.Column="0">
+                    <Label Content="IP:"/>
+                    <TextBox x:Name="ipTextBox" MinWidth="200"
+                             IsEnabled="{Binding IsDisconnected, Mode=OneWay}"
+                    >
+                        <TextBox.Text>
+                            <Binding Path="Ip" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <local:IpValidation/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="1">
+                    <Label Content="Port:"/>
+                    <TextBox x:Name="portTextBox" MinWidth="200" IsEnabled="{Binding IsDisconnected, Mode=OneWay}">
+                        <TextBox.Text>
+                            <Binding Path="Port" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <local:PortValidation/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Grid.Row="0">
+                    <Button Content="Connect" Grid.Column="1" Grid.Row="1" VerticalAlignment="Stretch"
+                        Height="25" Width="190" Command="{Binding ConnectCommand}"
+                    >
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding ElementName=ipTextBox, Path=(Validation.HasError)}" Value="False" />
+                                            <Condition Binding="{Binding ElementName=portTextBox, Path=(Validation.HasError)}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="IsEnabled" Value="True"/>
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="1">
+                    <Label Content="Download folder"/>
+                    <TextBox MinWidth="200" Text="{Binding Path=PathToDownload, Mode=TwoWay}" IsEnabled="{Binding IsDisconnected, Mode=OneWay}"/>
+                </StackPanel>
+                <ListBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" x:Name="viewFiles"
+                         ItemsSource="{Binding Path=DirectoriesAndFiles, Mode=OneWay}" HorizontalContentAlignment="Stretch">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.InputBindings>
+                                    <MouseBinding MouseAction="LeftDoubleClick" 
+                                        Command="{Binding DataContext.DownloadFileOrGoToAnotherFolderCommand,
+                                            RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                        CommandParameter="{Binding ElementName=viewFiles, Path=SelectedIndex}"/>
+                                </Grid.InputBindings>
+                                <TextBlock Text="{Binding .}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <StackPanel Grid.Column="2" Grid.Row="1">
+                    <Button Content="Download all in folder" Command="{Binding DownloadAllInFolderCommand}" Height="25" Width="190"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Grid.Row="1">
+                    <Button Content="Delete downloaded files" Command="{Binding DeleteDownloadedFilesCommand}" Height="25" Width="190"
+                            HorizontalAlignment="Left" Margin="0, 18, 0, 0"/>
+                </StackPanel>
+            </Grid>
+        </TabItem>
+
+        <TabItem Header="Downloads">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="15*"/>
+                    <ColumnDefinition Width="19*"/>
+                    <ColumnDefinition Width="17*"/>
+                    <ColumnDefinition Width="102*"/>
+                    <ColumnDefinition Width="243*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="396*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.1*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="Downloading" Grid.ColumnSpan="5" Grid.RowSpan="2"/>
+                <Label Grid.Row="0" Grid.Column="5" Content="Downloaded" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+
+                <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"
+                         ItemsSource="{Binding Path=DownloadingFiles, Mode=OneWay}"/>
+                <GridSplitter Grid.Row="1" Grid.Column="5" ShowsPreview="False" Width="3"
+                    HorizontalAlignment="Center" />
+                <ListBox Grid.Row="1" Grid.Column="6"
+                         Name="DownloadedFile" ItemsSource="{Binding Path=DownloadedFiles, Mode=OneWay}"
+                />
+            </Grid>
+        </TabItem>
+    </TabControl>
+</Window>

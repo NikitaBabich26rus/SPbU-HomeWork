@@ -1,0 +1,14 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\begin{document}
+\large
+\noindent
+$
+S\ K\ K =
+(\lambda x\ y\ z.x\ z\ (y\ z))\ (\lambda x\ y.x)\ (\lambda x\ y.x) \rightarrow_\beta \\
+(\lambda y\ z.(\lambda x\ y.x)\ z\ (y\ z))\ (\lambda x\ y.x) \rightarrow_\beta \\
+(\lambda y\ z.(\lambda y.z)\ (y\ z))\ (\lambda x\ y.x) \rightarrow_\beta
+(\lambda y\ z.z)\ (\lambda x\ y.x) \rightarrow_\beta \\
+(\lambda z. z) = I
+$
+\end{document}

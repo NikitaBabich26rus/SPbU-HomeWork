@@ -1,10 +1,10 @@
 image: Visual Studio 2019
 
 before_build:
-  - nuget restore Semester4/Test/Square/Square.sln
+  - nuget restore Semester3/HomeWork7/HomeWork7.sln
 
 build:
-  project: Semester4/Test/Square/Square.sln
+  project: Semester3/HomeWork7/HomeWork7.sln
 
 test_script:
-  - dotnet test Semester4/Test/Square/Square.sln
+  - dotnet test Semester3/HomeWork7/HomeWork7.sln

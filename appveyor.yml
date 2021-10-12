@@ -5,4 +5,5 @@ before_build:
 
 build_script:
   - dotnet build Semester3/HomeWork4/HomeWork4.sln
+  
 

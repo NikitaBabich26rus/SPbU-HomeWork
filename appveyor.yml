@@ -1,10 +1,10 @@
 image: Visual Studio 2019
 
 before_build:
-  - nuget restore Semester4/Homework2/ParseTree/ParseTree.sln
+  - nuget restore Semester4/Homework2/PrimeNumbers/PrimeNumbers.sln
 
 build:
-  project: Semester4/Homework2/ParseTree/ParseTree.sln
+  project: Semester4/Homework2/PrimeNumbers/PrimeNumbers.sln
 
 test_script:
-  - dotnet test Semester4/Homework2/ParseTree/ParseTree.sln
+  - dotnet test Semester4/Homework2/PrimeNumbers/PrimeNumbers.sln
